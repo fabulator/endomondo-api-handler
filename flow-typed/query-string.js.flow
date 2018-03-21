@@ -1,0 +1,8 @@
+// @flow
+declare module 'query-string' {
+    declare module.exports: {
+        parseUrl(url: string): {
+            query: Object,
+        },
+    };
+}
