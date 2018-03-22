@@ -1,13 +1,3 @@
-var toConsumableArray = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  } else {
-    return Array.from(arr);
-  }
-};
-
 /**
  * Rewrite altitude or hr of points based on updater.
  *
@@ -17,8 +7,8 @@ var toConsumableArray = function (arr) {
  * @returns {Workout}
  */
 function rewriteWorkoutData(workout, type, getNewValue) {
-    var newPoints = [].concat(toConsumableArray(workout.getPoints())).map(function (point) {
-        var newValue = getNewValue(point);
+    const newPoints = [...workout.getPoints()].map(point => {
+        const newValue = getNewValue(point);
 
         if (type === 'altitude') {
             point.setAltitude(newValue);

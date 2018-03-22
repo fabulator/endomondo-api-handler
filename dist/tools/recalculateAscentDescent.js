@@ -7,18 +7,18 @@
  * @returns {Workout}
  */
 function recalculateAscentDescent(workout) {
-    var ascent = 0;
-    var descent = 0;
-    var previusPoint = null;
+    let ascent = 0;
+    let descent = 0;
+    let previusPoint = null;
 
-    workout.getPoints().forEach(function (point) {
+    workout.getPoints().forEach(point => {
         if (!previusPoint) {
             previusPoint = point;
             return;
         }
 
-        var altitude = point.getAltitude();
-        var previusAltitude = previusPoint.getAltitude();
+        const altitude = point.getAltitude();
+        const previusAltitude = previusPoint.getAltitude();
 
         if (altitude === null) {
             return;
@@ -29,7 +29,7 @@ function recalculateAscentDescent(workout) {
             return;
         }
 
-        var diff = altitude - previusAltitude;
+        const diff = altitude - previusAltitude;
         if (diff > 0) {
             ascent += diff;
         } else {

@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var PRIVACY_EVERYONE = 0;
-var PRIVACY_FRIENDS = 1;
-var PRIVACY_ME = 2;
+const PRIVACY_EVERYONE = 0;
+const PRIVACY_FRIENDS = 1;
+const PRIVACY_ME = 2;
 
 exports.PRIVACY_EVERYONE = PRIVACY_EVERYONE;
 exports.PRIVACY_FRIENDS = PRIVACY_FRIENDS;

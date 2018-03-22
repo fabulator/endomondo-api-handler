@@ -7,18 +7,18 @@
  * @returns {Workout}
  */
 function recalculateAscentDescent(workout) {
-    var ascent = 0;
-    var descent = 0;
-    var previusPoint = null;
+    let ascent = 0;
+    let descent = 0;
+    let previusPoint = null;
 
-    workout.getPoints().forEach(function (point) {
+    workout.getPoints().forEach(point => {
         if (!previusPoint) {
             previusPoint = point;
             return;
         }
 
-        var altitude = point.getAltitude();
-        var previusAltitude = previusPoint.getAltitude();
+        const altitude = point.getAltitude();
+        const previusAltitude = previusPoint.getAltitude();
 
         if (altitude === null) {
             return;
@@ -29,7 +29,7 @@ function recalculateAscentDescent(workout) {
             return;
         }
 
-        var diff = altitude - previusAltitude;
+        const diff = altitude - previusAltitude;
         if (diff > 0) {
             ascent += diff;
         } else {
@@ -42,16 +42,6 @@ function recalculateAscentDescent(workout) {
     return workout.setAscent(ascent).setDescent(descent);
 }
 
-var toConsumableArray = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  } else {
-    return Array.from(arr);
-  }
-};
-
 /**
  * Rewrite altitude or hr of points based on updater.
  *
@@ -61,8 +51,8 @@ var toConsumableArray = function (arr) {
  * @returns {Workout}
  */
 function rewriteWorkoutData(workout, type, getNewValue) {
-    var newPoints = [].concat(toConsumableArray(workout.getPoints())).map(function (point) {
-        var newValue = getNewValue(point);
+    const newPoints = [...workout.getPoints()].map(point => {
+        const newValue = getNewValue(point);
 
         if (type === 'altitude') {
             point.setAltitude(newValue);
@@ -77,12 +67,12 @@ function rewriteWorkoutData(workout, type, getNewValue) {
 }
 
 function normalizeLocation(loc) {
-    return Math.round(loc * Math.pow(10, 6)) / Math.pow(10, 6);
+    return Math.round(loc * 10 ** 6) / 10 ** 6;
 }
 
 function rewriteAltitudeData(workout, altitudeData) {
-    var newWorkout = rewriteWorkoutData(workout, 'altitude', function (point) {
-        var elevation = altitudeData.find(function (item) {
+    const newWorkout = rewriteWorkoutData(workout, 'altitude', point => {
+        const elevation = altitudeData.find(item => {
             return normalizeLocation(item.location.lat) === normalizeLocation(point.getLatitude()) && normalizeLocation(item.location.lng) === normalizeLocation(point.getLongitude());
         });
         return elevation ? elevation.elevation : null;
