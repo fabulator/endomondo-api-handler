@@ -11,7 +11,7 @@ import type { Api, MobileApi } from './../api';
  * @param mobileApi
  * @returns {Promise<Workout>} Workout with updated id.
  */
-export default async function replaceWorkout(workout: Workout, api: Api, mobileApi: MobileApi): Promise<Workout> {
+async function replaceWorkout(workout: Workout, api: Api, mobileApi: MobileApi): Promise<Workout> {
     const oldWorkoutId = workout.getId();
 
     if (!oldWorkoutId) {
@@ -31,3 +31,5 @@ export default async function replaceWorkout(workout: Workout, api: Api, mobileA
 
     return newWorkout;
 }
+
+export default replaceWorkout;

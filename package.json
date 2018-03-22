@@ -1,6 +1,6 @@
 {
   "name": "endomondo-api-handler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Unofficial API handler for Endomondo",
   "main": "./src/index.js",
   "scripts": {
