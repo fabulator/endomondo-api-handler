@@ -148,6 +148,7 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
         return this.delete(this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
     }
 
+    // eslint-disable-next-line complexity
     async getWorkouts(filter: WorkoutFilters = {}, userId: ?number): Promise<ListOfWorkouts> {
         const {
             after,
@@ -158,10 +159,10 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
 
         const response: ApiResponseType<ApiWorkouts> = await this.get(this.getWorkoutsApiUrl('history', null, userId), {
             ...filter,
-            ...(after instanceof DateTime ? { after: this.getDateString(after) } : {}),
-            ...(before instanceof DateTime ? { before: this.getDateString(before) } : {}),
-            ...(fromDuration instanceof Duration ? { fromDuration: fromDuration.as('seconds') } : {}),
-            ...(toDuration instanceof Duration ? { fromDuration: toDuration.as('seconds') } : {}),
+            ...(after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
+            ...(before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}),
+            ...(fromDuration ? { fromDuration: typeof fromDuration === 'string' ? fromDuration : fromDuration.as('seconds') } : {}),
+            ...(toDuration ? { toDuration: typeof toDuration === 'string' ? toDuration : toDuration.as('seconds') } : {}),
         });
 
         return {

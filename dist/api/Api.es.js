@@ -589,7 +589,7 @@ class WorkoutFactory {
             }),
             distance: workout.distance,
             source: workout,
-            points: points.points ? points.points.map(point => {
+            points: points && points.points ? points.points.map(point => {
                 return PointFactory.getPointFromApi(point);
             }) : [],
             ascent: workout.ascent,
@@ -717,6 +717,7 @@ class Api$1 extends Api {
         return this.delete(this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
     }
 
+    // eslint-disable-next-line complexity
     async getWorkouts(filter = {}, userId) {
         const {
             after,
@@ -725,7 +726,7 @@ class Api$1 extends Api {
             toDuration
         } = filter;
 
-        const response = await this.get(this.getWorkoutsApiUrl('history', null, userId), _extends({}, filter, after instanceof DateTime ? { after: this.getDateString(after) } : {}, before instanceof DateTime ? { before: this.getDateString(before) } : {}, fromDuration instanceof Duration ? { fromDuration: fromDuration.as('seconds') } : {}, toDuration instanceof Duration ? { fromDuration: toDuration.as('seconds') } : {}));
+        const response = await this.get(this.getWorkoutsApiUrl('history', null, userId), _extends({}, filter, after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}, before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}, fromDuration ? { fromDuration: typeof fromDuration === 'string' ? fromDuration : fromDuration.as('seconds') } : {}, toDuration ? { toDuration: typeof toDuration === 'string' ? toDuration : toDuration.as('seconds') } : {}));
 
         return {
             paging: response.data.paging,

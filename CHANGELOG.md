@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.2.1] - 2018-03-23
+### Fixed
+- Fix workouts filters
+- Fix parsing workouts with no points
+
+
 ## [0.2.0] - 2018-03-23
 ### Changed
 - Add new tool for rewriting hear rate data.

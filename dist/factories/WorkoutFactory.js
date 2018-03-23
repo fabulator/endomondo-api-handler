@@ -564,7 +564,7 @@ class WorkoutFactory {
             }),
             distance: workout.distance,
             source: workout,
-            points: points.points ? points.points.map(point => {
+            points: points && points.points ? points.points.map(point => {
                 return PointFactory.getPointFromApi(point);
             }) : [],
             ascent: workout.ascent,
