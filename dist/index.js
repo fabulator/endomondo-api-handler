@@ -501,6 +501,10 @@ class Workout {
         return this.points;
     }
 
+    hasGPSData() {
+        return this.points.length > 0;
+    }
+
     setPoints(points) {
         this.points = points;
         return this;
@@ -1110,12 +1114,36 @@ function rewriteAltitudeData(workout, altitudeData) {
     return recalculateAscentDescent(newWorkout);
 }
 
+function rewriteHeartRateData(workout, HRData) {
+    const data = HRData.map(item => {
+        return {
+            hr: item.hr,
+            time: item.time.valueOf()
+        };
+    });
+
+    return rewriteWorkoutData(workout, 'hr', point => {
+        const time = point.getTime().valueOf();
+
+        const nearest = data.sort((a, b) => {
+            return Math.abs(time - a.time) - Math.abs(time - b.time);
+        })[0];
+
+        if (point.getTime().diff(luxon.DateTime.fromMillis(nearest.time)).as('seconds') > 15) {
+            return null;
+        }
+
+        return nearest.hr;
+    });
+}
+
 
 
 var index$4 = Object.freeze({
 	recalculateAscentDescent: recalculateAscentDescent,
 	replaceWorkout: replaceWorkout,
-	rewriteAltitudeData: rewriteAltitudeData
+	rewriteAltitudeData: rewriteAltitudeData,
+	rewriteHeartRateData: rewriteHeartRateData
 });
 
 exports.Api = Api;

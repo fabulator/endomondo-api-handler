@@ -145,6 +145,10 @@ export default class Workout {
         return this.points;
     }
 
+    hasGPSData(): boolean {
+        return this.points.length > 0;
+    }
+
     setPoints(points: Array<Point>): this {
         this.points = points;
         return this;

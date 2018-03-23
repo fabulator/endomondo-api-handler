@@ -363,6 +363,10 @@ class Workout {
         return this.points;
     }
 
+    hasGPSData() {
+        return this.points.length > 0;
+    }
+
     setPoints(points) {
         this.points = points;
         return this;

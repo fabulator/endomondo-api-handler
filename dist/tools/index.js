@@ -2,6 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var luxon = require('luxon');
+
 /**
  * Recalculate total ascent and descent.
  *
@@ -119,6 +121,30 @@ function rewriteAltitudeData(workout, altitudeData) {
     return recalculateAscentDescent(newWorkout);
 }
 
+function rewriteHeartRateData(workout, HRData) {
+    const data = HRData.map(item => {
+        return {
+            hr: item.hr,
+            time: item.time.valueOf()
+        };
+    });
+
+    return rewriteWorkoutData(workout, 'hr', point => {
+        const time = point.getTime().valueOf();
+
+        const nearest = data.sort((a, b) => {
+            return Math.abs(time - a.time) - Math.abs(time - b.time);
+        })[0];
+
+        if (point.getTime().diff(luxon.DateTime.fromMillis(nearest.time)).as('seconds') > 15) {
+            return null;
+        }
+
+        return nearest.hr;
+    });
+}
+
 exports.recalculateAscentDescent = recalculateAscentDescent;
 exports.replaceWorkout = replaceWorkout;
 exports.rewriteAltitudeData = rewriteAltitudeData;
+exports.rewriteHeartRateData = rewriteHeartRateData;

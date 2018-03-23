@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.2.0] - 2018-03-23
+### Changed
+- Add new tool for rewriting hear rate data.
+
+
 ## [0.1.2] - 2018-03-22
 ### Fixed
 - Fix export of async function

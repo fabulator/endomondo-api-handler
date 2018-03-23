@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 /**
  * Recalculate total ascent and descent.
  *
@@ -115,4 +117,27 @@ function rewriteAltitudeData(workout, altitudeData) {
     return recalculateAscentDescent(newWorkout);
 }
 
-export { recalculateAscentDescent, replaceWorkout, rewriteAltitudeData };
+function rewriteHeartRateData(workout, HRData) {
+    const data = HRData.map(item => {
+        return {
+            hr: item.hr,
+            time: item.time.valueOf()
+        };
+    });
+
+    return rewriteWorkoutData(workout, 'hr', point => {
+        const time = point.getTime().valueOf();
+
+        const nearest = data.sort((a, b) => {
+            return Math.abs(time - a.time) - Math.abs(time - b.time);
+        })[0];
+
+        if (point.getTime().diff(DateTime.fromMillis(nearest.time)).as('seconds') > 15) {
+            return null;
+        }
+
+        return nearest.hr;
+    });
+}
+
+export { recalculateAscentDescent, replaceWorkout, rewriteAltitudeData, rewriteHeartRateData };
