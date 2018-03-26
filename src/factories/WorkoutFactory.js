@@ -1,8 +1,8 @@
 // @flow
 import { DateTime, Duration } from 'luxon';
-import type { ApiWorkout } from './../types';
+import type { ApiWorkout, Privacy, Sport } from './../types';
 import PointFactory from './PointFactory';
-import { Workout } from './../models';
+import { Workout, type Point } from './../models';
 
 export default class WorkoutFactory {
     static getWorkoutFromApi(workout: ApiWorkout): Workout {
@@ -30,6 +30,28 @@ export default class WorkoutFactory {
             heartRateAvg: workout.heart_rate_avg,
             heartRateMax: workout.heart_rate_max,
             title: workout.title,
+        });
+    }
+
+    // eslint-disable-next-line max-params
+    static get(sportId: Sport, start: DateTime, duration: Duration, distance: number, points: Array<Point>, options: {
+        ascent?: number,
+        descent?: number,
+        calories?: number,
+        notes?: string,
+        mapPrivacy?: Privacy,
+        workoutPrivacy?: Privacy,
+        hashtags?: Array<string>,
+        heartRateAvg?: number,
+        title?: string,
+    }) {
+        return new Workout({
+            ...options,
+            sportId,
+            start,
+            duration,
+            distance,
+            points,
         });
     }
 }

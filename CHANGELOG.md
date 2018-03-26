@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.3.0] - 2018-03-26
+### Add
+- Add new method to Workout Factory for creating new workouts in Endomondo.
+
+
 ## [0.2.2] - 2018-03-26
 ### Fixed
 - Fix flow definitions

@@ -10,18 +10,18 @@ type Constructing = {
     duration: Duration,
     distance: number,
     points: Array<Point>,
-    source: ?ApiWorkout,
+    source?: ApiWorkout,
     ascent: ?number,
     descent: ?number,
     calories: ?number,
     notes: ?string,
     mapPrivacy: ?Privacy,
     workoutPrivacy: ?Privacy,
-    hashtags: Array<string>,
+    hashtags?: Array<string>,
     heartRateAvg: ?number,
-    heartRateMax: ?number,
+    heartRateMax?: number,
     title: ?string,
-    id: ?number,
+    id?: number,
 }
 
 export default class Workout {

@@ -578,6 +578,17 @@ class WorkoutFactory {
             title: workout.title
         });
     }
+
+    // eslint-disable-next-line max-params
+    static get(sportId, start, duration, distance, points, options) {
+        return new Workout(_extends({}, options, {
+            sportId,
+            start,
+            duration,
+            distance,
+            points
+        }));
+    }
 }
 
 export { PointFactory, WorkoutFactory };
