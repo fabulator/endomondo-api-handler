@@ -161,8 +161,8 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
             ...filter,
             ...(after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
             ...(before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}),
-            ...(fromDuration ? { fromDuration: typeof fromDuration === 'string' ? fromDuration : fromDuration.as('seconds') } : {}),
-            ...(toDuration ? { toDuration: typeof toDuration === 'string' ? toDuration : toDuration.as('seconds') } : {}),
+            ...(fromDuration ? { fromDuration: typeof fromDuration === 'number' ? fromDuration : fromDuration.as('seconds') } : {}),
+            ...(toDuration ? { toDuration: typeof toDuration === 'number' ? toDuration : toDuration.as('seconds') } : {}),
         });
 
         return {

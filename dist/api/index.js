@@ -734,7 +734,7 @@ class Api extends dist.Api {
             toDuration
         } = filter;
 
-        const response = await this.get(this.getWorkoutsApiUrl('history', null, userId), _extends({}, filter, after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}, before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}, fromDuration ? { fromDuration: typeof fromDuration === 'string' ? fromDuration : fromDuration.as('seconds') } : {}, toDuration ? { toDuration: typeof toDuration === 'string' ? toDuration : toDuration.as('seconds') } : {}));
+        const response = await this.get(this.getWorkoutsApiUrl('history', null, userId), _extends({}, filter, after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}, before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}, fromDuration ? { fromDuration: typeof fromDuration === 'number' ? fromDuration : fromDuration.as('seconds') } : {}, toDuration ? { toDuration: typeof toDuration === 'number' ? toDuration : toDuration.as('seconds') } : {}));
 
         return {
             paging: response.data.paging,
