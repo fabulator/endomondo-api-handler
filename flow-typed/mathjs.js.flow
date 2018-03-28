@@ -1,0 +1,10 @@
+// @flow
+declare module 'mathjs' {
+    declare export class Unit {
+        toNumber(as: string): number;
+    }
+
+    declare export default {
+        unit: (value: number, unit: string) => Unit,
+    };
+}

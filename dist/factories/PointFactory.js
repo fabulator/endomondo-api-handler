@@ -1,6 +1,9 @@
 'use strict';
 
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
 var luxon = require('luxon');
+var math = _interopDefault(require('mathjs'));
 
 class Point {
 
@@ -110,8 +113,19 @@ class Point {
         return this;
     }
 
+    getDuration() {
+        return this.duration;
+    }
+
+    setDuration(duration) {
+        this.duration = duration;
+        return this;
+    }
+
     toString() {
-        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), this.getDistance(), this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
+        const distance = this.getDistance();
+
+        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), distance !== null ? distance.toNumber('km') : null, this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
             return item === null ? '' : item;
         }).join(';');
     }
@@ -132,13 +146,15 @@ var _extends = Object.assign || function (target) {
 };
 
 class PointFactory {
-    static getPointFromApi(point) {
+    static getPointFromApi(point, timezone) {
+        const { distance } = point;
+
         return new Point(_extends({
-            time: luxon.DateTime.fromISO(point.time),
+            time: luxon.DateTime.fromISO(point.time, { zone: timezone }),
             instruction: point.instruction,
             latitude: point.latitude,
             longitude: point.longitude,
-            distance: point.distance,
+            distance: distance ? math.unit(distance, 'km') : null,
             altitude: point.altitude,
             duration: luxon.Duration.fromObject({
                 seconds: point.duration
@@ -158,7 +174,7 @@ class PointFactory {
         altitude,
         cadence,
         hr
-    }) {
+    } = {}) {
         return new Point({
             time,
             latitude,

@@ -1,5 +1,6 @@
 // @flow
 import type { DateTime, Duration } from 'luxon';
+import type { Unit } from 'mathjs';
 import { SPORT_NAMES } from './../constants';
 import type Point from './Point';
 import type { Sport, Privacy, ApiWorkout } from './../types';
@@ -8,7 +9,7 @@ type Constructing = {
     sportId: Sport,
     start: DateTime,
     duration: Duration,
-    distance: number,
+    distance: ?Unit,
     points: Array<Point>,
     source?: ApiWorkout,
     ascent: ?number,
@@ -28,7 +29,7 @@ export default class Workout {
     sportId: Sport;
     start: DateTime;
     duration: Duration;
-    distance: number;
+    distance: ?Unit;
     points: Array<Point>;
     hashtags: Array<string>;
     source: ?ApiWorkout;
@@ -132,11 +133,11 @@ export default class Workout {
         return this;
     }
 
-    getDistance(): number {
+    getDistance(): ?Unit {
         return this.distance;
     }
 
-    setDistance(distance: number): this {
+    setDistance(distance: Unit): this {
         this.distance = distance;
         return this;
     }
@@ -269,12 +270,14 @@ export default class Workout {
     }
 
     toString(): string {
+        const distance = this.getDistance();
+
         return [
             `Workout ${this.getId() || ''}`,
             `type: ${this.getSportName()}`,
             `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`,
-            `distance: ${Math.round(this.getDistance())}km`,
+            distance ? `distance: ${Math.round(distance.toNumber('km') * 10) / 10}km` : null,
             `duration: ${Math.round(this.getDuration().as('minutes'))}min`,
-        ].join('; ');
+        ].filter(item => item !== null).join('; ');
     }
 }

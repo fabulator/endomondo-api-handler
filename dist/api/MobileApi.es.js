@@ -1,5 +1,6 @@
 import zlib from 'zlib';
-import { Api, DefaultResponseProcessor } from 'rest-api-handler/dist';
+import Api from 'rest-api-handler/dist/Api';
+import DefaultResponseProcessor from 'rest-api-handler/dist/DefaultResponseProcessor';
 
 class EndomondoException extends Error {
     constructor(message) {
@@ -142,16 +143,16 @@ class MobileApi extends Api {
 
     async updateWorkout(workout) {
         const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+        const distance = workout.getDistance();
 
         const data = _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: workout.getStart().toUTC().toFormat(dataFormat),
             end_time: workout.getStart().toUTC().toFormat(dataFormat),
             extendedResponse: true,
             gzip: true
-        }, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
 
         const options = {
             workoutId: workout.getId(),

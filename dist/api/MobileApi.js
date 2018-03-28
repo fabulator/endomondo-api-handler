@@ -3,7 +3,8 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var zlib = _interopDefault(require('zlib'));
-var dist = require('rest-api-handler/dist');
+var Api = _interopDefault(require('rest-api-handler/dist/Api'));
+var DefaultResponseProcessor = _interopDefault(require('rest-api-handler/dist/DefaultResponseProcessor'));
 
 class EndomondoException extends Error {
     constructor(message) {
@@ -67,10 +68,10 @@ function gzipRequestBody(body) {
     });
 }
 
-class MobileApi extends dist.Api {
+class MobileApi extends Api {
 
     constructor() {
-        super(ENDOMONDO_MOBILE_URL, [new dist.DefaultResponseProcessor(EndomondoApiException)], {
+        super(ENDOMONDO_MOBILE_URL, [new DefaultResponseProcessor(EndomondoApiException)], {
             'Content-Type': 'application/octet-stream',
             'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)'
         });
@@ -101,7 +102,7 @@ class MobileApi extends dist.Api {
             action: 'PAIR'
         };
 
-        const response = await this.post(`auth${dist.Api.convertParametersToUrl(options)}`);
+        const response = await this.post(`auth${Api.convertParametersToUrl(options)}`);
 
         const { userId, authToken } = processStringResponse(response.data);
 
@@ -129,7 +130,7 @@ class MobileApi extends dist.Api {
         };
 
         const gzippedBody = await gzipRequestBody(workout.getPoints().map(point => point.toString()).join('\n'));
-        const response = await this.request(`track${dist.Api.convertParametersToUrl(options)}`, 'POST', {
+        const response = await this.request(`track${Api.convertParametersToUrl(options)}`, 'POST', {
             body: gzippedBody
         });
 
@@ -146,16 +147,16 @@ class MobileApi extends dist.Api {
 
     async updateWorkout(workout) {
         const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+        const distance = workout.getDistance();
 
         const data = _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: workout.getStart().toUTC().toFormat(dataFormat),
             end_time: workout.getStart().toUTC().toFormat(dataFormat),
             extendedResponse: true,
             gzip: true
-        }, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
 
         const options = {
             workoutId: workout.getId(),
@@ -166,7 +167,7 @@ class MobileApi extends dist.Api {
 
         const gzippedBody = await gzipRequestBody(JSON.stringify(data));
 
-        return this.request(`api/workout/post${dist.Api.convertParametersToUrl(options)}`, 'POST', {
+        return this.request(`api/workout/post${Api.convertParametersToUrl(options)}`, 'POST', {
             body: gzippedBody
         });
     }

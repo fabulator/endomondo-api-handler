@@ -1,7 +1,9 @@
 import { DateTime, Duration } from 'luxon';
+import math from 'mathjs';
 import cookie from 'cookie';
 import queryString from 'query-string';
-import { Api, DefaultResponseProcessor } from 'rest-api-handler/dist';
+import Api from 'rest-api-handler/dist/Api';
+import DefaultResponseProcessor from 'rest-api-handler/dist/DefaultResponseProcessor';
 import zlib from 'zlib';
 
 const RUNNING = 0;
@@ -283,8 +285,19 @@ class Point {
         return this;
     }
 
+    getDuration() {
+        return this.duration;
+    }
+
+    setDuration(duration) {
+        this.duration = duration;
+        return this;
+    }
+
     toString() {
-        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), this.getDistance(), this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
+        const distance = this.getDistance();
+
+        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), distance !== null ? distance.toNumber('km') : null, this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
             return item === null ? '' : item;
         }).join(';');
     }
@@ -518,7 +531,9 @@ class Workout {
     }
 
     toString() {
-        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, `distance: ${Math.round(this.getDistance())}km`, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].join('; ');
+        const distance = this.getDistance();
+
+        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, distance ? `distance: ${Math.round(distance.toNumber('km') * 10) / 10}km` : null, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].filter(item => item !== null).join('; ');
     }
 }
 
@@ -537,13 +552,15 @@ var _extends = Object.assign || function (target) {
 };
 
 class PointFactory {
-    static getPointFromApi(point) {
+    static getPointFromApi(point, timezone) {
+        const { distance } = point;
+
         return new Point(_extends({
-            time: DateTime.fromISO(point.time),
+            time: DateTime.fromISO(point.time, { zone: timezone }),
             instruction: point.instruction,
             latitude: point.latitude,
             longitude: point.longitude,
-            distance: point.distance,
+            distance: distance ? math.unit(distance, 'km') : null,
             altitude: point.altitude,
             duration: Duration.fromObject({
                 seconds: point.duration
@@ -563,7 +580,7 @@ class PointFactory {
         altitude,
         cadence,
         hr
-    }) {
+    } = {}) {
         return new Point({
             time,
             latitude,
@@ -581,18 +598,21 @@ class PointFactory {
 
 class WorkoutFactory {
     static getWorkoutFromApi(workout) {
-        const { points } = workout;
+        const { points, distance } = workout;
+
+        const start = DateTime.fromISO(workout.local_start_time);
+        const timezone = start.toFormat('z');
 
         return new Workout({
+            start,
             sportId: workout.sport,
-            start: DateTime.fromISO(workout.local_start_time),
             duration: Duration.fromObject({
                 seconds: workout.duration
             }),
-            distance: workout.distance,
+            distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map(point => {
-                return PointFactory.getPointFromApi(point);
+                return PointFactory.getPointFromApi(point, timezone);
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,
@@ -609,7 +629,7 @@ class WorkoutFactory {
     }
 
     // eslint-disable-next-line max-params
-    static get(sportId, start, duration, distance, points, options) {
+    static get(sportId, start, duration, distance, points = [], options) {
         return new Workout(_extends({}, options, {
             sportId,
             start,
@@ -710,12 +730,13 @@ class Api$1 extends Api {
 
     // eslint-disable-next-line complexity
     editWorkout(workout, userId) {
+        const distance = workout.getDistance();
+
         return this.put(this.getWorkoutsApiUrl('', workout.getId(), userId), _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: this.getDateString(workout.getStart())
-        }, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { show_workout: workout.getWorkoutPrivacy() } : {}));
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { show_workout: workout.getWorkoutPrivacy() } : {}));
     }
 
     deleteWorkout(workoutId, userId) {
@@ -868,16 +889,16 @@ class MobileApi extends Api {
 
     async updateWorkout(workout) {
         const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+        const distance = workout.getDistance();
 
         const data = _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: workout.getStart().toUTC().toFormat(dataFormat),
             end_time: workout.getStart().toUTC().toFormat(dataFormat),
             extendedResponse: true,
             gzip: true
-        }, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
 
         const options = {
             workoutId: workout.getId(),

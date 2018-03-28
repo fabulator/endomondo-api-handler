@@ -1,4 +1,5 @@
 // @flow
+import math, { type Unit } from 'mathjs';
 import { DateTime, Duration } from 'luxon';
 import type { ApiWorkout, Privacy, Sport } from './../types';
 import PointFactory from './PointFactory';
@@ -6,18 +7,21 @@ import { Workout, type Point } from './../models';
 
 export default class WorkoutFactory {
     static getWorkoutFromApi(workout: ApiWorkout): Workout {
-        const { points } = workout;
+        const { points, distance } = workout;
+
+        const start = DateTime.fromISO(workout.local_start_time);
+        const timezone = start.toFormat('z');
 
         return new Workout({
+            start,
             sportId: workout.sport,
-            start: DateTime.fromISO(workout.local_start_time),
             duration: Duration.fromObject({
                 seconds: workout.duration,
             }),
-            distance: workout.distance,
+            distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map((point) => {
-                return PointFactory.getPointFromApi(point);
+                return PointFactory.getPointFromApi(point, timezone);
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,
@@ -34,7 +38,7 @@ export default class WorkoutFactory {
     }
 
     // eslint-disable-next-line max-params
-    static get(sportId: Sport, start: DateTime, duration: Duration, distance: number, points: Array<Point>, options: {
+    static get(sportId: Sport, start: DateTime, duration: Duration, distance: ?Unit, points: Array<Point> = [], options: {
         ascent?: number,
         descent?: number,
         calories?: number,

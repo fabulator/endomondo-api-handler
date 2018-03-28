@@ -374,7 +374,9 @@ class Workout {
     }
 
     toString() {
-        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, `distance: ${Math.round(this.getDistance())}km`, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].join('; ');
+        const distance = this.getDistance();
+
+        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, distance ? `distance: ${Math.round(distance.toNumber('km') * 10) / 10}km` : null, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].filter(item => item !== null).join('; ');
     }
 }
 

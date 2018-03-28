@@ -2,8 +2,15 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.0.0] - 2018-03-28
+### Added
+- Let's say it is a stable version
+- Add readme
+- Add wrapper for unit tests
+
+
 ## [0.3.0] - 2018-03-26
-### Add
+### Added
 - Add new method to Workout Factory for creating new workouts in Endomondo.
 
 

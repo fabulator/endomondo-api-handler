@@ -1,16 +1,19 @@
 // @flow
 import { DateTime, Duration } from 'luxon';
+import math, { type Unit } from 'mathjs';
 import type { Point as ApiPoint } from './../types/api';
 import { Point } from './../models';
 
 export default class PointFactory {
-    static getPointFromApi(point: ApiPoint): Point {
+    static getPointFromApi(point: ApiPoint, timezone: string): Point {
+        const { distance } = point;
+
         return new Point({
-            time: DateTime.fromISO(point.time),
+            time: DateTime.fromISO(point.time, { zone: timezone }),
             instruction: point.instruction,
             latitude: point.latitude,
             longitude: point.longitude,
-            distance: point.distance,
+            distance: distance ? math.unit(distance, 'km') : null,
             altitude: point.altitude,
             duration: Duration.fromObject({
                 seconds: point.duration,
@@ -33,13 +36,13 @@ export default class PointFactory {
         hr,
     }: {
         instruction: ?number,
-        distance: ?number,
+        distance: ?Unit,
         duration: ?Duration,
         speed: ?number,
         cadence: ?number,
         hr: ?number,
         altitude: ?number,
-    }) {
+    } = {}) {
         return new Point({
             time,
             latitude,

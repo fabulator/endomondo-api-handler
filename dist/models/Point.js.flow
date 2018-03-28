@@ -1,12 +1,13 @@
 // @flow
 import type { DateTime, Duration } from 'luxon';
+import type { Unit } from 'mathjs';
 
 type Constructor = {
     time: DateTime,
     latitude: number,
     longitude: number,
     instruction: ?number,
-    distance: ?number,
+    distance: ?Unit,
     altitude: ?number,
     duration: ?Duration,
     speed: ?number,
@@ -20,7 +21,7 @@ export default class Point {
     latitude: number;
     longitude: number;
     instruction: number | null;
-    distance: number | null;
+    distance: Unit | null;
     duration: Duration | null;
     speed: number | null;
     hr: number | null;
@@ -97,11 +98,11 @@ export default class Point {
         return this;
     }
 
-    getDistance(): number | null {
+    getDistance(): Unit | null {
         return this.distance;
     }
 
-    setDistance(distance: number | null) {
+    setDistance(distance: Unit | null) {
         this.distance = distance;
         return this;
     }
@@ -133,13 +134,24 @@ export default class Point {
         return this;
     }
 
+    getDuration(): Duration | null {
+        return this.duration;
+    }
+
+    setDuration(duration: Duration): this {
+        this.duration = duration;
+        return this;
+    }
+
     toString(): string {
+        const distance = this.getDistance();
+
         return [
             this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''),
             this.getInstruction(),
             this.getLatitude(),
             this.getLongitude(),
-            this.getDistance(),
+            distance !== null ? distance.toNumber('km') : null,
             this.getSpeed(),
             this.getAltitude(),
             this.getHeartRate(),

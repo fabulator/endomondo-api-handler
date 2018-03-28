@@ -1,15 +1,16 @@
 {
   "name": "endomondo-api-handler",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Unofficial API handler for Endomondo",
   "main": "./src/index.js",
   "scripts": {
-    "js-lint": "node node_modules/eslint/bin/eslint.js --ext .js ./src",
+    "js-lint": "node node_modules/eslint/bin/eslint.js --ext .js ./src ./tests",
     "js-lint-export": "npm run js-lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
     "flow": "node node_modules/flow-bin/vendor/flow",
     "flow-coverage": "node node_modules/flow-coverage-report/bin/flow-coverage-report.js -f \"node node_modules/flow-bin/vendor/flow\" -i ./src/**/*.js* -t html -t text -t json -o tests_results/coverage/flow",
     "build": "rm -rf ./dist && node node_modules/rollup/bin/rollup --config ./rollup.config.js",
-    "precommit": "npm run js-lint && npm run flow && npm run build"
+    "test": "node ./node_modules/jest/bin/jest.js",
+    "precommit": "npm run js-lint && npm run flow && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -19,16 +20,19 @@
   "license": "Apache License 2.0",
   "homepage": "https://github.com/fabulator/endomondo-api-handler#readme",
   "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
     "eslint-config-socifi": "^1.5.0",
     "flow-bin": "^0.68.0",
     "flow-coverage-report": "^0.4.1",
     "flow-typed": "^2.3.0",
+    "socifi-jest-config": "^1.4.0",
     "socifi-rollup-config": "^1.6.0"
   },
   "dependencies": {
     "cookie": "^0.3.1",
     "luxon": "^0.5.8",
+    "mathjs": "^4.0.1",
     "query-string": "^6.0.0",
-    "rest-api-handler": "^1.3.1"
+    "rest-api-handler": "^1.4.0"
   }
 }

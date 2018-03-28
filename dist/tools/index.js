@@ -4,6 +4,41 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var luxon = require('luxon');
 
+class EndomondoException extends Error {
+    constructor(message) {
+        super(`Endomondo Error: ${message}`);
+    }
+}
+
+/**
+ * Create new workout and delete old one. It is only way how to update points.
+ *
+ * @param workout
+ * @param api
+ * @param mobileApi
+ * @returns {Promise<Workout>} Workout with updated id.
+ */
+async function replaceWorkout(workout, api, mobileApi) {
+    const oldWorkoutId = workout.getId();
+
+    if (!oldWorkoutId) {
+        throw new EndomondoException('Workout does not have ID');
+    }
+
+    const newWorkoutId = await mobileApi.createWorkout(workout);
+
+    const newWorkout = workout.setId(newWorkoutId);
+
+    newWorkout.getHashtags().forEach(hashtag => {
+        api.addHashtag(hashtag, newWorkoutId);
+    });
+
+    await api.editWorkout(newWorkout);
+    await api.deleteWorkout(oldWorkoutId);
+
+    return newWorkout;
+}
+
 /**
  * Recalculate total ascent and descent.
  *
@@ -44,41 +79,6 @@ function recalculateAscentDescent(workout) {
     });
 
     return workout.setAscent(ascent).setDescent(descent);
-}
-
-class EndomondoException extends Error {
-    constructor(message) {
-        super(`Endomondo Error: ${message}`);
-    }
-}
-
-/**
- * Create new workout and delete old one. It is only way how to update points.
- *
- * @param workout
- * @param api
- * @param mobileApi
- * @returns {Promise<Workout>} Workout with updated id.
- */
-async function replaceWorkout(workout, api, mobileApi) {
-    const oldWorkoutId = workout.getId();
-
-    if (!oldWorkoutId) {
-        throw new EndomondoException('Workout does not have ID');
-    }
-
-    const newWorkoutId = await mobileApi.createWorkout(workout);
-
-    const newWorkout = workout.setId(newWorkoutId);
-
-    newWorkout.getHashtags().forEach(hashtag => {
-        api.addHashtag(hashtag, newWorkoutId);
-    });
-
-    await api.editWorkout(newWorkout);
-    await api.deleteWorkout(oldWorkoutId);
-
-    return newWorkout;
 }
 
 /**
@@ -144,7 +144,6 @@ function rewriteHeartRateData(workout, HRData) {
     });
 }
 
-exports.recalculateAscentDescent = recalculateAscentDescent;
 exports.replaceWorkout = replaceWorkout;
 exports.rewriteAltitudeData = rewriteAltitudeData;
 exports.rewriteHeartRateData = rewriteHeartRateData;

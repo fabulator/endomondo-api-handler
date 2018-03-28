@@ -1,12 +1,10 @@
 // @flow
 import cookie from 'cookie';
 import queryString from 'query-string';
-import { DateTime, Duration } from 'luxon';
-import {
-    Api as ApiHandler,
-    DefaultResponseProcessor,
-    type ApiResponseType,
-} from 'rest-api-handler/dist';
+import { DateTime } from 'luxon';
+import ApiHandler from 'rest-api-handler/src/Api';
+import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
+import type { ApiResponseType } from 'rest-api-handler/src';
 import { ENDOMONDO_URL } from './../constants';
 import {
     EndomondoException,
@@ -120,11 +118,13 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
 
     // eslint-disable-next-line complexity
     editWorkout(workout: Workout, userId: ?number) {
+        const distance = workout.getDistance();
+
         return this.put(this.getWorkoutsApiUrl('', workout.getId(), userId), {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: this.getDateString(workout.getStart()),
+            ...(distance ? { distance: distance.toNumber('km') } : {}),
             ...(workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}),
             ...(workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}),
             ...(workout.getTitle() ? { title: workout.getTitle() } : {}),

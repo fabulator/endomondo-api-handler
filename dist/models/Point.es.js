@@ -106,8 +106,19 @@ class Point {
         return this;
     }
 
+    getDuration() {
+        return this.duration;
+    }
+
+    setDuration(duration) {
+        this.duration = duration;
+        return this;
+    }
+
     toString() {
-        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), this.getDistance(), this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
+        const distance = this.getDistance();
+
+        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), distance !== null ? distance.toNumber('km') : null, this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
             return item === null ? '' : item;
         }).join(';');
     }

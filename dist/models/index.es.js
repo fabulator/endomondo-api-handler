@@ -106,8 +106,19 @@ class Point {
         return this;
     }
 
+    getDuration() {
+        return this.duration;
+    }
+
+    setDuration(duration) {
+        this.duration = duration;
+        return this;
+    }
+
     toString() {
-        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), this.getDistance(), this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
+        const distance = this.getDistance();
+
+        return [this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''), this.getInstruction(), this.getLatitude(), this.getLongitude(), distance !== null ? distance.toNumber('km') : null, this.getSpeed(), this.getAltitude(), this.getHeartRate(), this.getCadence(), ''].map(item => {
             return item === null ? '' : item;
         }).join(';');
     }
@@ -487,7 +498,9 @@ class Workout {
     }
 
     toString() {
-        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, `distance: ${Math.round(this.getDistance())}km`, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].join('; ');
+        const distance = this.getDistance();
+
+        return [`Workout ${this.getId() || ''}`, `type: ${this.getSportName()}`, `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`, distance ? `distance: ${Math.round(distance.toNumber('km') * 10) / 10}km` : null, `duration: ${Math.round(this.getDuration().as('minutes'))}min`].filter(item => item !== null).join('; ');
     }
 }
 

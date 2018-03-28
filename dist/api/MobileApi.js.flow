@@ -1,10 +1,8 @@
 // @flow
 import zlib from 'zlib';
-import {
-    Api,
-    DefaultResponseProcessor,
-    type ApiResponseType,
-} from 'rest-api-handler/dist';
+import Api from 'rest-api-handler/src/Api';
+import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
+import type { ApiResponseType } from 'rest-api-handler/src';
 import { EndomondoApiException, EndomondoException } from './../exceptions';
 import { ENDOMONDO_MOBILE_URL } from './../constants';
 import type { Workout } from './../models';
@@ -127,15 +125,16 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
 
     async updateWorkout(workout: Workout): Promise<ApiResponseType<*>> {
         const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+        const distance = workout.getDistance();
 
         const data = {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            distance: workout.getDistance(),
             start_time: workout.getStart().toUTC().toFormat(dataFormat),
             end_time: workout.getStart().toUTC().toFormat(dataFormat),
             extendedResponse: true,
             gzip: true,
+            ...(distance ? { distance: distance.toNumber('km') } : {}),
             ...(workout.getCalories() ? { calories: workout.getCalories() } : {}),
             ...(workout.getNotes() ? { notes: workout.getNotes() } : {}),
             ...(workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}),
