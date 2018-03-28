@@ -1,3 +1,5 @@
+# Endomondo API handler
+
 This a handler for unofficial Endomondo API, which is used on their web app and mobile app. It allows you to read various of information and update them. This library is focused on searching, updating and creating workouts. Other endpoints you can find by sniffing your browser. Cooperation is welcome. 
 
 The library is based on [my PHP library](https://github.com/fabulator/endomondo-api) that do the similar.
