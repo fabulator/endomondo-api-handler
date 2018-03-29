@@ -311,8 +311,8 @@ class Workout {
         this.source = source || null;
         this.calories = calories || null;
         this.notes = notes || null;
-        this.mapPrivacy = mapPrivacy || null;
-        this.workoutPrivacy = workoutPrivacy || null;
+        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
+        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
         this.id = id || null;
         this.hashtags = hashtags || [];
         this.heartRateAvg = heartRateAvg || null;
@@ -577,7 +577,6 @@ class WorkoutFactory {
         const { points, distance } = workout;
 
         const start = luxon.DateTime.fromISO(workout.local_start_time);
-        const timezone = start.toFormat('z');
 
         return new Workout({
             start,
@@ -588,7 +587,7 @@ class WorkoutFactory {
             distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map(point => {
-                return PointFactory.getPointFromApi(point, timezone);
+                return PointFactory.getPointFromApi(point, start.toFormat('z'));
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,

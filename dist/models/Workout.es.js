@@ -176,8 +176,8 @@ class Workout {
         this.source = source || null;
         this.calories = calories || null;
         this.notes = notes || null;
-        this.mapPrivacy = mapPrivacy || null;
-        this.workoutPrivacy = workoutPrivacy || null;
+        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
+        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
         this.id = id || null;
         this.hashtags = hashtags || [];
         this.heartRateAvg = heartRateAvg || null;

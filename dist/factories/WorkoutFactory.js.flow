@@ -10,7 +10,6 @@ export default class WorkoutFactory {
         const { points, distance } = workout;
 
         const start = DateTime.fromISO(workout.local_start_time);
-        const timezone = start.toFormat('z');
 
         return new Workout({
             start,
@@ -21,7 +20,7 @@ export default class WorkoutFactory {
             distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map((point) => {
-                return PointFactory.getPointFromApi(point, timezone);
+                return PointFactory.getPointFromApi(point, start.toFormat('z'));
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,
@@ -39,15 +38,15 @@ export default class WorkoutFactory {
 
     // eslint-disable-next-line max-params
     static get(sportId: Sport, start: DateTime, duration: Duration, distance: ?Unit, points: Array<Point> = [], options: {
-        ascent?: number,
-        descent?: number,
-        calories?: number,
-        notes?: string,
-        mapPrivacy?: Privacy,
-        workoutPrivacy?: Privacy,
+        ascent?: ?number,
+        descent?: ?number,
+        calories?: ?number,
+        notes?: ?string,
+        mapPrivacy?: ?Privacy,
+        workoutPrivacy?: ?Privacy,
         hashtags?: Array<string>,
-        heartRateAvg?: number,
-        title?: string,
+        heartRateAvg?: ?number,
+        title?: ?string,
     }) {
         return new Workout({
             ...options,

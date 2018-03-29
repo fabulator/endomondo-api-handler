@@ -37,6 +37,7 @@ function gzipRequestBody(body: string): Promise<Buffer> {
 export default class MobileApi extends Api<ApiResponseType<*>> {
     authToken: ?string;
     userId: ?number;
+    dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
 
     constructor() {
         super(ENDOMONDO_MOBILE_URL, [
@@ -124,14 +125,13 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
     }
 
     async updateWorkout(workout: Workout): Promise<ApiResponseType<*>> {
-        const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
         const distance = workout.getDistance();
 
         const data = {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            start_time: workout.getStart().toUTC().toFormat(dataFormat),
-            end_time: workout.getStart().toUTC().toFormat(dataFormat),
+            start_time: workout.getStart().toUTC().toFormat(this.dataFormat),
+            end_time: workout.getStart().toUTC().toFormat(this.dataFormat),
             extendedResponse: true,
             gzip: true,
             ...(distance ? { distance: distance.toNumber('km') } : {}),
@@ -148,14 +148,12 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
             authToken: this.getAuthToken(),
         };
 
-        const gzippedBody = await gzipRequestBody(JSON.stringify(data));
-
         return this
             .request(
                 `api/workout/post${Api.convertParametersToUrl(options)}`,
                 'POST',
                 {
-                    body: gzippedBody,
+                    body: await gzipRequestBody(JSON.stringify(data)),
                 },
             );
     }

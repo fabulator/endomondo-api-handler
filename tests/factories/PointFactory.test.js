@@ -1,4 +1,3 @@
-// @flow
 import { PointFactory, Point } from './../../src';
 
 describe('Test PointFactory class', () => {

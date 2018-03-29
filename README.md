@@ -1,5 +1,8 @@
 # Endomondo API handler
 
+[![codecov](https://img.shields.io/npm/v/endomondo-api-handler.svg)](https://www.npmjs.com/package/endomondo-api-handler) [![codecov](https://codecov.io/gh/fabulator/endomondo-api-handler/branch/master/graph/badge.svg)](https://codecov.io/gh/fabulator/endomondo-api-handler)  [![codecov](https://travis-ci.org/fabulator/endomondo-api-handler.svg?branch=master)](https://travis-ci.org/fabulator/endomondo-api-handler) [![Maintainability](https://api.codeclimate.com/v1/badges/7ab35417954388460660/maintainability)](https://codeclimate.com/github/fabulator/endomondo-api-handler/maintainability)
+
+
 This a handler for unofficial Endomondo API, which is used on their web app and mobile app. It allows you to read various of information and update them. This library is focused on searching, updating and creating workouts. Other endpoints you can find by sniffing your browser. Cooperation is welcome. 
 
 The library is based on [my PHP library](https://github.com/fabulator/endomondo-api) that do the similar.

@@ -131,8 +131,8 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
             ...(workout.getAscent() ? { ascent: workout.getAscent() } : {}),
             ...(workout.getDescent() ? { descent: workout.getDescent() } : {}),
             ...(workout.getNotes() ? { notes: workout.getNotes() } : {}),
-            ...(workout.getMapPrivacy() ? { show_map: workout.getMapPrivacy() } : {}),
-            ...(workout.getWorkoutPrivacy() ? { show_workout: workout.getWorkoutPrivacy() } : {}),
+            ...(workout.getMapPrivacy() !== null ? { show_map: workout.getMapPrivacy() } : {}),
+            ...(workout.getWorkoutPrivacy() !== null ? { show_workout: workout.getWorkoutPrivacy() } : {}),
         });
     }
 

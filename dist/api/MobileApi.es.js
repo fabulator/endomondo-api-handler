@@ -71,6 +71,7 @@ class MobileApi extends Api {
             'Content-Type': 'application/octet-stream',
             'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)'
         });
+        this.dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
     }
 
     getAuthToken() {
@@ -142,14 +143,13 @@ class MobileApi extends Api {
     }
 
     async updateWorkout(workout) {
-        const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
         const distance = workout.getDistance();
 
         const data = _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            start_time: workout.getStart().toUTC().toFormat(dataFormat),
-            end_time: workout.getStart().toUTC().toFormat(dataFormat),
+            start_time: workout.getStart().toUTC().toFormat(this.dataFormat),
+            end_time: workout.getStart().toUTC().toFormat(this.dataFormat),
             extendedResponse: true,
             gzip: true
         }, distance ? { distance: distance.toNumber('km') } : {}, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
@@ -161,10 +161,8 @@ class MobileApi extends Api {
             authToken: this.getAuthToken()
         };
 
-        const gzippedBody = await gzipRequestBody(JSON.stringify(data));
-
         return this.request(`api/workout/post${Api.convertParametersToUrl(options)}`, 'POST', {
-            body: gzippedBody
+            body: await gzipRequestBody(JSON.stringify(data))
         });
     }
 }

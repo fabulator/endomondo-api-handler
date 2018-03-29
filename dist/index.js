@@ -425,8 +425,8 @@ class Workout {
         this.source = source || null;
         this.calories = calories || null;
         this.notes = notes || null;
-        this.mapPrivacy = mapPrivacy || null;
-        this.workoutPrivacy = workoutPrivacy || null;
+        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
+        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
         this.id = id || null;
         this.hashtags = hashtags || [];
         this.heartRateAvg = heartRateAvg || null;
@@ -691,7 +691,6 @@ class WorkoutFactory {
         const { points, distance } = workout;
 
         const start = luxon.DateTime.fromISO(workout.local_start_time);
-        const timezone = start.toFormat('z');
 
         return new Workout({
             start,
@@ -702,7 +701,7 @@ class WorkoutFactory {
             distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map(point => {
-                return PointFactory.getPointFromApi(point, timezone);
+                return PointFactory.getPointFromApi(point, start.toFormat('z'));
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,
@@ -826,7 +825,7 @@ class Api$1 extends Api {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
             start_time: this.getDateString(workout.getStart())
-        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { show_workout: workout.getWorkoutPrivacy() } : {}));
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() !== null ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() !== null ? { show_workout: workout.getWorkoutPrivacy() } : {}));
     }
 
     deleteWorkout(workoutId, userId) {
@@ -907,6 +906,7 @@ class MobileApi extends Api {
             'Content-Type': 'application/octet-stream',
             'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)'
         });
+        this.dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
     }
 
     getAuthToken() {
@@ -978,14 +978,13 @@ class MobileApi extends Api {
     }
 
     async updateWorkout(workout) {
-        const dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
         const distance = workout.getDistance();
 
         const data = _extends({
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            start_time: workout.getStart().toUTC().toFormat(dataFormat),
-            end_time: workout.getStart().toUTC().toFormat(dataFormat),
+            start_time: workout.getStart().toUTC().toFormat(this.dataFormat),
+            end_time: workout.getStart().toUTC().toFormat(this.dataFormat),
             extendedResponse: true,
             gzip: true
         }, distance ? { distance: distance.toNumber('km') } : {}, workout.getCalories() ? { calories: workout.getCalories() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {});
@@ -997,10 +996,8 @@ class MobileApi extends Api {
             authToken: this.getAuthToken()
         };
 
-        const gzippedBody = await gzipRequestBody(JSON.stringify(data));
-
         return this.request(`api/workout/post${Api.convertParametersToUrl(options)}`, 'POST', {
-            body: gzippedBody
+            body: await gzipRequestBody(JSON.stringify(data))
         });
     }
 }

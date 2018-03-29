@@ -337,8 +337,8 @@ class Workout {
         this.source = source || null;
         this.calories = calories || null;
         this.notes = notes || null;
-        this.mapPrivacy = mapPrivacy || null;
-        this.workoutPrivacy = workoutPrivacy || null;
+        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
+        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
         this.id = id || null;
         this.hashtags = hashtags || [];
         this.heartRateAvg = heartRateAvg || null;
@@ -603,7 +603,6 @@ class WorkoutFactory {
         const { points, distance } = workout;
 
         const start = luxon.DateTime.fromISO(workout.local_start_time);
-        const timezone = start.toFormat('z');
 
         return new Workout({
             start,
@@ -614,7 +613,7 @@ class WorkoutFactory {
             distance: distance ? math.unit(workout.distance, 'km') : null,
             source: workout,
             points: points && points.points ? points.points.map(point => {
-                return PointFactory.getPointFromApi(point, timezone);
+                return PointFactory.getPointFromApi(point, start.toFormat('z'));
             }) : [],
             ascent: workout.ascent,
             descent: workout.descent,
@@ -738,7 +737,7 @@ class Api extends ApiHandler {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
             start_time: this.getDateString(workout.getStart())
-        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() ? { show_workout: workout.getWorkoutPrivacy() } : {}));
+        }, distance ? { distance: distance.toNumber('km') } : {}, workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}, workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}, workout.getTitle() ? { title: workout.getTitle() } : {}, workout.getAscent() ? { ascent: workout.getAscent() } : {}, workout.getDescent() ? { descent: workout.getDescent() } : {}, workout.getNotes() ? { notes: workout.getNotes() } : {}, workout.getMapPrivacy() !== null ? { show_map: workout.getMapPrivacy() } : {}, workout.getWorkoutPrivacy() !== null ? { show_workout: workout.getWorkoutPrivacy() } : {}));
     }
 
     deleteWorkout(workoutId, userId) {

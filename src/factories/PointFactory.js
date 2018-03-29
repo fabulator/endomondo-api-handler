@@ -35,13 +35,13 @@ export default class PointFactory {
         cadence,
         hr,
     }: {
-        instruction: ?number,
-        distance: ?Unit,
-        duration: ?Duration,
-        speed: ?number,
-        cadence: ?number,
-        hr: ?number,
-        altitude: ?number,
+        instruction?: ?number,
+        distance?: ?Unit,
+        duration?: ?Duration,
+        speed?: ?number,
+        cadence?: ?number,
+        hr?: ?number,
+        altitude?: ?number,
     } = {}) {
         return new Point({
             time,

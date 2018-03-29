@@ -37,8 +37,8 @@ export default class Workout {
     descent: ?number;
     calories: ?number;
     notes: ?string;
-    mapPrivacy: ?Privacy;
-    workoutPrivacy: ?Privacy;
+    mapPrivacy: Privacy | null;
+    workoutPrivacy: Privacy | null;
     id: ?number;
     heartRateAvg: ?number;
     heartRateMax: ?number;
@@ -74,8 +74,8 @@ export default class Workout {
         this.source = source || null;
         this.calories = calories || null;
         this.notes = notes || null;
-        this.mapPrivacy = mapPrivacy || null;
-        this.workoutPrivacy = workoutPrivacy || null;
+        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
+        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
         this.id = id || null;
         this.hashtags = hashtags || [];
         this.heartRateAvg = heartRateAvg || null;
@@ -87,7 +87,7 @@ export default class Workout {
         return this.id;
     }
 
-    setId(id: number): this {
+    setId(id: ?number): this {
         this.id = id;
         return this;
     }
@@ -137,7 +137,7 @@ export default class Workout {
         return this.distance;
     }
 
-    setDistance(distance: Unit): this {
+    setDistance(distance: ?Unit): this {
         this.distance = distance;
         return this;
     }
@@ -159,7 +159,7 @@ export default class Workout {
         return this.ascent;
     }
 
-    setAscent(ascent: number): this {
+    setAscent(ascent: ?number): this {
         this.ascent = ascent;
         return this;
     }
@@ -168,7 +168,7 @@ export default class Workout {
         return this.descent;
     }
 
-    setDescent(descent: number): this {
+    setDescent(descent: ?number): this {
         this.descent = descent;
         return this;
     }
@@ -177,7 +177,7 @@ export default class Workout {
         return this.calories;
     }
 
-    setCalories(calories: number): this {
+    setCalories(calories: ?number): this {
         this.calories = calories;
         return this;
     }
@@ -186,25 +186,25 @@ export default class Workout {
         return this.notes;
     }
 
-    setNotes(notes: string) {
+    setNotes(notes: ?string) {
         this.notes = notes;
         return this;
     }
 
-    getMapPrivacy(): ?Privacy {
+    getMapPrivacy(): Privacy | null {
         return this.mapPrivacy;
     }
 
-    setMapPrivacy(privacy: Privacy): this {
+    setMapPrivacy(privacy: Privacy | null): this {
         this.mapPrivacy = privacy;
         return this;
     }
 
-    getWorkoutPrivacy(): ?Privacy {
+    getWorkoutPrivacy(): Privacy | null {
         return this.workoutPrivacy;
     }
 
-    setWorkoutPrivacy(privacy: Privacy): this {
+    setWorkoutPrivacy(privacy: Privacy | null): this {
         this.workoutPrivacy = privacy;
         return this;
     }
@@ -242,7 +242,7 @@ export default class Workout {
         return this.heartRateAvg;
     }
 
-    setAvgHeartRate(hr: number): this {
+    setAvgHeartRate(hr: ?number): this {
         this.heartRateAvg = hr;
         return this;
     }
@@ -251,7 +251,7 @@ export default class Workout {
         return this.heartRateMax;
     }
 
-    setMaxHeartRate(hr: number): this {
+    setMaxHeartRate(hr: ?number): this {
         this.heartRateMax = hr;
         return this;
     }
@@ -260,7 +260,7 @@ export default class Workout {
         return this.title;
     }
 
-    setTitle(title: string) {
+    setTitle(title: ?string) {
         this.title = title;
         return this;
     }
