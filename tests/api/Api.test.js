@@ -21,6 +21,7 @@ describe('Api testing', () => {
                 month: 3,
                 day: 5,
                 hour: 4,
+                zone: 'utc',
             }),
             Duration.fromObject({ minutes: 5 }),
         );
@@ -37,7 +38,7 @@ describe('Api testing', () => {
             expect(putSpy).toHaveBeenCalledWith('rest/v1/users/1/workouts/', {
                 duration: 300,
                 sport: 0,
-                start_time: '2018-03-05T03:00:00.000Z',
+                start_time: '2018-03-05T04:00:00.000Z',
             });
         });
 
@@ -48,7 +49,7 @@ describe('Api testing', () => {
             expect(putSpy).toHaveBeenCalledWith('rest/v1/users/1/workouts/', {
                 duration: 300,
                 sport: 0,
-                start_time: '2018-03-05T03:00:00.000Z',
+                start_time: '2018-03-05T04:00:00.000Z',
                 distance: 6,
             });
         });
@@ -76,7 +77,7 @@ describe('Api testing', () => {
                 show_map: 0,
                 show_workout: 1,
                 sport: 0,
-                start_time: '2018-03-05T03:00:00.000Z',
+                start_time: '2018-03-05T04:00:00.000Z',
                 title: 'titulek',
             });
         });
