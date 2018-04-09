@@ -4,13 +4,61 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var cookie = _interopDefault(require('cookie'));
+var Api = _interopDefault(require('rest-api-handler/dist/Api'));
 var luxon = require('luxon');
 var math = _interopDefault(require('mathjs'));
-var cookie = _interopDefault(require('cookie'));
 var queryString = _interopDefault(require('query-string'));
-var Api = _interopDefault(require('rest-api-handler/dist/Api'));
 var DefaultResponseProcessor = _interopDefault(require('rest-api-handler/dist/DefaultResponseProcessor'));
 var zlib = _interopDefault(require('zlib'));
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+class CookieApi extends Api {
+
+    static serializeCookies(cookies) {
+        return Object.keys(cookies).map(name => {
+            return cookie.serialize(name, cookies[name]);
+        }).join(';');
+    }
+
+    getCookies() {
+        const cookies = this.getDefaultHeaders()['cookie'];
+        if (!cookies) {
+            return null;
+        }
+
+        return cookie.parse(cookies);
+    }
+
+    setCookies(cookies) {
+        this.setDefaultHeader('cookie', CookieApi.serializeCookies(_extends({}, this.getCookies(), cookies)));
+    }
+}
+
+CookieApi.prototype.fetchRequest = async function (request) {
+    const response = await Api.prototype.fetchRequest.call(this, request);
+    const setCookieHeader = response.headers.get('set-cookie');
+    if (!setCookieHeader) {
+        return response;
+    }
+
+    const cookies = cookie.parse(setCookieHeader);
+    this.setCookies(cookies);
+    return response;
+};
 
 const RUNNING = 0;
 const CYCLING_TRANSPORT = 1;
@@ -627,20 +675,6 @@ class Workout {
     }
 }
 
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
 class PointFactory {
     static getPointFromApi(point, timezone) {
         const { distance } = point;
@@ -729,13 +763,7 @@ class WorkoutFactory {
     }
 }
 
-function serializeCookies(cookies) {
-    return Object.keys(cookies).map(name => {
-        return cookie.serialize(name, cookies[name]);
-    }).join(';');
-}
-
-class Api$1 extends Api {
+class Api$1 extends CookieApi {
 
     constructor(csfrtoken = '123456789') {
         super(ENDOMONDO_URL, [new DefaultResponseProcessor(EndomondoApiException)]);
@@ -758,7 +786,7 @@ class Api$1 extends Api {
     }
 
     setUserToken(token) {
-        this.setDefaultHeader('cookie', serializeCookies({
+        this.setDefaultHeader('cookie', Api$1.serializeCookies({
             CSRF_TOKEN: this.csfrtoken,
             USER_TOKEN: token
         }));
@@ -806,10 +834,15 @@ class Api$1 extends Api {
             remember: true
         });
 
-        const token = cookie.parse(response.source.headers.get('set-cookie')).USER_TOKEN;
         this.setUserId(response.data.id);
-        this.setUserToken(token);
-        return token;
+
+        const cookies = this.getCookies();
+
+        if (!cookies) {
+            throw new EndomondoException('Cookies are missing in response.');
+        }
+
+        return cookies.USER_TOKEN;
     }
 
     async getWorkout(workoutId, userId) {

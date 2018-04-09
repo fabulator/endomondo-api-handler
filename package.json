@@ -1,6 +1,6 @@
 {
   "name": "endomondo-api-handler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Unofficial handler for Endomondo API",
   "main": "./src/index.js",
   "scripts": {
@@ -33,6 +33,6 @@
     "luxon": "^0.5.8",
     "mathjs": "^4.0.1",
     "query-string": "^6.0.0",
-    "rest-api-handler": "^1.4.0"
+    "rest-api-handler": "^1.5.0"
   }
 }

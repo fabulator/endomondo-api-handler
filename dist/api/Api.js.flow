@@ -1,8 +1,7 @@
 // @flow
-import cookie from 'cookie';
 import queryString from 'query-string';
 import { DateTime } from 'luxon';
-import ApiHandler from 'rest-api-handler/src/Api';
+import CookieApi from './CookieApi';
 import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
 import type { ApiResponseType } from 'rest-api-handler/src';
 import { ENDOMONDO_URL } from './../constants';
@@ -20,17 +19,11 @@ import type {
     Paging,
 } from './../types';
 
-function serializeCookies(cookies: { [string]: string }): string {
-    return Object.keys(cookies).map((name) => {
-        return cookie.serialize(name, cookies[name]);
-    }).join(';');
-}
-
 type ListOfWorkouts = {
     workouts: Array<Workout>,
 } & Paging;
 
-export default class Api extends ApiHandler<ApiResponseType<Object>> {
+export default class Api extends CookieApi<ApiResponseType<Object>> {
     userId: ?number;
     csfrtoken: string;
     dateFormat: string = 'yyyy-MM-dd\'T\'HH:mm:ss\'.000Z\'';
@@ -57,7 +50,7 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
     }
 
     setUserToken(token: string) {
-        this.setDefaultHeader('cookie', serializeCookies({
+        this.setDefaultHeader('cookie', Api.serializeCookies({
             CSRF_TOKEN: this.csfrtoken,
             USER_TOKEN: token,
         }));
@@ -105,10 +98,15 @@ export default class Api extends ApiHandler<ApiResponseType<Object>> {
             remember: true,
         });
 
-        const token = cookie.parse(response.source.headers.get('set-cookie')).USER_TOKEN;
         this.setUserId(response.data.id);
-        this.setUserToken(token);
-        return token;
+
+        const cookies = this.getCookies();
+
+        if (!cookies) {
+            throw new EndomondoException('Cookies are missing in response.');
+        }
+
+        return cookies.USER_TOKEN;
     }
 
     async getWorkout(workoutId: number, userId: ?number): Promise<Workout> {
