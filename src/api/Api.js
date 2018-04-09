@@ -1,9 +1,9 @@
 // @flow
 import queryString from 'query-string';
 import { DateTime } from 'luxon';
-import CookieApi from './CookieApi';
 import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
 import type { ApiResponseType } from 'rest-api-handler/src';
+import CookieApi from './CookieApi';
 import { ENDOMONDO_URL } from './../constants';
 import {
     EndomondoException,

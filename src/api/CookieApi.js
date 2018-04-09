@@ -12,7 +12,7 @@ class CookieApi<ResponseType> extends Api<ResponseType> {
     }
 
     getCookies(): ?{[string]: string} {
-        const cookies = this.getDefaultHeaders()['cookie'];
+        const cookies = this.getDefaultHeaders().cookie;
         if (!cookies) {
             return null;
         }
@@ -28,7 +28,7 @@ class CookieApi<ResponseType> extends Api<ResponseType> {
     }
 }
 
-CookieApi.prototype.fetchRequest = async function(request: Request): Promise<Response> {
+CookieApi.prototype.fetchRequest = async function fetchRequest(request: Request): Promise<Response> {
     const response = await Api.prototype.fetchRequest.call(this, request);
     const setCookieHeader = response.headers.get('set-cookie');
     if (!setCookieHeader) {

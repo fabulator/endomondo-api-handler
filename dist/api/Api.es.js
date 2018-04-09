@@ -28,7 +28,7 @@ class CookieApi extends Api {
     }
 
     getCookies() {
-        const cookies = this.getDefaultHeaders()['cookie'];
+        const cookies = this.getDefaultHeaders().cookie;
         if (!cookies) {
             return null;
         }
@@ -36,12 +36,12 @@ class CookieApi extends Api {
         return cookie.parse(cookies);
     }
 
-    setCookies(cookies) {
+    addCookies(cookies) {
         this.setDefaultHeader('cookie', CookieApi.serializeCookies(_extends({}, this.getCookies(), cookies)));
     }
 }
 
-CookieApi.prototype.fetchRequest = async function (request) {
+CookieApi.prototype.fetchRequest = async function fetchRequest(request) {
     const response = await Api.prototype.fetchRequest.call(this, request);
     const setCookieHeader = response.headers.get('set-cookie');
     if (!setCookieHeader) {
@@ -49,7 +49,7 @@ CookieApi.prototype.fetchRequest = async function (request) {
     }
 
     const cookies = cookie.parse(setCookieHeader);
-    this.setCookies(cookies);
+    this.addCookies(cookies);
     return response;
 };
 
