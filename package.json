@@ -11,7 +11,8 @@
     "build": "rm -rf ./dist && node node_modules/rollup/bin/rollup --config ./rollup.config.js",
     "test": "node ./node_modules/jest/bin/jest.js",
     "flow-init": "node node_modules/flow-typed/dist/cli.js install jest@22.x query-string@6.x luxon@0.4.x",
-    "precommit": "npm run js-lint && npm run flow && npm run test && npm run build"
+    "precommit": "npm run js-lint && npm run flow && npm run test",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
