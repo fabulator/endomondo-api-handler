@@ -187,10 +187,7 @@
 .*node_modules/damerau-levenshtein/.*
 .*node_modules/dashdash/.*
 .*node_modules/debug/.*
-
-
 .*node_modules/decamelize/.*
-
 .*node_modules/decompress-response/.*
 .*node_modules/deep-is/.*
 .*node_modules/default-require-extensions/.*
@@ -205,7 +202,6 @@
 .*node_modules/domexception/.*
 .*node_modules/duplexer2/.*
 .*node_modules/duplexer3/.*
-
 .*node_modules/eastasianwidth/.*
 .*node_modules/ecc-jsbn/.*
 .*node_modules/electron-to-chromium/.*
@@ -675,11 +671,9 @@
 
 [include]
 
-
 [options]
 
-
 [version]
-0.68.0
+0.69.0
 
 [libs]

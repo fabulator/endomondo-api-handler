@@ -136,7 +136,7 @@ function rewriteHeartRateData(workout, HRData) {
             return Math.abs(time - a.time) - Math.abs(time - b.time);
         })[0];
 
-        if (point.getTime().diff(luxon.DateTime.fromMillis(nearest.time)).as('seconds') > 15) {
+        if (point.getTime().diff(luxon.DateTime.fromMillis(nearest.time), ['milliseconds']).as('seconds') > 15) {
             return null;
         }
 

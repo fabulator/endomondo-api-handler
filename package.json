@@ -10,6 +10,7 @@
     "flow-coverage": "node node_modules/flow-coverage-report/bin/flow-coverage-report.js -f \"node node_modules/flow-bin/vendor/flow\" -i ./src/**/*.js* -t html -t text -t json -o tests_results/coverage/flow",
     "build": "rm -rf ./dist && node node_modules/rollup/bin/rollup --config ./rollup.config.js",
     "test": "node ./node_modules/jest/bin/jest.js",
+    "flow-init": "node node_modules/flow-typed/dist/cli.js install jest@22.x query-string@6.x luxon@0.4.x",
     "precommit": "npm run js-lint && npm run flow && npm run test && npm run build"
   },
   "repository": {
@@ -22,15 +23,15 @@
   "devDependencies": {
     "cross-fetch": "^2.1.0",
     "eslint-config-socifi": "^1.5.0",
-    "flow-bin": "^0.68.0",
+    "flow-bin": "^0.69.0",
     "flow-coverage-report": "^0.4.1",
     "flow-typed": "^2.3.0",
     "socifi-jest-config": "^1.4.0",
     "socifi-rollup-config": "^1.6.0"
   },
   "dependencies": {
-    "cookie": "^0.3.1",
-    "luxon": "^0.5.8",
+    "cookie": "^0.3.0",
+    "luxon": "^1.0.0",
     "mathjs": "^4.0.1",
     "query-string": "^6.0.0",
     "rest-api-handler": "^1.5.0"
