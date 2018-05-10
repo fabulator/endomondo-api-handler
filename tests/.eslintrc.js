@@ -1,5 +1,5 @@
 module.exports = {
     extends: [
-        'socifi/jest',
+        '@socifi/eslint-config/jest',
     ],
 };

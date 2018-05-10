@@ -108,3 +108,25 @@ const workout = WorkoutFactory.get(
 
 const workoutId = await mobileApi.createWorkout(workout);
 ```
+
+### Export your workouts to GPX
+
+```javascript
+require('cross-fetch/polyfill');
+const fs = require('fs');
+const { Api } = require('endomondo-api-handler');
+
+const api = new Api();
+
+(async () => {
+    await api.login(LOGIN, PASSWORD);
+
+    await api.processWorkouts({}, (workout) => {
+        console.log(workout.toString());
+        if (workout.hasGPSData()) {
+            fs.writeFileSync(`tmp/${workout.getId()}.gpx`, workout.toGpx(), 'utf8');
+        }
+    });
+})();
+
+```

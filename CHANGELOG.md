@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.1.0] - 2018-05-10
+### Changed
+- Use cookie-api-handler for resolving Endomondo cookies
+
+### Added
+- add toGpx method to workout Class + add example to README
+
+
 ## [1.0.2] - 2018-04-09
 ### Fixed
 - Set cookies that are sent from Endomondo. It will extend length of session.

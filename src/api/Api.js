@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import { DateTime } from 'luxon';
 import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
 import type { ApiResponseType } from 'rest-api-handler/src';
-import CookieApi from './CookieApi';
+import CookieApi from 'cookie-api-handler/src/CookieApi';
 import { ENDOMONDO_URL } from './../constants';
 import {
     EndomondoException,
@@ -156,6 +156,7 @@ export default class Api extends CookieApi<ApiResponseType<Object>> {
         } = filter;
 
         const response: ApiResponseType<ApiWorkouts> = await this.get(this.getWorkoutsApiUrl('history', null, userId), {
+            expand: 'points,workout',
             ...filter,
             ...(after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
             ...(before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}),
@@ -182,7 +183,7 @@ export default class Api extends CookieApi<ApiResponseType<Object>> {
             return processor(workout);
         });
 
-        if (workouts.length) {
+        if (workouts.length > 0) {
             const data = queryString.parseUrl(paging.next).query;
             processorPromises.push(...await this.processWorkouts(data, processor));
         }

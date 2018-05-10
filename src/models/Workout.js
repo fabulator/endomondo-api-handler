@@ -1,16 +1,27 @@
 // @flow
 import type { DateTime, Duration } from 'luxon';
 import type { Unit } from 'mathjs';
+import math from 'mathjs';
+import { BaseBuilder, BaseBuilderModels, buildGPX } from 'gpx-builder/src';
 import { SPORT_NAMES } from './../constants';
-import type Point from './Point';
+import EndomondoPoint from './Point';
 import type { Sport, Privacy, ApiWorkout } from './../types';
+
+const {
+    Point,
+    Metadata,
+    Person,
+    Link,
+    Track,
+    Segment,
+} = BaseBuilderModels;
 
 type Constructing = {
     sportId: Sport,
     start: DateTime,
     duration: Duration,
     distance: ?Unit,
-    points: Array<Point>,
+    points: Array<EndomondoPoint>,
     source?: ApiWorkout,
     ascent: ?number,
     descent: ?number,
@@ -30,7 +41,7 @@ export default class Workout {
     start: DateTime;
     duration: Duration;
     distance: ?Unit;
-    points: Array<Point>;
+    points: Array<EndomondoPoint>;
     hashtags: Array<string>;
     source: ?ApiWorkout;
     ascent: ?number;
@@ -142,7 +153,7 @@ export default class Workout {
         return this;
     }
 
-    getPoints(): Array<Point> {
+    getPoints(): Array<EndomondoPoint> {
         return this.points;
     }
 
@@ -150,7 +161,7 @@ export default class Workout {
         return this.points.length > 0;
     }
 
-    setPoints(points: Array<Point>): this {
+    setPoints(points: Array<EndomondoPoint>): this {
         this.points = points;
         return this;
     }
@@ -267,6 +278,61 @@ export default class Workout {
 
     getSource(): ?ApiWorkout {
         return this.source;
+    }
+
+    getGpxPoints(): Array<Point> {
+        return this.getPoints()
+            .filter((point: EndomondoPoint) => {
+                return point.getLatitude() != null && point.getLongitude() != null;
+            }).map((point: EndomondoPoint) => {
+                const speed = point.getSpeed();
+                const hr = point.getHeartRate();
+                const cadence = point.getCadence();
+                const altitude = point.getAltitude();
+
+                return new Point(point.getLatitude(), point.getLongitude(), {
+                    time: point.getTime().toJSDate(),
+                    ...(hr != null ? { hr } : {}),
+                    ...(cadence != null ? { cad: cadence } : {}),
+                    ...(altitude != null ? { ele: altitude } : {}),
+                    ...(speed != null ? { speed: math.unit(speed, 'km/h').toNumber('m/s') } : {}),
+                });
+            });
+    }
+
+    // eslint-disable-next-line complexity
+    toGpx(): string {
+        const workoutId = this.getId();
+        const authorId = this.source && this.source.author ? this.source.author.id : null;
+        const authorName = this.source && this.source.author ? this.source.author.name : null;
+
+        const builder = new BaseBuilder();
+
+        builder.setMetadata(new Metadata({
+            ...(authorName ? {
+                author: new Person({
+                    name: authorName,
+                }),
+            } : {}),
+            link: new Link('http://www.endomondo.com', {
+                text: 'Endomondo',
+            }),
+            time: this.getStart().toJSDate(),
+        }));
+
+        builder.setTracks([
+            new Track([new Segment(this.getGpxPoints())], {
+                src: 'http://www.endomondo.com/',
+                ...(workoutId && authorId ? {
+                    link: new Link(`https://www.endomondo.com/users/${authorId}/workouts/${workoutId}`, {
+                        text: 'endomondo',
+                    }),
+                } : {}),
+                type: this.getSportName(),
+            }),
+        ]);
+
+        return buildGPX(builder.getData());
     }
 
     toString(): string {

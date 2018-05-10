@@ -1,7 +1,0 @@
-// @flow
-declare module 'cookie' {
-    declare module.exports: {
-        serialize(name: string, val: string): string,
-        parse(string): {[string]: string},
-    };
-}

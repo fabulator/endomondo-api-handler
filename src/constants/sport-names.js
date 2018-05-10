@@ -72,11 +72,8 @@ import {
     PADDLE_TENNIS,
     PARAGLIDING,
 } from './sports';
-import type { Sport } from './../types';
 
-const names : {
-    [Sport]: string,
-} = {
+export default {
     [RUNNING]: 'Running',
     [CYCLING_TRANSPORT]: 'Cycling, transport',
     [CYCLING_SPORT]: 'Cycling, sport',
@@ -149,5 +146,3 @@ const names : {
     [PADDLE_TENNIS]: 'Paddle tennis',
     [PARAGLIDING]: 'Paragliding',
 };
-
-export default names;
