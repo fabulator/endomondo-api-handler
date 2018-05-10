@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "lint": "eslint --ext .js ./src ./tests",
-    "lint-export": "npm run js-lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
+    "lint-export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
     "flow-init": "flow-typed install cookie@0.3.x jest@22.x query-string@6.x luxon@0.4.x xmlbuilder@x.x",
     "flow": "flow",
     "flow-coverage": "flow-coverage-report -f \"node node_modules/flow-bin/vendor/flow\" -i ./src/**/*.js* -t html -t text -t json -o tests_results/coverage/flow",
