@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.1.1] - 2018-05-10
+### Fixed
+- Fix main file in package.json
+
+
 ## [1.1.0] - 2018-05-10
 ### Changed
 - Use cookie-api-handler for resolving Endomondo cookies

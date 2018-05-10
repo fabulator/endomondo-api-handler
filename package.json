@@ -1,8 +1,10 @@
 {
   "name": "endomondo-api-handler",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Unofficial handler for Endomondo API",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
+  "jsnext:main": "dist/index.es.js",
+  "module": "dist/index.es.js",
   "scripts": {
     "lint": "eslint --ext .js ./src ./tests",
     "lint-export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
