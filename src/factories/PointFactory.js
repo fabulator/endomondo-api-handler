@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { DateTime, Duration } from 'luxon';
 import math, { type Unit } from 'mathjs';
 import type { Point as ApiPoint } from './../types/api';

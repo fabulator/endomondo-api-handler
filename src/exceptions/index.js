@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import EndomondoException from './EndomondoException';
 import EndomondoApiException from './EndomondoApiException';
 

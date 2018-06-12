@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const RUNNING: 0 = 0;
 export const CYCLING_TRANSPORT: 1 = 1;
 export const CYCLING_SPORT: 2 = 2;

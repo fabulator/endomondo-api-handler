@@ -1,8 +1,8 @@
-// @flow
+// @flow strict
 import type { DateTime, Duration } from 'luxon';
 import type { Unit } from 'mathjs';
 import math from 'mathjs';
-import { BaseBuilder, BaseBuilderModels, buildGPX } from 'gpx-builder/src';
+import { GarminBuilder, buildGPX } from 'gpx-builder/src';
 import { SPORT_NAMES } from './../constants';
 import EndomondoPoint from './Point';
 import type { Sport, Privacy, ApiWorkout } from './../types';
@@ -14,7 +14,7 @@ const {
     Link,
     Track,
     Segment,
-} = BaseBuilderModels;
+} = GarminBuilder.MODELS;
 
 type Constructing = {
     sportId: Sport,
@@ -306,7 +306,7 @@ export default class Workout {
         const authorId = this.source && this.source.author ? this.source.author.id : null;
         const authorName = this.source && this.source.author ? this.source.author.name : null;
 
-        const builder = new BaseBuilder();
+        const builder = new GarminBuilder();
 
         builder.setMetadata(new Metadata({
             ...(authorName ? {
@@ -332,7 +332,7 @@ export default class Workout {
             }),
         ]);
 
-        return buildGPX(builder.getData());
+        return buildGPX(builder.toObject());
     }
 
     toString(): string {

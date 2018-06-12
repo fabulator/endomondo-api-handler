@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Point } from './Point';
 import type { User } from './User';
 import type { Workout } from './Workout';

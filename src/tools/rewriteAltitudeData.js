@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import recalculateAscentDescent from './recalculateAscentDescent';
 import rewriteWorkoutData from './rewriteWorkoutData';
 import type { Workout } from './../models';

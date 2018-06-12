@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import math, { type Unit } from 'mathjs';
 import { DateTime, Duration } from 'luxon';
 import type { ApiWorkout, Privacy, Sport } from './../types';

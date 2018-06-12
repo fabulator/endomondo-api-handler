@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { DateTime, Duration } from 'luxon';
 import type { Unit } from 'mathjs';
 

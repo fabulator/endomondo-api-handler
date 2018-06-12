@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { DateTime } from 'luxon';
 import rewriteWorkoutData from './rewriteWorkoutData';
 import type { Workout, Point } from './../models';

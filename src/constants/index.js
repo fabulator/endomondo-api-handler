@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import * as SPORTS from './sports';
 import SPORT_NAMES from './sport-names';
 import * as PRIVACY from './privacy';

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export type User = {
     id: number,
     email: string,

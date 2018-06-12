@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Api from './Api';
 import MobileApi from './MobileApi';
 

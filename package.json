@@ -1,6 +1,6 @@
 {
   "name": "endomondo-api-handler",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Unofficial handler for Endomondo API",
   "main": "./dist/index.js",
   "jsnext:main": "dist/index.es.js",
@@ -22,11 +22,15 @@
     "url": "git+ssh://git@github.com/fabulator/endomondo-api-handler.git"
   },
   "author": "Michal Ozogán <michal@ozogan.eu>",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "homepage": "https://github.com/fabulator/endomondo-api-handler#readme",
+  "keywords": [
+    "endomondo",
+    "endomondo-api"
+  ],
   "devDependencies": {
     "cross-fetch": "^2.1.1",
-    "@socifi/eslint-config": "^1.8.1",
+    "@socifi/eslint-config": "^1.9.0",
     "flow-bin": "^0.74.0",
     "flow-coverage-report": "^0.5.0",
     "flow-typed": "^2.3.0",
@@ -34,11 +38,11 @@
     "@socifi/rollup-config": "^1.10.0"
   },
   "dependencies": {
-    "cookie-api-handler": "^1.0.1",
-    "gpx-builder": "^0.3.0",
-    "luxon": "^1.2.0",
-    "mathjs": "^4.2.2",
+    "cookie-api-handler": "^1.1.0",
+    "gpx-builder": "^1.0.0",
+    "luxon": "^1.2.1",
+    "mathjs": "^4.4.2",
     "query-string": "^6.1.0",
-    "rest-api-handler": "^1.6.1"
+    "rest-api-handler": "^1.8.0"
   }
 }

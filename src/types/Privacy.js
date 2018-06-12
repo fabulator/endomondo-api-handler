@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import {
     PRIVACY_EVERYONE,
     PRIVACY_FRIENDS,

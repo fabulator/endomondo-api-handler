@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { DateTime, Duration } from 'luxon';
 import type { Sport } from './../Sport';
 

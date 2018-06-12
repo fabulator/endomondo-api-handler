@@ -728,3 +728,8 @@
 >=0.72.0
 
 [libs]
+
+[strict]
+unsafe-getters-setters
+untyped-import
+untyped-type-import

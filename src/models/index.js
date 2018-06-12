@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Point from './Point';
 import Workout from './Workout';
 

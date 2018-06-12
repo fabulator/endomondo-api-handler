@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import queryString from 'query-string';
 import { DateTime } from 'luxon';
 import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';

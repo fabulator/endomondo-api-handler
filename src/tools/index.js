@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import replaceWorkout from './replaceWorkout';
 import rewriteAltitudeData from './rewriteAltitudeData';
 import rewriteHeartRateData from './rewriteHeartRateData';

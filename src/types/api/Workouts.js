@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Workout } from './Workout';
 import type { Paging } from './Paging';
 

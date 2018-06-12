@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import zlib from 'zlib';
 import Api from 'rest-api-handler/src/Api';
 import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';

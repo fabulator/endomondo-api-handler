@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { ApiResponseType } from 'rest-api-handler/src';
 import EndomondoException from './EndomondoException';
 

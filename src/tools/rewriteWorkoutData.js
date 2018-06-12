@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Workout, Point } from './../models';
 
 type Type = 'altitude' | 'hr';

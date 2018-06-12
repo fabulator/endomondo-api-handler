@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { Api, MobileApi } from './api';
 import { SPORTS, PRIVACY } from './constants';
 import { EndomondoException, EndomondoApiException } from './exceptions';

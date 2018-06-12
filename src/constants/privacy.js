@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 export const PRIVACY_EVERYONE: 0 = 0;
 export const PRIVACY_FRIENDS: 1 = 1;

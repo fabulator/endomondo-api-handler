@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Sport } from '../Sport';
 import type { Point } from './Point';
 import type { Privacy } from '../Privacy';

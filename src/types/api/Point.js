@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export type Point = {
     time: string,
     instruction?: number,

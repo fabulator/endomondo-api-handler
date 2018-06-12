@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { EndomondoException } from './../exceptions';
 import type { Workout } from './../models';
 import type { Api, MobileApi } from './../api';
