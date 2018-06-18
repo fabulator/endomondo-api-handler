@@ -41,7 +41,7 @@
     "cookie-api-handler": "^1.1.0",
     "gpx-builder": "^1.0.0",
     "luxon": "^1.2.1",
-    "mathjs": "^4.4.2",
+    "mathjs": "^5.0.0",
     "query-string": "^6.1.0",
     "rest-api-handler": "^1.8.0"
   }
