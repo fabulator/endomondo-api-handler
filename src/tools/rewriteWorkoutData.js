@@ -1,7 +1,7 @@
-// @flow strict
+// @flow
 import type { Workout, Point } from './../models';
 
-type Type = 'altitude' | 'hr';
+type Type = 'altitude' | 'hr' | 'cadence';
 
 /**
  * Rewrite altitude or hr of points based on updater.
@@ -19,6 +19,8 @@ export default function rewriteWorkoutData(workout: Workout, type: Type, getNewV
             point.setAltitude(newValue);
         } else if (type === 'hr') {
             point.setHeartRate(newValue);
+        } else if (type === 'cadence') {
+            point.setCadence(newValue);
         }
 
         return point;

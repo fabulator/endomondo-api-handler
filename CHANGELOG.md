@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.3.0] - 2018-06-28
+### Added
+- Cadence rewritter
+
+
 ## [1.2.0] - 2018-06-12
 ### Changed
 - Updated dependecies

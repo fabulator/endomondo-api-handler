@@ -8,6 +8,7 @@ import {
     replaceWorkout,
     rewriteAltitudeData,
     rewriteHeartRateData,
+    rewriteCadenceData,
 } from './tools';
 import type { WorkoutFilters } from './types';
 
@@ -26,4 +27,5 @@ export {
     replaceWorkout,
     rewriteAltitudeData,
     rewriteHeartRateData,
+    rewriteCadenceData,
 };
