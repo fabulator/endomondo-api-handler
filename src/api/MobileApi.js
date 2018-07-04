@@ -116,7 +116,7 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
         const workoutId: ?number = processStringResponse(response.data)['workout.id'];
 
         if (!workoutId) {
-            throw EndomondoException('Error while creating workout. Endomondo did not returned workout id.');
+            throw new EndomondoException('Error while creating workout. Endomondo did not returned workout id.');
         }
 
         await this.updateWorkout(workout.setId(workoutId));

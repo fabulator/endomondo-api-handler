@@ -58,5 +58,5 @@ export type Workout = {
     show_map: Privacy,
     show_workout: Privacy,
     admin_rejected: boolean,
-    personal_bests: Array<*>
+    personal_bests: Array<*>,
 }

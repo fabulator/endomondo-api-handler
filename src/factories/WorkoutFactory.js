@@ -9,7 +9,7 @@ export default class WorkoutFactory {
     static getWorkoutFromApi(workout: ApiWorkout): Workout {
         const { points, distance } = workout;
 
-        const start = DateTime.fromISO(workout.local_start_time);
+        const start = DateTime.fromISO(workout.local_start_time, { setZone: true });
 
         return new Workout({
             start,
