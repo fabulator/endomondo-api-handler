@@ -184,7 +184,7 @@ export default class Api extends CookieApi<ApiResponseType<Object>> {
         });
 
         if (workouts.length > 0) {
-            const data = queryString.parseUrl(paging.next).query;
+            const data: Object = queryString.parseUrl(paging.next).query;
             processorPromises.push(...await this.processWorkouts(data, processor));
         }
 
