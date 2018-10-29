@@ -30,7 +30,7 @@
   ],
   "devDependencies": {
     "cross-fetch": "^2.1.1",
-    "@socifi/eslint-config": "^1.10.0",
+    "@socifi/eslint-config": "^2.0.0",
     "flow-bin": "^0.84.0",
     "flow-coverage-report": "^0.6.0",
     "flow-typed": "^2.5.1",
