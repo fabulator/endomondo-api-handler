@@ -1,14 +1,12 @@
-// @flow strict
-import zlib from 'zlib';
+import { gzip } from 'zlib';
 import Api from 'rest-api-handler/src/Api';
-import DefaultResponseProcessor from 'rest-api-handler/src/DefaultResponseProcessor';
-import type { ApiResponseType } from 'rest-api-handler/src';
+import { DefaultResponseProcessor, ApiResponseType } from 'rest-api-handler';
 import { EndomondoApiException, EndomondoException } from './../exceptions';
 import { ENDOMONDO_MOBILE_URL } from './../constants';
-import type { Workout } from './../models';
+import { Workout } from './../models';
 
-function processStringResponse(response: string): Object {
-    const data = {};
+function processStringResponse(response: string): {[property: string]: string} {
+    const data: {[property: string]: string} = {};
 
     response.split('\n')
         .map(item => item.split('='))
@@ -23,7 +21,7 @@ function processStringResponse(response: string): Object {
 
 function gzipRequestBody(body: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-        zlib.gzip(body, (error, buffer: Buffer) => {
+        gzip(body, (error, buffer: Buffer) => {
             if (error) {
                 reject(error);
                 return;
@@ -34,33 +32,37 @@ function gzipRequestBody(body: string): Promise<Buffer> {
     });
 }
 
-export default class MobileApi extends Api<ApiResponseType<*>> {
-    authToken: ?string;
-    userId: ?number;
-    dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+export default class MobileApi extends Api<ApiResponseType<any>> {
+    private authToken: string | null;
 
-    constructor() {
+    private userId: number | null;
+
+    private static dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+
+    public constructor() {
         super(ENDOMONDO_MOBILE_URL, [
             new DefaultResponseProcessor(EndomondoApiException),
         ], {
             'Content-Type': 'application/octet-stream',
             'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)',
         });
+        this.authToken = null;
+        this.userId = null;
     }
 
-    getAuthToken(): ?string {
+    public getAuthToken(): string | null {
         return this.authToken;
     }
 
-    setAuthToken(authToken: string) {
+    public setAuthToken(authToken: string | null) {
         this.authToken = authToken;
     }
 
-    getUserId(): ?number {
+    public getUserId(): number | null {
         return this.userId;
     }
 
-    setUserId(id: number) {
+    public setUserId(id: number | null) {
         this.userId = id;
     }
 
@@ -75,18 +77,21 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
 
         const response: ApiResponseType<string> = await this.post(`auth${Api.convertParametersToUrl(options)}`);
 
-        const { userId, authToken }: {
-            userId: string,
-            authToken: string,
-        } = processStringResponse(response.data);
+        const decoded = processStringResponse(response.data);
 
+        if (!decoded.userId || decoded.authToken) {
+            throw new EndomondoException(`User id and token was not found in response: ${response.data}`);
+        }
+
+        const userId = decoded.userId;
+        const authToken = decoded.authToken;
         this.setUserId(Number(userId));
         this.setAuthToken(authToken);
         return authToken;
     }
 
     /**
-     * Create Endomono workout.
+     * Create Endomondo workout.
      *
      * @param workout
      * @returns {Promise<number>} return id of new workout
@@ -113,25 +118,27 @@ export default class MobileApi extends Api<ApiResponseType<*>> {
                 },
             );
 
-        const workoutId: ?number = processStringResponse(response.data)['workout.id'];
+        const workoutId = processStringResponse(response.data)['workout.id'];
 
         if (!workoutId) {
             throw new EndomondoException('Error while creating workout. Endomondo did not returned workout id.');
         }
 
-        await this.updateWorkout(workout.setId(workoutId));
+        const numberedWorkoutId = Number(workoutId);
 
-        return workoutId;
+        await this.updateWorkout(workout.setId(numberedWorkoutId));
+
+        return numberedWorkoutId;
     }
 
-    async updateWorkout(workout: Workout): Promise<ApiResponseType<*>> {
+    async updateWorkout(workout: Workout): Promise<ApiResponseType<any>> {
         const distance = workout.getDistance();
 
         const data = {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getSportId(),
-            start_time: workout.getStart().toUTC().toFormat(this.dataFormat),
-            end_time: workout.getStart().toUTC().toFormat(this.dataFormat),
+            start_time: workout.getStart().toUTC().toFormat(MobileApi.dataFormat),
+            end_time: workout.getStart().toUTC().toFormat(MobileApi.dataFormat),
             extendedResponse: true,
             gzip: true,
             ...(distance ? { distance: distance.toNumber('km') } : {}),
