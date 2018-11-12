@@ -35,7 +35,7 @@
     "flow-coverage-report": "^0.6.0",
     "flow-typed": "^2.5.1",
     "@socifi/jest-config": "^1.10.0",
-    "@socifi/rollup-config": "^1.10.0"
+    "@socifi/rollup-config": "^2.0.0"
   },
   "dependencies": {
     "cookie-api-handler": "^1.1.0",
