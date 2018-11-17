@@ -14,6 +14,10 @@ describe('Test Workout class', () => {
         });
     });
 
+    it('exports gpx', () => {
+        expect(typeof workout.toGpx()).toEqual('string');
+    });
+
     describe('Test hashtag methods', () => {
         it('set and get hashtags', () => {
             expect(workout.getHashtags()).toEqual([]);

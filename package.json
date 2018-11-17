@@ -1,6 +1,6 @@
 {
   "name": "endomondo-api-handler",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Unofficial handler for Endomondo API",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.esm.js",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "cookie-api-handler": "^2.0.0",
-    "gpx-builder": "^2.0.0",
+    "gpx-builder": "^2.0.1",
     "luxon": "^1.6.2",
     "mathjs": "^5.2.3",
     "query-string": "^6.2.0",
