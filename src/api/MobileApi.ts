@@ -1,9 +1,8 @@
 import { gzip } from 'zlib';
-import Api from 'rest-api-handler/src/Api';
-import { DefaultResponseProcessor, ApiResponseType } from 'rest-api-handler';
-import { EndomondoApiException, EndomondoException } from './../exceptions';
-import { ENDOMONDO_MOBILE_URL } from './../constants';
-import { Workout } from './../models';
+import { Api, DefaultResponseProcessor, ApiResponseType } from 'rest-api-handler';
+import { EndomondoApiException, EndomondoException } from '../exceptions';
+import { ENDOMONDO_MOBILE_URL } from '../constants';
+import { Workout } from '../models';
 
 function processStringResponse(response: string): {[property: string]: string} {
     const data: {[property: string]: string} = {};
@@ -66,7 +65,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
         this.userId = id;
     }
 
-    async login(email: string, password: string): Promise<string> {
+    public async login(email: string, password: string): Promise<string> {
         const options = {
             email,
             password,
@@ -83,8 +82,8 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             throw new EndomondoException(`User id and token was not found in response: ${response.data}`);
         }
 
-        const userId = decoded.userId;
-        const authToken = decoded.authToken;
+        const { userId, authToken } = decoded;
+
         this.setUserId(Number(userId));
         this.setAuthToken(authToken);
         return authToken;
@@ -96,7 +95,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
      * @param workout
      * @returns {Promise<number>} return id of new workout
      */
-    async createWorkout(workout: Workout): Promise<number> {
+    public async createWorkout(workout: Workout): Promise<number> {
         const options = {
             workoutId: `-${'XXXXXXXXXXXXXXXX'.split('X').map(() => {
                 return Math.floor(Math.random() * 9);
@@ -131,7 +130,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
         return numberedWorkoutId;
     }
 
-    async updateWorkout(workout: Workout): Promise<ApiResponseType<any>> {
+    public async updateWorkout(workout: Workout): Promise<ApiResponseType<any>> {
         const distance = workout.getDistance();
 
         const data = {

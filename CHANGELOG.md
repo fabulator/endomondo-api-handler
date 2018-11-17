@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2018-11-17
+### Changed
+- Migrate to typescript
+- Move Point and Workout factories to static method of its models.
+- Change names of privacy variables
+
+
 ## [1.3.1] - 2018-07-04
 ### Fixed
 - Fix workout timezone

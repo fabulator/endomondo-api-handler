@@ -84,7 +84,7 @@ To create workout, use WorkoutFactory and MobileApi:
 ```javascript
 const { DateTime, Duration } = require('luxon');
 const math = require('mathjs');
-const { PointFactory, WorkoutFactory, SPORTS } = require('endomondo-api-handler');
+const { Point, Workout, SPORTS } = require('endomondo-api-handler');
 
 const start = DateTime.fromObject({
     year: 2018,
@@ -94,15 +94,15 @@ const start = DateTime.fromObject({
     minute: 2,
 });
 
-const workout = WorkoutFactory.get(
+const workout = Workout.get(
     SPORTS.RUNNING,
     start,
     Duration.fromObject({ minutes: 3 }),
     math.unit(3, 'km'),
     [
-        PointFactory.get(start, 50.02957153, 14.51805568),
-        PointFactory.get(start.plus({ minutes: 1 }), 50.03057153, 14.52205568),
-        PointFactory.get(start.plus({ minutes: 2 }), 50.03357153, 14.53805568),
+        Point.get(start, 50.02957153, 14.51805568),
+        Point.get(start.plus({ minutes: 1 }), 50.03057153, 14.52205568),
+        Point.get(start.plus({ minutes: 2 }), 50.03357153, 14.53805568),
     ],
 );
 
