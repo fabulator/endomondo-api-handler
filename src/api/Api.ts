@@ -79,7 +79,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     /**
      * Get api url for workout namespace.
      */
-    private getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null): string {
+    private getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null = this.userId): string {
         return this.getUserApiUrl(`workouts/${workoutId ? `${workoutId}${namespace ? `/${namespace}` : ''}` : namespace}`, userId);
     }
 
@@ -146,7 +146,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     }
 
     // eslint-disable-next-line complexity
-    public async getWorkouts(filter: WorkoutFilters = {}, userId: number | null): Promise<ListOfWorkouts> {
+    public async getWorkouts(filter: WorkoutFilters = {}, userId: number | null = this.userId): Promise<ListOfWorkouts> {
         const {
             after,
             before,
@@ -174,7 +174,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     public async processWorkouts(
         filter: WorkoutFilters = {},
         processor: (workout: Workout) => Promise<Workout>,
-        userId: number | null = null,
+        userId: number | null = this.userId,
     ): Promise<Array<Workout>> {
         const { workouts, paging } = await this.getWorkouts(filter, userId);
 
@@ -185,7 +185,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         if (workouts.length > 0) {
             const data: Object = parseUrl(paging.next).query;
             // @ts-ignore
-            processorPromises.push(...await this.processWorkouts(data, processor));
+            processorPromises.push(...await this.processWorkouts(data, processor, userId));
         }
 
         return Promise.all(processorPromises);
