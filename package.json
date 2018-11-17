@@ -1,21 +1,20 @@
 {
   "name": "endomondo-api-handler",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "description": "Unofficial handler for Endomondo API",
-  "main": "./dist/index.js",
-  "jsnext:main": "dist/index.es.js",
-  "module": "dist/index.es.js",
+  "main": "dist/index.js",
+  "jsnext:main": "dist/index.esm.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --ext .js ./src ./tests",
-    "lint-export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
-    "flow-init": "flow-typed install cookie@0.3.x jest@22.x query-string@6.x luxon@0.4.x xmlbuilder@x.x",
-    "flow": "flow",
-    "flow-coverage": "flow-coverage-report -f \"node node_modules/flow-bin/vendor/flow\" -i ./src/**/*.js* -t html -t text -t json -o tests_results/coverage/flow",
-    "build": "rm -rf ./dist && rollup --config ./rollup.config.js",
+    "lint": "eslint --ext .ts ./src ./tests",
+    "lint:export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
+    "tsc": "tsc",
+    "build": "rollup --config ./rollup.config.js",
     "test": "jest",
-    "test-build": "npm run test -- --config jest.config.build.js",
-    "precommit": "npm run lint && npm run flow && npm run test",
-    "prepublishOnly": "npm run build && npm run test-build"
+    "test:build": "npm run test -- --config jest.config.build.js",
+    "test:all": "npm run lint && npm run tsc && npm run test",
+    "prepublishOnly": "npm run build && npm run tsc && npm run test:build"
   },
   "repository": {
     "type": "git",
@@ -29,20 +28,21 @@
     "endomondo-api"
   ],
   "devDependencies": {
-    "cross-fetch": "^2.1.1",
-    "@socifi/eslint-config": "^1.10.0",
-    "flow-bin": "^0.86.0",
-    "flow-coverage-report": "^0.6.0",
-    "flow-typed": "^2.5.1",
-    "@socifi/jest-config": "^1.10.0",
-    "@socifi/rollup-config": "^1.10.0"
+    "@socifi/babel-config": "^0.6.0",
+    "@socifi/eslint-config": "^2.0.1",
+    "@socifi/jest-config": "^2.1.0",
+    "@socifi/rollup-config": "^2.0.1",
+    "@types/luxon": "^1.4.1",
+    "@types/mathjs": "^4.4.3",
+    "@types/query-string": "^6.1.1",
+    "cross-fetch": "^2.2.3"
   },
   "dependencies": {
-    "cookie-api-handler": "^1.1.0",
-    "gpx-builder": "^1.0.1",
-    "luxon": "^1.4.3",
-    "mathjs": "^5.2.0",
+    "cookie-api-handler": "^2.0.0",
+    "gpx-builder": "^2.0.0",
+    "luxon": "^1.6.2",
+    "mathjs": "^5.2.3",
     "query-string": "^6.2.0",
-    "rest-api-handler": "^1.8.1"
+    "rest-api-handler": "^2.0.0"
   }
 }

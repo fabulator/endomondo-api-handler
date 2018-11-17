@@ -1,5 +1,3 @@
-module.exports = require('@socifi/jest-config')(undefined, {
-    transformIgnorePatterns: [
-        '<rootDir>/dist',
-    ],
-});
+const { setupTestFrameworkScriptFile, ...config } = require('@socifi/jest-config')();
+
+module.exports = { ...config, transform: { '.*': 'babel-jest' } };
