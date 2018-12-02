@@ -43,8 +43,7 @@ describe('Api testing', () => {
         });
 
         it('with distance', async () => {
-            workout.setDistance(unit(6, 'km'));
-            await api.editWorkout(workout);
+            await api.editWorkout(workout.setDistance(unit(6, 'km')));
 
             expect(putSpy).toHaveBeenCalledWith('rest/v1/users/1/workouts/', {
                 duration: 300,
@@ -55,17 +54,17 @@ describe('Api testing', () => {
         });
 
         it('with option properties', async () => {
-            workout
-                .setAvgHeartRate(80)
-                .setMaxHeartRate(180)
-                .setTitle('titulek')
-                .setAscent(666)
-                .setDescent(999)
-                .setNotes('xzxs')
-                .setMapPrivacy(0)
-                .setWorkoutPrivacy(1);
-
-            await api.editWorkout(workout);
+            await api.editWorkout(
+                workout
+                    .setAvgHeartRate(80)
+                    .setMaxHeartRate(180)
+                    .setTitle('titulek')
+                    .setAscent(unit(666, 'm'))
+                    .setDescent(unit(999, 'm'))
+                    .setNotes('xzxs')
+                    .setMapPrivacy(0)
+                    .setWorkoutPrivacy(1),
+            );
 
             expect(putSpy).toHaveBeenCalledWith('rest/v1/users/1/workouts/', {
                 ascent: 666,

@@ -5,17 +5,14 @@ import EndomondoException from './EndomondoException';
  * Endomondo API Exception
  */
 export default class EndomondoApiException extends EndomondoException {
-    private response: ApiResponseType<any>;
-
-    private request: Request;
+    protected response: ApiResponseType<any>;
 
     /**
      * Constructor.
      */
-    public constructor(response: ApiResponseType<any>, request: Request) {
+    public constructor(response: ApiResponseType<any>) {
         super(JSON.stringify(response.data));
         this.response = response;
-        this.request = request;
     }
 
     public getResponse(): ApiResponseType<any> {
@@ -23,6 +20,6 @@ export default class EndomondoApiException extends EndomondoException {
     }
 
     public getRequest(): Request {
-        return this.request;
+        return this.response.request;
     }
 }

@@ -1,11 +1,10 @@
-import { DateTime, Duration } from 'luxon';
 import { Sport } from '../Sport';
 
-export type WorkoutFilters = {
-    after?: string | DateTime,
-    before?: string | DateTime,
-    fromDuration?: number | Duration,
-    toDuration?: number | Duration,
+export interface WorkoutFilters {
+    after?: string,
+    before?: string,
+    fromDuration?: number,
+    toDuration?: number,
     limit?: number,
     fromDistance?: number,
     toDistance?: number,
@@ -13,4 +12,4 @@ export type WorkoutFilters = {
     sport?: Sport,
     expand?: string,
     offset?: number,
-};
+}

@@ -1,5 +1,5 @@
 import { DateTime, Duration } from 'luxon';
-import { Workout, SPORTS } from '../../src';
+import { Workout } from '../../src';
 
 describe('Test Workout class', () => {
     let workout: Workout;
@@ -7,10 +7,12 @@ describe('Test Workout class', () => {
     beforeEach(() => {
         workout = new Workout({
             hashtags: [],
-            sportId: SPORTS.CYCLING_SPORT,
+            typeId: Workout.SPORT.CYCLING_SPORT,
             start: DateTime.local(),
             duration: Duration.fromMillis(1),
             points: [],
+            id: undefined,
+            source: undefined,
         });
     });
 
@@ -22,30 +24,28 @@ describe('Test Workout class', () => {
         it('set and get hashtags', () => {
             expect(workout.getHashtags()).toEqual([]);
 
-            workout.addHashtag('a');
-            expect(workout.getHashtags()).toEqual(['a']);
+            const updatedWorkout = workout.addHashtag('a');
 
-            workout.addHashtags(['b', 'c']);
-            expect(workout.getHashtags()).toEqual(['a', 'b', 'c']);
+            expect(updatedWorkout.getHashtags()).toEqual(['a']);
 
-            workout.setHashtags(['c']);
-            expect(workout.getHashtags()).toEqual(['c']);
+            expect(updatedWorkout.addHashtags(['b', 'c']).getHashtags()).toEqual(['a', 'b', 'c']);
+
+            expect(workout.setHashtags(['c']).getHashtags()).toEqual(['c']);
         });
 
         it('is not creating duplicate hashtags', () => {
-            workout.addHashtag('a');
-            expect(workout.getHashtags()).toEqual(['a']);
+            expect(workout.addHashtag('a').getHashtags()).toEqual(['a']);
 
-            workout.addHashtag('a');
-            expect(workout.getHashtags()).toEqual(['a']);
+            expect(workout.addHashtag('a').getHashtags()).toEqual(['a']);
         });
 
         it('find hashtag', () => {
             expect(workout.hasHashtag('a')).toEqual(false);
-            workout.setHashtags(['c', 't', 'z']);
-            expect(workout.hasHashtag('a')).toEqual(false);
-            expect(workout.hasHashtag('tt')).toEqual(false);
-            expect(workout.hasHashtag('z')).toEqual(true);
+
+            const workoutWithHashtags = workout.setHashtags(['c', 't', 'z']);
+            expect(workoutWithHashtags.hasHashtag('a')).toEqual(false);
+            expect(workoutWithHashtags.hasHashtag('tt')).toEqual(false);
+            expect(workoutWithHashtags.hasHashtag('z')).toEqual(true);
         });
     });
 });

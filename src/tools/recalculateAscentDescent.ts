@@ -1,3 +1,4 @@
+import { unit } from 'mathjs';
 import { Workout, Point } from '../models';
 
 /**
@@ -20,16 +21,16 @@ export default function recalculateAscentDescent(workout: Workout): Workout {
         const altitude = point.getAltitude();
         const previusAltitude = previusPoint.getAltitude();
 
-        if (altitude === null) {
+        if (altitude == null) {
             return;
         }
 
-        if (previusAltitude === null) {
+        if (previusAltitude == null) {
             previusPoint = point;
             return;
         }
 
-        const diff = altitude - previusAltitude;
+        const diff = altitude.toNumber('m') - previusAltitude.toNumber('m');
         if (diff > 0) {
             ascent += diff;
         } else {
@@ -40,6 +41,6 @@ export default function recalculateAscentDescent(workout: Workout): Workout {
     });
 
     return workout
-        .setAscent(ascent)
-        .setDescent(descent);
+        .setAscent(unit(ascent, 'm'))
+        .setDescent(unit(descent, 'm'));
 }

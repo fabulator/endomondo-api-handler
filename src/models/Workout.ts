@@ -1,416 +1,246 @@
-/* eslint-disable max-lines */
 import { DateTime, Duration } from 'luxon';
 import { Unit, unit } from 'mathjs';
-import { GarminBuilder, buildGPX } from 'gpx-builder';
-import { SPORT_NAMES } from '../constants';
-import EndomondoPoint from './Point';
-import { Sport, Privacy, ApiWorkout } from '../types';
+import { Workout as BaseWorkout, TYPES } from 'fitness-models';
+import { SPORT_NAMES as LIST_OF_SPORT_NAMES, SPORT, PRIVACY } from '../constants';
+import Point from './Point';
+import { Sport, Privacy, API } from '../types';
+import { workoutGPXExporter } from '../helpers';
 
-const {
-    Point,
-    Metadata,
-    Person,
-    Link,
-    Track,
-    Segment,
-} = GarminBuilder.MODELS;
-
-type Constructing = {
-    sportId: Sport,
-    start: DateTime,
-    duration: Duration,
-    points: Array<EndomondoPoint>,
-    distance?: Unit,
-    source?: ApiWorkout,
-    ascent?: number,
-    descent?: number,
-    calories?: number,
-    notes?: string,
+interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
+    typeId: Sport,
+    points?: Array<Point>,
     mapPrivacy?: Privacy,
     workoutPrivacy?: Privacy,
     hashtags?: Array<string>,
-    heartRateAvg?: number,
-    heartRateMax?: number,
-    title?: string,
-    id?: number,
-};
+    id: Id,
+    source: ApiSource,
+}
 
-export default class Workout {
-    private sportId: Sport;
+export default class Workout<Id extends (number | undefined) = any, ApiSource extends (API.Workout | undefined) = any> extends BaseWorkout {
+    protected id: Id;
 
-    private start: DateTime;
+    protected typeId: Sport;
 
-    private duration: Duration;
+    protected points: Array<Point>;
 
-    private distance: Unit | null;
+    protected hashtags: Array<string>;
 
-    private points: Array<EndomondoPoint>;
+    protected source: ApiSource;
 
-    private hashtags: Array<string>;
+    protected mapPrivacy?: Privacy;
 
-    private source: ApiWorkout | null;
+    protected workoutPrivacy?: Privacy;
 
-    private ascent: number | null;
+    public constructor(options: Constructor<Id, ApiSource>) {
+        super(options);
 
-    private descent: number | null;
+        this.typeId = options.typeId;
+        this.points = options.points || [];
+        this.mapPrivacy = options.mapPrivacy;
+        this.workoutPrivacy = options.workoutPrivacy;
+        this.hashtags = options.hashtags || [];
+        this.id = options.id;
+        this.source = options.source;
 
-    private calories: number | null;
-
-    private notes: string | null;
-
-    private mapPrivacy: Privacy | null;
-
-    private workoutPrivacy: Privacy | null;
-
-    private id: number | null;
-
-    private heartRateAvg: number | null;
-
-    private heartRateMax: number | null;
-
-    private title: string | null;
-
-    // eslint-disable-next-line complexity
-    public constructor({
-        sportId,
-        start,
-        duration,
-        distance,
-        source,
-        points,
-        ascent,
-        descent,
-        calories,
-        notes,
-        mapPrivacy,
-        workoutPrivacy,
-        id,
-        hashtags,
-        heartRateAvg,
-        heartRateMax,
-        title,
-    }: Constructing) {
-        this.sportId = sportId;
-        this.start = start;
-        this.duration = duration;
-        this.distance = distance || null;
-        this.points = points || [];
-        this.ascent = ascent || null;
-        this.descent = descent || null;
-        this.source = source || null;
-        this.calories = calories || null;
-        this.notes = notes || null;
-        this.mapPrivacy = typeof mapPrivacy === 'number' ? mapPrivacy : null;
-        this.workoutPrivacy = typeof workoutPrivacy === 'number' ? workoutPrivacy : null;
-        this.id = id || null;
-        this.hashtags = hashtags || [];
-        this.heartRateAvg = heartRateAvg || null;
-        this.heartRateMax = heartRateMax || null;
-        this.title = title || null;
+        this.isRace = this.hasHashtag('race');
+        this.isCommute = this.hasHashtag('commute');
     }
 
-    public static fromApi(workout: ApiWorkout): Workout {
+    public static SPORT_NAMES: {[key: string]: string} = LIST_OF_SPORT_NAMES;
+
+    public static SPORT: {[key: string]: Sport} = SPORT;
+
+    public static PRIVACY: {[key: string]: Privacy} = PRIVACY;
+
+    public static fromApi(workout: API.Workout): Workout<number, API.Workout> {
         const { points, distance } = workout;
 
         const start = DateTime.fromISO(workout.local_start_time, { setZone: true });
 
         return new Workout({
             start,
-            sportId: workout.sport,
+            typeId: workout.sport,
             duration: Duration.fromObject({
                 seconds: workout.duration,
             }),
             source: workout,
             points: points && points.points ? points.points.map((point) => {
-                return EndomondoPoint.fromApi(point, start.toFormat('z'));
+                return Point.fromApi(point, start.toFormat('z'));
             }) : [],
-            ascent: workout.ascent,
-            descent: workout.descent,
+            ascent: workout.ascent ? unit(workout.ascent, 'm') : undefined,
+            descent: workout.descent ? unit(workout.descent, 'm') : undefined,
             calories: workout.calories,
             notes: workout.message,
             mapPrivacy: workout.show_map,
             workoutPrivacy: workout.show_workout,
             id: workout.id,
             hashtags: workout.hashtags,
-            heartRateAvg: workout.heart_rate_avg,
-            heartRateMax: workout.heart_rate_max,
+            avgHeartRate: workout.heart_rate_avg,
+            maxHeartRate: workout.heart_rate_max,
             title: workout.title,
             ...(distance ? { distance: unit(distance, 'km') } : {}),
         });
     }
 
     // eslint-disable-next-line max-params
-    public static get(sportId: Sport, start: DateTime, duration: Duration, distance?: Unit, points: Array<EndomondoPoint> = [], options: {
-        ascent?: number,
-        descent?: number,
-        calories?: number,
-        notes?: string,
-        mapPrivacy?: Privacy,
-        workoutPrivacy?: Privacy,
-        hashtags?: Array<string>,
-        heartRateAvg?: number,
-        title?: string,
-    } = {}) {
+    public static get(
+        typeId: Sport,
+        start: DateTime,
+        duration: Duration,
+        distance?: Unit,
+        points: Array<Point> = [],
+        options: Partial<Constructor<undefined, undefined>> = {},
+    ): Workout<undefined, undefined> {
         return new Workout({
             ...options,
-            sportId,
             start,
             duration,
             distance,
             points,
+            typeId,
+            id: undefined,
+            source: undefined,
         });
     }
 
-    public getId(): number | null {
+    protected clone(extension: Partial<Constructor<number | undefined, ApiSource>>): any {
+        return new Workout({
+            ...this.toObject(),
+            ...extension,
+        });
+    }
+
+    public getId() {
         return this.id;
     }
 
-    public setId(id: number | null): this {
-        this.id = id;
-        return this;
+    public setId(id: number): Workout<number, ApiSource>
+
+    public setId(id: undefined): Workout<undefined, ApiSource>
+
+    public setId(id: number | undefined) {
+        return this.clone({ id });
     }
 
-    public getSportId(): Sport {
-        return this.sportId;
-    }
-
-    public setSportId(sportId: Sport): this {
-        this.sportId = sportId;
-        return this;
+    public getTypeId() {
+        return this.typeId;
     }
 
     public getSportName(): string {
-        return SPORT_NAMES[this.getSportId()];
+        return Workout.SPORT_NAMES[this.getTypeId()];
     }
 
-    public getStart(): DateTime {
-        return this.start;
-    }
-
-    public setStart(start: DateTime): this {
-        this.start = start;
-        return this;
-    }
-
-    public getEnd(): DateTime {
-        const points = this.getPoints();
-
-        if (points) {
-            return points[points.length - 1].getTime();
-        }
-
-        return this.getStart().plus(this.getDuration());
-    }
-
-    public getDuration(): Duration {
-        return this.duration;
-    }
-
-    public setDuration(duration: Duration): this {
-        this.duration = duration;
-        return this;
-    }
-
-    public getDistance(): Unit | null {
-        return this.distance;
-    }
-
-    public setDistance(distance: Unit | null): this {
-        this.distance = distance;
-        return this;
-    }
-
-    public getPoints(): Array<EndomondoPoint> {
+    public getPoints(): Array<Point> {
         return this.points;
     }
 
-    public hasGPSData(): boolean {
-        return this.points.length > 0;
-    }
-
-    public setPoints(points: Array<EndomondoPoint>): this {
-        this.points = points;
-        return this;
-    }
-
-    public getAscent(): number | null {
-        return this.ascent;
-    }
-
-    public setAscent(ascent: number | null): this {
-        this.ascent = ascent;
-        return this;
-    }
-
-    public getDescent(): number | null {
-        return this.descent;
-    }
-
-    public setDescent(descent: number | null): this {
-        this.descent = descent;
-        return this;
-    }
-
-    public getCalories(): number | null {
-        return this.calories;
-    }
-
-    public setCalories(calories: number | null): this {
-        this.calories = calories;
-        return this;
-    }
-
-    public getNotes(): string | null {
-        return this.notes;
-    }
-
-    public setNotes(notes: string | null) {
-        this.notes = notes;
-        return this;
-    }
-
-    public getMapPrivacy(): Privacy | null {
+    public getMapPrivacy(): Privacy | undefined {
         return this.mapPrivacy;
     }
 
-    public setMapPrivacy(privacy: Privacy | null): this {
-        this.mapPrivacy = privacy;
-        return this;
+    public setMapPrivacy(mapPrivacy?: Privacy): Workout<Id, ApiSource> {
+        return this.clone({ mapPrivacy });
     }
 
-    public getWorkoutPrivacy(): Privacy | null {
+    public getWorkoutPrivacy(): Privacy | undefined {
         return this.workoutPrivacy;
     }
 
-    public setWorkoutPrivacy(privacy: Privacy | null): this {
-        this.workoutPrivacy = privacy;
-        return this;
+    public setWorkoutPrivacy(workoutPrivacy?: Privacy): Workout<Id, ApiSource> {
+        return this.clone({ workoutPrivacy });
     }
 
     public getHashtags(): Array<string> {
         return this.hashtags;
     }
 
-    public setHashtags(hashtags: Array<string>): this {
-        this.hashtags = hashtags;
-        return this;
+    public setHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+        return this.clone({ hashtags });
     }
 
-    public addHashtags(hashtags: Array<string>): this {
-        hashtags.forEach((hashtag) => {
-            this.addHashtag(hashtag);
+    public addHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+        return this.clone({
+            hashtags: [
+                ...this.getHashtags(),
+                ...hashtags,
+            ],
         });
-
-        return this;
     }
 
-    public addHashtag(hashtag: string): this {
-        if (!this.hasHashtag(hashtag)) {
-            this.hashtags.push(hashtag);
-        }
-
-        return this;
+    public addHashtag(hashtag: string): Workout<Id, ApiSource> {
+        return this.addHashtags([hashtag]);
     }
 
     public hasHashtag(hashtag: string): boolean {
         return this.hashtags.indexOf(hashtag) !== -1;
     }
 
-    public getAvgHeartRate(): number | null {
-        return this.heartRateAvg;
-    }
-
-    public setAvgHeartRate(hr: number | null): this {
-        this.heartRateAvg = hr;
-        return this;
-    }
-
-    public getMaxHeartRate(): number | null {
-        return this.heartRateMax;
-    }
-
-    public setMaxHeartRate(hr: number | null): this {
-        this.heartRateMax = hr;
-        return this;
-    }
-
-    public getTitle(): string | null {
-        return this.title;
-    }
-
-    public setTitle(title: string | null) {
-        this.title = title;
-        return this;
-    }
-
-    public getSource(): ApiWorkout | null {
+    public getSource(): ApiSource {
         return this.source;
     }
 
-    private getGpxPoints(): Array<any> {
-        return this.getPoints()
-            .filter((point: EndomondoPoint) => {
-                return point.getLatitude() != null && point.getLongitude() != null;
-            }).map((point: EndomondoPoint) => {
-                const speed = point.getSpeed();
-                const hr = point.getHeartRate();
-                const cadence = point.getCadence();
-                const altitude = point.getAltitude();
-
-                return new Point(point.getLatitude(), point.getLongitude(), {
-                    time: point.getTime().toJSDate(),
-                    ...(hr != null ? { hr } : {}),
-                    ...(cadence != null ? { cad: cadence } : {}),
-                    ...(altitude != null ? { ele: altitude } : {}),
-                    ...(speed != null ? { speed: unit(speed, 'km/h').toNumber('m/s') } : {}),
-                });
-            });
-    }
-
-    // eslint-disable-next-line complexity
     public toGpx(): string {
-        const workoutId = this.getId();
-        const authorId = this.source && this.source.author ? this.source.author.id : null;
-        const authorName = this.source && this.source.author ? this.source.author.name : null;
-
-        const builder = new GarminBuilder();
-
-        builder.setMetadata(new Metadata({
-            ...(authorName ? {
-                author: new Person({
-                    name: authorName,
-                }),
-            } : {}),
-            link: new Link('http://www.endomondo.com', {
-                text: 'Endomondo',
-            }),
-            time: this.getStart().toJSDate(),
-        }));
-
-        builder.setTracks([
-            new Track([new Segment(this.getGpxPoints())], {
-                src: 'http://www.endomondo.com/',
-                ...(workoutId && authorId ? {
-                    link: new Link(`https://www.endomondo.com/users/${authorId}/workouts/${workoutId}`, {
-                        text: 'endomondo',
-                    }),
-                } : {}),
-                type: this.getSportName(),
-            }),
-        ]);
-
-        return buildGPX(builder.toObject());
+        return workoutGPXExporter(this);
     }
 
-    public toString(): string {
-        const distance = this.getDistance();
+    public setTypeId(typeId: Sport): Workout<Id, ApiSource> {
+        return this.clone({ typeId });
+    }
 
-        return [
-            `Workout ${this.getId() || ''}`,
-            `type: ${this.getSportName()}`,
-            `start: ${this.getStart().toFormat('yyyy-MM-dd HH:mm')}`,
-            distance ? `distance: ${Math.round(distance.toNumber('km') * 10) / 10}km` : null,
-            `duration: ${Math.round(this.getDuration().as('minutes'))}min`,
-        ].filter(item => item !== null).join('; ');
+    public setStart(start: DateTime): Workout<Id, ApiSource> {
+        return this.clone({ start });
+    }
+
+    public setDuration(duration: Duration): Workout<Id, ApiSource> {
+        return this.clone({ duration });
+    }
+
+    public setDistance(distance?: Unit): Workout<Id, ApiSource> {
+        return this.clone({ distance });
+    }
+
+    public setPoints(points: Array<Point>): Workout<Id, ApiSource> {
+        return this.clone({ points });
+    }
+
+    public setCalories(calories?: number): Workout<Id, ApiSource> {
+        return this.clone({ calories });
+    }
+
+    public setNotes(notes?: string): Workout<Id, ApiSource> {
+        return this.clone({ notes });
+    }
+
+    public setAvgHeartRate(avgHeartRate?: number): Workout<Id, ApiSource> {
+        return this.clone({ avgHeartRate });
+    }
+
+    public setMaxHeartRate(maxHeartRate?: number): Workout<Id, ApiSource> {
+        return this.clone({ maxHeartRate });
+    }
+
+    public setTitle(title?: string): Workout<Id, ApiSource> {
+        return this.clone({ title });
+    }
+
+    public setAscent(ascent?: Unit): Workout<Id, ApiSource> {
+        return this.clone({ ascent });
+    }
+
+    public setDescent(descent?: Unit): Workout<Id, ApiSource> {
+        return this.clone({ descent });
+    }
+
+    public toObject(): Constructor<Id, ApiSource> {
+        return {
+            ...super.toObject(),
+            typeId: this.typeId,
+            points: this.points,
+            mapPrivacy: this.mapPrivacy,
+            workoutPrivacy: this.workoutPrivacy,
+            hashtags: this.hashtags,
+            id: this.id,
+            source: this.source,
+        };
     }
 }

@@ -1,4 +1,3 @@
-import { EndomondoException } from '../exceptions';
 import { Workout } from '../models';
 import { Api, MobileApi } from '../api';
 
@@ -10,13 +9,7 @@ import { Api, MobileApi } from '../api';
  * @param mobileApi
  * @returns Workout with updated id.
  */
-async function replaceWorkout(workout: Workout, api: Api, mobileApi: MobileApi): Promise<Workout> {
-    const oldWorkoutId = workout.getId();
-
-    if (!oldWorkoutId) {
-        throw new EndomondoException('Workout does not have ID');
-    }
-
+export default async function replaceWorkout(workout: Workout<number>, api: Api, mobileApi: MobileApi): Promise<Workout> {
     const newWorkoutId = await mobileApi.createWorkout(workout);
 
     const newWorkout = workout.setId(newWorkoutId);
@@ -26,9 +19,7 @@ async function replaceWorkout(workout: Workout, api: Api, mobileApi: MobileApi):
     });
 
     await api.editWorkout(newWorkout);
-    await api.deleteWorkout(oldWorkoutId);
+    await api.deleteWorkout(workout.getId());
 
     return newWorkout;
 }
-
-export default replaceWorkout;

@@ -1,3 +1,4 @@
+import { unit } from 'mathjs';
 import { Workout, Point } from '../models';
 
 type Type = 'altitude' | 'hr' | 'cadence';
@@ -10,19 +11,19 @@ type Type = 'altitude' | 'hr' | 'cadence';
  * @param getNewValue
  * @returns {Workout}
  */
-export default function rewriteWorkoutData(workout: Workout, type: Type, getNewValue: (point: Point) => number | null): Workout {
-    const newPoints = [...workout.getPoints()].map((point) => {
+export default function rewriteWorkoutData(workout: Workout, type: Type, getNewValue: (point: Point) => number | undefined): Workout {
+    const newPoints = workout.getPoints().map((point) => {
         const newValue = getNewValue(point);
 
         if (type === 'altitude') {
-            point.setAltitude(newValue);
-        } else if (type === 'hr') {
-            point.setHeartRate(newValue);
-        } else if (type === 'cadence') {
-            point.setCadence(newValue);
+            return point.setAltitude(newValue ? unit(newValue, 'm') : undefined);
         }
 
-        return point;
+        if (type === 'hr') {
+            return point.setHeartRate(newValue);
+        }
+
+        return point.setCadence(newValue);
     });
 
     return workout.setPoints(newPoints);

@@ -1,31 +1,15 @@
-import { DateTime } from 'luxon';
 import rewriteWorkoutData from './rewriteWorkoutData';
 import { Workout, Point } from '../models';
+import { POINT_DATA_REPLACER } from '../types';
+import rewriteTimeData from './rewriteTimeData';
 
-export type CadenceData = Array<{
-    time: DateTime,
-    cadence: number,
-}>;
-
-export default function rewriteCadenceData(workout: Workout, cadenceData: CadenceData): Workout {
-    const data = cadenceData.map((item) => {
-        return {
-            cadence: item.cadence,
-            time: item.time.valueOf(),
-        };
-    });
-
+export default function rewriteCadenceData(workout: Workout, cadenceData: POINT_DATA_REPLACER.CadenceData): Workout {
     return rewriteWorkoutData(workout, 'cadence', (point: Point) => {
-        const time = point.getTime().valueOf();
-
-        const nearest = data.sort((a, b) => {
-            return Math.abs(time - a.time) - Math.abs(time - b.time);
-        })[0];
-
-        if (point.getTime().diff(DateTime.fromMillis(nearest.time), ['milliseconds']).as('seconds') > 15) {
-            return null;
-        }
-
-        return nearest.cadence;
+        return rewriteTimeData(point, cadenceData.map((item) => {
+            return {
+                value: item.cadence,
+                time: item.time.valueOf(),
+            };
+        }));
     });
 }

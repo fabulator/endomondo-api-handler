@@ -1,7 +1,2 @@
-import Point from './Point';
-import Workout from './Workout';
-
-export {
-    Point,
-    Workout,
-};
+export { default as Point } from './Point';
+export { default as Workout } from './Workout';

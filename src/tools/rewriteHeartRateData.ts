@@ -1,31 +1,15 @@
-import { DateTime } from 'luxon';
 import rewriteWorkoutData from './rewriteWorkoutData';
+import rewriteTimeData from './rewriteTimeData';
 import { Workout, Point } from '../models';
+import { POINT_DATA_REPLACER } from '../types';
 
-export type HrData = Array<{
-    time: DateTime,
-    hr: number,
-}>;
-
-export default function rewriteHeartRateData(workout: Workout, HRData: HrData): Workout {
-    const data = HRData.map((item) => {
-        return {
-            hr: item.hr,
-            time: item.time.valueOf(),
-        };
-    });
-
+export default function rewriteHeartRateData(workout: Workout, HrData: POINT_DATA_REPLACER.HrData): Workout {
     return rewriteWorkoutData(workout, 'hr', (point: Point) => {
-        const time = point.getTime().valueOf();
-
-        const nearest = data.sort((a, b) => {
-            return Math.abs(time - a.time) - Math.abs(time - b.time);
-        })[0];
-
-        if (point.getTime().diff(DateTime.fromMillis(nearest.time), ['milliseconds']).as('seconds') > 15) {
-            return null;
-        }
-
-        return nearest.hr;
+        return rewriteTimeData(point, HrData.map((item) => {
+            return {
+                value: item.hr,
+                time: item.time.valueOf(),
+            };
+        }));
     });
 }

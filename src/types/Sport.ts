@@ -70,7 +70,7 @@ import {
     STRETCHING,
     PADDLE_TENNIS,
     PARAGLIDING,
-} from '../constants/sports';
+} from '../constants/sport';
 
 export type Sport = typeof RUNNING |
     typeof CYCLING_TRANSPORT |

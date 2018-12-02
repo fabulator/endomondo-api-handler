@@ -3,29 +3,18 @@ import { DateTime } from 'luxon';
 import { ApiResponseType, DefaultResponseProcessor } from 'rest-api-handler';
 import CookieApi from 'cookie-api-handler';
 import { ENDOMONDO_URL } from '../constants';
-import {
-    EndomondoException,
-    EndomondoApiException,
-} from '../exceptions';
+import { EndomondoException, EndomondoApiException } from '../exceptions';
 import { Workout } from '../models';
-import {
-    ApiUser,
-    WorkoutFilters,
-    ApiWorkouts,
-    ApiWorkout,
-    Paging,
-} from '../types';
-
-type ListOfWorkouts = {
-    workouts: Array<Workout>,
-} & Paging;
+import * as TYPES from '../types';
 
 export default class Api extends CookieApi<ApiResponseType<any>> {
-    private userId: number | null;
+    protected userId: number | null = null;
 
-    private csfrtoken: string;
+    protected userToken: string | null = null;
 
-    private dateFormat = 'yyyy-MM-dd\'T\'HH:mm:ss\'.000Z\'';
+    protected csfrtoken: string;
+
+    protected dateFormat = 'yyyy-MM-dd\'T\'HH:mm:ss\'.000Z\'';
 
     public constructor(csfrtoken = '123456789') {
         super(ENDOMONDO_URL, [
@@ -37,7 +26,6 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
             'x-csrf-token': this.csfrtoken,
             cookie: `CSRF_TOKEN=${this.csfrtoken};`,
         });
-        this.userId = null;
     }
 
     public setUserId(id: number | null) {
@@ -48,11 +36,17 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         return this.userId;
     }
 
-    public setUserToken(token: string) {
+    public setUserToken(token: string | null) {
+        this.userToken = token;
+
         this.setDefaultHeader('cookie', Api.serializeCookies({
             CSRF_TOKEN: this.csfrtoken,
-            USER_TOKEN: token,
+            ...(token ? { USER_TOKEN: token } : {}),
         }));
+    }
+
+    public getUserToken(): string | null {
+        return this.userToken;
     }
 
     /**
@@ -61,14 +55,14 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
      * @param date
      * @returns {string}
      */
-    private getDateString(date: DateTime) {
+    protected getDateString(date: DateTime) {
         return date.toUTC().toFormat(this.dateFormat);
     }
 
     /**
      * Get api url for user namespace.
      */
-    private getUserApiUrl(namespace: string, userId: number | null = this.userId): string {
+    protected getUserApiUrl(namespace: string, userId: number | null = this.userId): string {
         if (!userId) {
             throw new EndomondoException('User id is not defined');
         }
@@ -79,7 +73,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     /**
      * Get api url for workout namespace.
      */
-    private getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null = this.userId): string {
+    protected getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null = this.userId): string {
         return this.getUserApiUrl(`workouts/${workoutId ? `${workoutId}${namespace ? `/${namespace}` : ''}` : namespace}`, userId);
     }
 
@@ -91,7 +85,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
      * @returns {Promise<string>} return user token
      */
     public async login(email: string, password: string): Promise<string> {
-        const response: ApiResponseType<ApiUser> = await this.post('rest/session', {
+        const response: ApiResponseType<TYPES.API.User> = await this.post('rest/session', {
             email,
             password,
             remember: true,
@@ -105,31 +99,50 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
             throw new EndomondoException('Cookies are missing in response.');
         }
 
+        this.setUserToken(cookies.USER_TOKEN);
+
         return cookies.USER_TOKEN;
     }
 
-    public async getWorkout(workoutId: number, userId: number | null = this.userId): Promise<Workout> {
-        const response: ApiResponseType<ApiWorkout> = await this.get(this.getWorkoutsApiUrl('', workoutId, userId));
+    public async getProfile(userId: number | null = this.userId): Promise<TYPES.API.Profile> {
+        const { data } = await this.get(this.getUserApiUrl(''));
+
+        return data;
+    }
+
+    public async getWorkout(workoutId: number, userId: number | null = this.userId): Promise<Workout<number, TYPES.API.Workout>> {
+        const response: ApiResponseType<TYPES.API.Workout> = await this.get(this.getWorkoutsApiUrl('', workoutId, userId));
         return Workout.fromApi(response.data);
     }
 
-    // eslint-disable-next-line complexity
-    public editWorkout(workout: Workout, userId: number | null = this.userId) {
+    public async getWorkoutGpx(workoutId: number, userId: number | null = this.userId): Promise<string> {
+        const { data } = await this.get(this.getWorkoutsApiUrl('export?format=GPX', workoutId, userId));
+        return data;
+    }
+
+    public async getWorkoutTcx(workoutId: number, userId: number | null = this.userId): Promise<string> {
+        const { data } = await this.get(this.getWorkoutsApiUrl('export?format=TCX', workoutId, userId));
+        return data;
+    }
+
+    public editWorkout(workout: Workout<number>, userId: number | null = this.userId) {
         const distance = workout.getDistance();
+        const ascent = workout.getAscent();
+        const descent = workout.getDescent();
 
         return this.put(this.getWorkoutsApiUrl('', workout.getId(), userId), {
             duration: workout.getDuration().as('seconds'),
-            sport: workout.getSportId(),
+            sport: workout.getTypeId(),
             start_time: this.getDateString(workout.getStart()),
-            ...(distance ? { distance: distance.toNumber('km') } : {}),
-            ...(workout.getAvgHeartRate() ? { heart_rate_avg: workout.getAvgHeartRate() } : {}),
-            ...(workout.getMaxHeartRate() ? { heart_rate_max: workout.getMaxHeartRate() } : {}),
-            ...(workout.getTitle() ? { title: workout.getTitle() } : {}),
-            ...(workout.getAscent() ? { ascent: workout.getAscent() } : {}),
-            ...(workout.getDescent() ? { descent: workout.getDescent() } : {}),
-            ...(workout.getNotes() ? { notes: workout.getNotes() } : {}),
-            ...(workout.getMapPrivacy() !== null ? { show_map: workout.getMapPrivacy() } : {}),
-            ...(workout.getWorkoutPrivacy() !== null ? { show_workout: workout.getWorkoutPrivacy() } : {}),
+            ...(distance != null ? { distance: distance.toNumber('km') } : {}),
+            ...(workout.getAvgHeartRate() != null ? { heart_rate_avg: workout.getAvgHeartRate() } : {}),
+            ...(workout.getMaxHeartRate() != null ? { heart_rate_max: workout.getMaxHeartRate() } : {}),
+            ...(workout.getTitle() != null ? { title: workout.getTitle() } : {}),
+            ...(ascent != null ? { ascent: ascent.toNumber('m') } : {}),
+            ...(descent != null ? { descent: descent.toNumber('m') } : {}),
+            ...(workout.getNotes() != null ? { notes: workout.getNotes() } : {}),
+            ...(workout.getMapPrivacy() != null ? { show_map: workout.getMapPrivacy() } : {}),
+            ...(workout.getWorkoutPrivacy() != null ? { show_workout: workout.getWorkoutPrivacy() } : {}),
         });
     }
 
@@ -145,8 +158,10 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         return this.delete(this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
     }
 
-    // eslint-disable-next-line complexity
-    public async getWorkouts(filter: WorkoutFilters = {}, userId: number | null = this.userId): Promise<ListOfWorkouts> {
+    public async getWorkouts(
+        filter: TYPES.WorkoutFilters = {},
+        userId: number | null = this.userId,
+    ): Promise<TYPES.RESPONSES.ListOfWorkouts> {
         const {
             after,
             before,
@@ -154,13 +169,13 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
             toDuration,
         } = filter;
 
-        const response: ApiResponseType<ApiWorkouts> = await this.get(this.getWorkoutsApiUrl('history', null, userId), {
+        const response: ApiResponseType<TYPES.API.Workouts> = await this.get(this.getWorkoutsApiUrl('history', null, userId), {
             expand: 'points,workout',
             ...filter,
-            ...(after ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
-            ...(before ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}),
-            ...(fromDuration ? { fromDuration: typeof fromDuration === 'number' ? fromDuration : fromDuration.as('seconds') } : {}),
-            ...(toDuration ? { toDuration: typeof toDuration === 'number' ? toDuration : toDuration.as('seconds') } : {}),
+            ...(after != null ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
+            ...(before != null ? { before: typeof before === 'string' ? before : this.getDateString(before) } : {}),
+            ...(fromDuration != null ? { fromDuration: typeof fromDuration === 'number' ? fromDuration : fromDuration.as('seconds') } : {}),
+            ...(toDuration != null ? { toDuration: typeof toDuration === 'number' ? toDuration : toDuration.as('seconds') } : {}),
         });
 
         return {
@@ -172,8 +187,8 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     }
 
     public async processWorkouts(
-        filter: WorkoutFilters = {},
-        processor: (workout: Workout) => Promise<Workout>,
+        filter: TYPES.WorkoutFilters = {},
+        processor: (workout: Workout<number, TYPES.API.Workout>) => Promise<Workout>,
         userId: number | null = this.userId,
     ): Promise<Array<Workout>> {
         const { workouts, paging } = await this.getWorkouts(filter, userId);
@@ -183,9 +198,10 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         });
 
         if (workouts.length > 0) {
-            const data: Object = parseUrl(paging.next).query;
-            // @ts-ignore
-            processorPromises.push(...await this.processWorkouts(data, processor, userId));
+            const data: TYPES.API.WorkoutFilters = parseUrl(paging.next).query;
+            processorPromises.push(...(await this.processWorkouts(data, processor, userId)).map(async (workout) => {
+                return workout;
+            }));
         }
 
         return Promise.all(processorPromises);

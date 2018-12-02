@@ -1,7 +1,2 @@
-import Api from './Api';
-import MobileApi from './MobileApi';
-
-export {
-    Api,
-    MobileApi,
-};
+export { default as Api } from './Api';
+export { default as MobileApi } from './MobileApi';

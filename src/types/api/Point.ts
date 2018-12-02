@@ -1,11 +1,11 @@
 export type Point = {
-    time: string,
+    time?: string,
     instruction?: number,
-    latitude: number,
-    longitude: number,
-    distance: number,
-    duration: number,
-    altitude: number,
+    latitude?: number,
+    longitude?: number,
+    distance?: number,
+    duration?: number,
+    altitude?: number,
     sensor_data: {
         speed?: number,
         heart_rate?: number,

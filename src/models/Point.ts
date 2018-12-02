@@ -1,88 +1,53 @@
-import { DateTime, Duration } from 'luxon';
+import {
+    DateTime,
+    Duration,
+    DurationObject,
+    Zone,
+} from 'luxon';
 import { unit, Unit } from 'mathjs';
-import { Point as ApiPoint } from '../types/api';
+import { Point as BasePoint, TYPES } from 'fitness-models';
+import { API } from '../types';
 
-type Constructor = {
-    time: DateTime,
-    latitude: number,
-    longitude: number,
+interface Constructor extends TYPES.PointConstructor {
     instruction?: number,
-    distance?: Unit,
-    altitude?: number,
-    duration?: Duration,
-    speed?: number,
-    hr?: number,
-    cadence?: number,
-};
+}
 
-export default class Point {
-    private time: DateTime;
+export default class Point extends BasePoint {
+    protected instruction?: number;
 
-    private latitude: number;
-
-    private longitude: number;
-
-    private instruction: number | null;
-
-    private distance: Unit | null;
-
-    private duration: Duration | null;
-
-    private speed: number | null;
-
-    private hr: number | null;
-
-    private cadence: number | null;
-
-    private altitude: number | null;
-
-    // eslint-disable-next-line complexity
-    public constructor({
-        time,
-        instruction,
-        latitude,
-        longitude,
-        distance,
-        duration,
-        speed,
-        hr,
-        cadence,
-        altitude,
-    }: Constructor) {
-        this.time = time;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.instruction = instruction || null;
-        this.distance = distance || null;
-        this.duration = duration || null;
-        this.speed = speed || null;
-        this.hr = hr || null;
-        this.cadence = cadence || null;
-        this.altitude = typeof altitude !== 'undefined' && altitude !== null ? altitude : null;
+    public constructor(options: Constructor) {
+        super(options);
+        this.instruction = options.instruction;
     }
 
-    public static fromApi(point: ApiPoint, timezone: string): Point {
-        const { distance } = point;
+    public static fromApi(point: API.Point, timezone: string | Zone): Point {
+        const {
+            distance,
+            altitude,
+            sensor_data,
+            time,
+        } = point;
 
         return new Point({
-            time: DateTime.fromISO(point.time, { zone: timezone }),
+            time: time ? DateTime.fromISO(time, { zone: timezone }) : undefined,
             instruction: point.instruction,
             latitude: point.latitude,
             longitude: point.longitude,
-            altitude: point.altitude,
             duration: Duration.fromObject({
                 seconds: point.duration,
             }),
-            ...(distance ? { distance: unit(distance, 'km') } : {}),
-            ...(point.sensor_data ? {
-                speed: point.sensor_data.speed,
-                hr: point.sensor_data.heart_rate,
-                cadence: point.sensor_data.cadence,
+            distance: distance != null ? unit(distance, 'km') : undefined,
+            altitude: altitude != null ? unit(altitude, 'm') : undefined,
+            ...(sensor_data ? {
+                speed: sensor_data.speed != null ? unit(sensor_data.speed, 'km/h') : undefined,
+                hr: sensor_data.heart_rate,
+                cadence: sensor_data.cadence,
             } : {}),
         });
     }
 
-    public static get(time: DateTime, latitude: number, longitude: number, {
+    // eslint-disable-next-line complexity
+    public static get(time: DateTime | string, latitude: number, longitude: number, {
         instruction,
         distance,
         duration,
@@ -92,133 +57,103 @@ export default class Point {
         hr,
     }: {
         instruction?: number,
-        distance?: Unit,
-        duration?: Duration,
-        speed?: number,
+        distance?: Unit | number,
+        duration?: Duration | DurationObject | number,
+        speed?: Unit | number,
         cadence?: number,
         hr?: number,
-        altitude?: number,
+        altitude?: Unit | number,
     } = {}) {
         return new Point({
-            time,
+            time: time instanceof DateTime ? time : DateTime.fromISO(time, { setZone: true }),
             latitude,
             longitude,
-            altitude,
             hr,
             instruction,
-            distance,
-            duration,
-            speed,
             cadence,
+            distance: typeof distance === 'number' ? unit(distance, 'km') : distance,
+            altitude: typeof altitude === 'number' ? unit(altitude, 'm') : altitude,
+            speed: typeof speed === 'number' ? unit(speed, 'km/h') : speed,
+            ...(duration instanceof Duration ? { duration } : {}),
+            ...(typeof duration === 'number' ? { duration: Duration.fromObject({ seconds: duration }) } : {}),
+            ...(!(duration instanceof Duration) && typeof duration === 'object' ? { duration: Duration.fromObject(duration) } : {}),
         });
     }
 
-    public getTime(): DateTime {
-        return this.time;
+    protected clone(extension: Partial<Constructor> = {}): Point {
+        return new Point({ ...this.toObject(), ...extension });
     }
 
-    public setTime(time: DateTime): this {
-        this.time = time;
-        return this;
-    }
-
-    public getLatitude(): number {
-        return this.latitude;
-    }
-
-    public setLatitude(latitude: number): this {
-        this.latitude = latitude;
-        return this;
-    }
-
-    public getLongitude(): number {
-        return this.longitude;
-    }
-
-    public setLongitude(longitude: number): this {
-        this.longitude = longitude;
-        return this;
-    }
-
-    public getAltitude(): number | null {
-        return this.altitude;
-    }
-
-    public setAltitude(altitude: number | null): this {
-        this.altitude = altitude;
-        return this;
-    }
-
-    public getInstruction(): number | null {
+    public getInstruction() {
         return this.instruction;
     }
 
-    public setInstruction(instruction: number | null): this {
-        this.instruction = instruction;
-        return this;
+    public setInstruction(instruction?: number) {
+        return this.clone({ instruction });
     }
 
-    public getDistance(): Unit | null {
-        return this.distance;
+    public setTime(time?: DateTime) {
+        return this.clone({ time });
     }
 
-    public setDistance(distance: Unit | null) {
-        this.distance = distance;
-        return this;
+    public setLatitude(latitude?: number) {
+        return this.clone({ latitude });
     }
 
-    public getSpeed(): number | null {
-        return this.speed;
+    public setLongitude(longitude?: number) {
+        return this.clone({ longitude });
     }
 
-    public setSpeed(speed: number | null): this {
-        this.speed = speed;
-        return this;
+    public setAltitude(altitude?: Unit) {
+        return this.clone({ altitude });
     }
 
-    public getHeartRate(): number | null {
-        return this.hr;
+    public setDistance(distance?: Unit) {
+        return this.clone({ distance });
     }
 
-    public setHeartRate(hr: number | null): this {
-        this.hr = hr;
-        return this;
+    public setSpeed(speed?: Unit) {
+        return this.clone({ speed });
     }
 
-    public getCadence(): number | null {
-        return this.cadence;
+    public setHeartRate(hr?: number) {
+        return this.clone({ hr });
     }
 
-    public setCadence(cadence: number | null): this {
-        this.cadence = cadence;
-        return this;
+    public setCadence(cadence?: number) {
+        return this.clone({ cadence });
     }
 
-    public getDuration(): Duration | null {
-        return this.duration;
+    public setDuration(duration?: Duration) {
+        return this.clone({ duration });
     }
 
-    public setDuration(duration: Duration): this {
-        this.duration = duration;
-        return this;
+    public toObject(): Constructor {
+        return {
+            ...super.toObject(),
+            instruction: this.getInstruction(),
+        };
     }
 
     public toString(): string {
         const distance = this.getDistance();
+        const altitude = this.getAltitude();
+        const speed = this.getSpeed();
+        const time = this.getTime();
 
         return [
-            this.getTime().toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\''),
+            time != null ? time.toUTC().toFormat('yyyy-MM-dd HH:mm:ss \'UTC\'') : undefined,
             this.getInstruction(),
             this.getLatitude(),
             this.getLongitude(),
-            distance !== null ? distance.toNumber('km') : null,
-            this.getSpeed(),
-            this.getAltitude(),
+            distance != null ? distance.toNumber('km') : undefined,
+            speed != null ? speed.toNumber('km/h') : undefined,
+            altitude != null ? altitude.toNumber('m') : undefined,
             this.getHeartRate(),
             this.getCadence(),
             '',
         ].map((item) => {
-            return item === null ? '' : item;
+            return item == null ? '' : item;
         }).join(';');
     }
 }

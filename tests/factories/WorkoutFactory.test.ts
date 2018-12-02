@@ -1,14 +1,12 @@
 import {
     Workout,
-    SPORTS,
-    PRIVACY,
 } from '../../src';
 import { apiPoint } from './PointFactory.test';
 
 const apiWorkout = {
     expand: '',
     id: 1,
-    sport: SPORTS.CYCLING_SPORT,
+    sport: Workout.SPORT.SAILING,
     startTime: '2018-07-03T14:26:00.000Z',
     local_start_time: '2018-07-03T16:26:00.000+02:00',
     distance: 1,
@@ -55,8 +53,8 @@ const apiWorkout = {
         id: 4,
         points: [apiPoint],
     },
-    show_map: PRIVACY.ME,
-    show_workout: PRIVACY.ME,
+    show_map: Workout.PRIVACY.ME,
+    show_workout: Workout.PRIVACY.ME,
     admin_rejected: true,
     personal_bests: [],
 };
@@ -74,6 +72,8 @@ describe('Test WorkoutFactory test class', () => {
 
     it('create right dateTime in points', () => {
         const workout = Workout.fromApi(apiWorkout);
+
+        // @ts-ignore
         expect(workout.getPoints()[0].getTime().offset).toEqual(120);
     });
 });

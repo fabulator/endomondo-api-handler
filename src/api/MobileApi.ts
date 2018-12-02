@@ -1,6 +1,6 @@
 import { gzip } from 'zlib';
-import { Api, DefaultResponseProcessor, ApiResponseType } from 'rest-api-handler';
-import { EndomondoApiException, EndomondoException } from '../exceptions';
+import { Api, ApiResponseType } from 'rest-api-handler';
+import { EndomondoApiException, EndomondoAuthException, EndomondoException } from '../exceptions';
 import { ENDOMONDO_MOBILE_URL } from '../constants';
 import { Workout } from '../models';
 
@@ -32,15 +32,34 @@ function gzipRequestBody(body: string): Promise<Buffer> {
 }
 
 export default class MobileApi extends Api<ApiResponseType<any>> {
-    private authToken: string | null;
+    protected authToken: string | null;
 
-    private userId: number | null;
+    protected userId: number | null;
 
-    private static dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+    protected static dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
 
     public constructor() {
         super(ENDOMONDO_MOBILE_URL, [
-            new DefaultResponseProcessor(EndomondoApiException),
+            async (response: Response, request: Request) => {
+                const contentType = response.headers.get('content-type');
+
+                const toResponse = {
+                    data: contentType && contentType.indexOf('json') >= 0 ? await response.json() : await response.text(),
+                    status: response.status,
+                    source: response,
+                    request,
+                };
+
+                if ((typeof toResponse.data === 'object' && toResponse.data.error) || !response.ok) {
+                    if (toResponse.data.error && toResponse.data.error.type === 'AUTH_FAILED') {
+                        throw new EndomondoAuthException(toResponse);
+                    }
+
+                    throw new EndomondoApiException(toResponse);
+                }
+
+                return toResponse;
+            },
         ], {
             'Content-Type': 'application/octet-stream',
             'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)',
@@ -49,11 +68,11 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
         this.userId = null;
     }
 
-    public getAuthToken(): string | null {
+    public getUserToken(): string | null {
         return this.authToken;
     }
 
-    public setAuthToken(authToken: string | null) {
+    public setUserToken(authToken: string | null) {
         this.authToken = authToken;
     }
 
@@ -78,15 +97,22 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
 
         const decoded = processStringResponse(response.data);
 
-        if (!decoded.userId || decoded.authToken) {
+        if (!decoded.userId || !decoded.authToken) {
             throw new EndomondoException(`User id and token was not found in response: ${response.data}`);
         }
 
         const { userId, authToken } = decoded;
 
         this.setUserId(Number(userId));
-        this.setAuthToken(authToken);
+        this.setUserToken(authToken);
+
         return authToken;
+    }
+
+    public async getProfile(): Promise<any> {
+        return this.get('api/workouts', {
+            authToken: this.getUserToken(),
+        });
     }
 
     /**
@@ -101,10 +127,10 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
                 return Math.floor(Math.random() * 9);
             }).join('')}`,
             duration: workout.getDuration().as('seconds'),
-            sport: workout.getSportId(),
+            sport: workout.getTypeId(),
             extendedResponse: true,
             gzip: true,
-            authToken: this.getAuthToken(),
+            authToken: this.getUserToken(),
         };
 
         const gzippedBody = await gzipRequestBody(workout.getPoints().map(point => point.toString()).join('\n'));
@@ -130,28 +156,28 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
         return numberedWorkoutId;
     }
 
-    public async updateWorkout(workout: Workout): Promise<ApiResponseType<any>> {
+    public async updateWorkout(workout: Workout<number>): Promise<ApiResponseType<any>> {
         const distance = workout.getDistance();
 
         const data = {
             duration: workout.getDuration().as('seconds'),
-            sport: workout.getSportId(),
+            sport: workout.getTypeId(),
             start_time: workout.getStart().toUTC().toFormat(MobileApi.dataFormat),
             end_time: workout.getStart().toUTC().toFormat(MobileApi.dataFormat),
             extendedResponse: true,
             gzip: true,
-            ...(distance ? { distance: distance.toNumber('km') } : {}),
-            ...(workout.getCalories() ? { calories: workout.getCalories() } : {}),
-            ...(workout.getNotes() ? { notes: workout.getNotes() } : {}),
-            ...(workout.getMapPrivacy() ? { privacy_map: workout.getMapPrivacy() } : {}),
-            ...(workout.getWorkoutPrivacy() ? { privacy_workout: workout.getWorkoutPrivacy() } : {}),
+            ...(distance != null ? { distance: distance.toNumber('km') } : {}),
+            ...(workout.getCalories() != null ? { calories: workout.getCalories() } : {}),
+            ...(workout.getNotes() != null ? { notes: workout.getNotes() } : {}),
+            ...(workout.getMapPrivacy() != null ? { privacy_map: workout.getMapPrivacy() } : {}),
+            ...(workout.getWorkoutPrivacy() != null ? { privacy_workout: workout.getWorkoutPrivacy() } : {}),
         };
 
         const options = {
             workoutId: workout.getId(),
             userId: this.getUserId(),
             gzip: true,
-            authToken: this.getAuthToken(),
+            authToken: this.getUserToken(),
         };
 
         return this

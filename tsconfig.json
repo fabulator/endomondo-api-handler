@@ -17,7 +17,8 @@
     ],
     "module": "commonjs",
     "target": "esnext",
-    "strict": true
+    "strict": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*"

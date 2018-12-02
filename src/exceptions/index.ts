@@ -1,7 +1,3 @@
-import EndomondoException from './EndomondoException';
-import EndomondoApiException from './EndomondoApiException';
-
-export {
-    EndomondoException,
-    EndomondoApiException,
-};
+export { default as EndomondoException } from './EndomondoException';
+export { default as EndomondoApiException } from './EndomondoApiException';
+export { default as EndomondoAuthException } from './EndomondoAuthException';
