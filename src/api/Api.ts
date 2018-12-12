@@ -62,7 +62,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     /**
      * Get api url for user namespace.
      */
-    protected getUserApiUrl(namespace: string, userId: number | null = this.userId): string {
+    protected async getUserApiUrl(namespace: string, userId: number | null = this.userId): Promise<string> {
         if (!userId) {
             throw new EndomondoException('User id is not defined');
         }
@@ -73,7 +73,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     /**
      * Get api url for workout namespace.
      */
-    protected getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null = this.userId): string {
+    protected async getWorkoutsApiUrl(namespace: string, workoutId: number | null, userId: number | null = this.userId): Promise<string> {
         return this.getUserApiUrl(`workouts/${workoutId ? `${workoutId}${namespace ? `/${namespace}` : ''}` : namespace}`, userId);
     }
 
@@ -105,32 +105,32 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
     }
 
     public async getProfile(userId: number | null = this.userId): Promise<TYPES.API.Profile> {
-        const { data } = await this.get(this.getUserApiUrl(''));
+        const { data } = await this.get(await this.getUserApiUrl(''));
 
         return data;
     }
 
     public async getWorkout(workoutId: number, userId: number | null = this.userId): Promise<Workout<number, TYPES.API.Workout>> {
-        const response: ApiResponseType<TYPES.API.Workout> = await this.get(this.getWorkoutsApiUrl('', workoutId, userId));
+        const response: ApiResponseType<TYPES.API.Workout> = await this.get(await this.getWorkoutsApiUrl('', workoutId, userId));
         return Workout.fromApi(response.data);
     }
 
     public async getWorkoutGpx(workoutId: number, userId: number | null = this.userId): Promise<string> {
-        const { data } = await this.get(this.getWorkoutsApiUrl('export?format=GPX', workoutId, userId));
+        const { data } = await this.get(await this.getWorkoutsApiUrl('export?format=GPX', workoutId, userId));
         return data;
     }
 
     public async getWorkoutTcx(workoutId: number, userId: number | null = this.userId): Promise<string> {
-        const { data } = await this.get(this.getWorkoutsApiUrl('export?format=TCX', workoutId, userId));
+        const { data } = await this.get(await this.getWorkoutsApiUrl('export?format=TCX', workoutId, userId));
         return data;
     }
 
-    public editWorkout(workout: Workout<number>, userId: number | null = this.userId) {
+    public async editWorkout(workout: Workout<number>, userId: number | null = this.userId) {
         const distance = workout.getDistance();
         const ascent = workout.getAscent();
         const descent = workout.getDescent();
 
-        return this.put(this.getWorkoutsApiUrl('', workout.getId(), userId), {
+        return this.put(await this.getWorkoutsApiUrl('', workout.getId(), userId), {
             duration: workout.getDuration().as('seconds'),
             sport: workout.getTypeId(),
             start_time: this.getDateString(workout.getStart()),
@@ -146,16 +146,16 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         });
     }
 
-    public deleteWorkout(workoutId: number, userId: number | null = this.userId) {
-        return this.delete(this.getWorkoutsApiUrl('', workoutId, userId));
+    public async deleteWorkout(workoutId: number, userId: number | null = this.userId) {
+        return this.delete(await this.getWorkoutsApiUrl('', workoutId, userId));
     }
 
-    public addHashtag(hashtag: string, workoutId: number, userId: number | null = this.userId) {
-        return this.post(this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
+    public async addHashtag(hashtag: string, workoutId: number, userId: number | null = this.userId) {
+        return this.post(await this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
     }
 
-    public removeHashtag(hashtag: string, workoutId: number, userId: number | null = this.userId) {
-        return this.delete(this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
+    public async removeHashtag(hashtag: string, workoutId: number, userId: number | null = this.userId) {
+        return this.delete(await this.getWorkoutsApiUrl(`hashtags/${hashtag}`, workoutId, userId));
     }
 
     public async getWorkouts(
@@ -169,7 +169,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
             toDuration,
         } = filter;
 
-        const response: ApiResponseType<TYPES.API.Workouts> = await this.get(this.getWorkoutsApiUrl('history', null, userId), {
+        const response: ApiResponseType<TYPES.API.Workouts> = await this.get(await this.getWorkoutsApiUrl('history', null, userId), {
             expand: 'points,workout',
             ...filter,
             ...(after != null ? { after: typeof after === 'string' ? after : this.getDateString(after) } : {}),
