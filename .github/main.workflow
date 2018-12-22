@@ -27,7 +27,8 @@ action "Test" {
 }
 
 action "Publish" {
-  uses = "actions/npm@e7aaefe"
+  uses = "docker://node:10"
+  runs = "npm"
   needs = ["Lint", "Typescript lint", "Test"]
   args = "run release"
   secrets = ["GITHUB_TOKEN", "NPM_TOKEN"]
