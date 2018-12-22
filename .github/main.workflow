@@ -10,25 +10,25 @@ action "Install" {
 
 action "Lint" {
   uses = "actions/npm@e7aaefe"
-  args = "lint"
+  args = "run lint"
   needs = ["Install"]
 }
 
 action "Typescript lint" {
   uses = "actions/npm@e7aaefe"
-  args = "tsc"
+  args = "run tsc"
   needs = ["Install"]
 }
 
 action "Test" {
   uses = "actions/npm@e7aaefe"
   needs = ["Install"]
-  args = "test"
+  args = "run test"
 }
 
 action "Publish" {
   uses = "actions/npm@e7aaefe"
   needs = ["Lint", "Typescript lint", "Test"]
-  args = "release"
+  args = "run release"
   secrets = ["GITHUB_TOKEN", "NPM_TOKEN"]
 }
