@@ -5,30 +5,30 @@ workflow "Fabulator NPM Workflow" {
 
 action "Install" {
   uses = "actions/npm@e7aaefe"
-  runs = "ci"
+  args = "ci"
 }
 
 action "Lint" {
   uses = "actions/npm@e7aaefe"
-  runs = "lint"
+  args = "lint"
   needs = ["Install"]
 }
 
 action "Typescript lint" {
   uses = "actions/npm@e7aaefe"
-  runs = "tsc"
+  args = "tsc"
   needs = ["Install"]
 }
 
 action "Test" {
   uses = "actions/npm@e7aaefe"
   needs = ["Install"]
-  runs = "test"
+  args = "test"
 }
 
 action "Publish" {
   uses = "actions/npm@e7aaefe"
   needs = ["Lint", "Typescript lint", "Test"]
-  runs = "release"
+  args = "release"
   secrets = ["GITHUB_TOKEN", "NPM_TOKEN"]
 }
