@@ -150,10 +150,6 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ workoutPrivacy });
     }
 
-    public getHashtags(): Array<string> {
-        return this.hashtags;
-    }
-
     public setHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
         return this.clone({ hashtags });
     }
@@ -171,8 +167,14 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.addHashtags([hashtag]);
     }
 
-    public hasHashtag(hashtag: string): boolean {
-        return this.hashtags.indexOf(hashtag) !== -1;
+    public removeHashtag(hashtag: string) {
+        return this.removeHashtags([hashtag]);
+    }
+
+    public removeHashtags(hashtags: Array<string>) {
+        return this.clone({
+            hashtags: hashtags.filter(hashtag => hashtags.includes(hashtag)),
+        });
     }
 
     public getSource(): ApiSource {

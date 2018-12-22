@@ -41,11 +41,11 @@
     "@types/query-string": "^6.1.1",
     "cross-fetch": "^2.2.3",
     "husky": "^1.2.1",
-    "semantic-release-config-fabulator": "^1.0.2"
+    "semantic-release-config-fabulator": "^1.0.3"
   },
   "dependencies": {
     "cookie-api-handler": "^2.1.0",
-    "fitness-models": "^0.1.0",
+    "fitness-models": "^0.2.0",
     "gpx-builder": "^2.0.1",
     "luxon": "^1.8.3",
     "mathjs": "^5.2.3",

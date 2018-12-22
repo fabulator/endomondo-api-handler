@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+    - 11
+install:
+    - npm ci
+script:
+    - npm run lint
+    - npm run test
+    - npm run tsc
+    - npm run release
+notifications:
+    email: false
+sudo: required
