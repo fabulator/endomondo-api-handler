@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "cookie-api-handler": "^2.1.0",
-    "fitness-models": "^0.1.0",
+    "fitness-models": "^0.2.0",
     "gpx-builder": "^2.0.1",
     "luxon": "^1.8.2",
     "mathjs": "^5.4.0",
