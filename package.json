@@ -41,7 +41,7 @@
     "cookie-api-handler": "^2.1.0",
     "fitness-models": "^0.2.0",
     "gpx-builder": "^2.0.1",
-    "luxon": "^1.8.2",
+    "luxon": "^1.8.3",
     "mathjs": "^5.4.0",
     "query-string": "^6.2.0",
     "rest-api-handler": "^2.1.0"
