@@ -43,7 +43,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         this.source = options.source;
 
         this.isRace = this.hasHashtag('race');
-        this.isCommute = this.hasHashtag('commute');
+        this.isCommute = this.hasHashtag('work');
     }
 
     public static SPORT_NAMES: {[key: string]: string} = LIST_OF_SPORT_NAMES;
