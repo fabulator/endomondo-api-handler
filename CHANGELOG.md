@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0-beta.1] 2018-12-22
+### Changed
+- Update version of fitness models
+- Try Github Actions :)
+- Something
+
+### Added
+- Linters
+
+### Other
+- Make getUserApiUrl async method.
+- Prepare for beta
+
 ## [2.0.1] - 2018-11-18
 ### Fixed
 - Fix default user id
