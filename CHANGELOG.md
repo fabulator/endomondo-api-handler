@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0-beta.2] 2018-12-25
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+
+### Changed
+- Hashtag for commute.
+
 ## [2.1.0-beta.1] 2018-12-22
 ### Changed
 - Update version of fitness models
