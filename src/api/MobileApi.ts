@@ -143,6 +143,10 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
                 },
             );
 
+        if (response.data.trim() === 'AUTH_FAILED') {
+            throw new EndomondoAuthException(response);
+        }
+
         const workoutId = processStringResponse(response.data)['workout.id'];
 
         if (!workoutId) {
