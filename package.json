@@ -34,7 +34,7 @@
     "@socifi/rollup-config": "^2.0.1",
     "@types/luxon": "^1.4.1",
     "@types/mathjs": "^4.4.4",
-    "@types/query-string": "^6.1.1",
+    "@types/query-string": "^6.2.0",
     "cross-fetch": "^3.0.0"
   },
   "dependencies": {
