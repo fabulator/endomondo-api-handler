@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0-beta.5] 2019-01-15
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+
+### Fixed
+- unit tests
+
 ## [2.1.0-beta.4] 2019-01-15
 ### Changed
 - Notes to message
