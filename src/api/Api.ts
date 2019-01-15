@@ -140,7 +140,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
             ...(workout.getTitle() != null ? { title: workout.getTitle() } : {}),
             ...(ascent != null ? { ascent: ascent.toNumber('m') } : {}),
             ...(descent != null ? { descent: descent.toNumber('m') } : {}),
-            ...(workout.getNotes() != null ? { notes: workout.getNotes() } : {}),
+            ...(workout.getMessage() != null ? { message: workout.getMessage() } : {}),
             ...(workout.getMapPrivacy() != null ? { show_map: workout.getMapPrivacy() } : {}),
             ...(workout.getWorkoutPrivacy() != null ? { show_workout: workout.getWorkoutPrivacy() } : {}),
         });

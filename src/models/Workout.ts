@@ -14,6 +14,7 @@ interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
     hashtags?: Array<string>,
     id: Id,
     source: ApiSource,
+    message?: string,
 }
 
 export default class Workout<Id extends (number | undefined) = any, ApiSource extends (API.Workout | undefined) = any> extends BaseWorkout {
@@ -31,6 +32,8 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
     protected workoutPrivacy?: Privacy;
 
+    protected message?: string;
+
     public constructor(options: Constructor<Id, ApiSource>) {
         super(options);
 
@@ -41,6 +44,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         this.hashtags = options.hashtags || [];
         this.id = options.id;
         this.source = options.source;
+        this.message = options.message;
 
         this.isRace = this.hasHashtag('race');
         this.isCommute = this.hasHashtag('work');
@@ -150,6 +154,14 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ workoutPrivacy });
     }
 
+    public getMessage() {
+        return this.message;
+    }
+
+    public setMessage(message?: string): Workout<Id, ApiSource> {
+        return this.clone({ message });
+    }
+
     public setHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
         return this.clone({ hashtags });
     }
@@ -243,6 +255,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
             hashtags: this.hashtags,
             id: this.id,
             source: this.source,
+            message: this.message,
         };
     }
 }
