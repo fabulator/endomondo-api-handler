@@ -61,7 +61,7 @@ describe('Api testing', () => {
                     .setTitle('titulek')
                     .setAscent(unit(666, 'm'))
                     .setDescent(unit(999, 'm'))
-                    .setNotes('xzxs')
+                    .setMessage('xzxs')
                     .setMapPrivacy(0)
                     .setWorkoutPrivacy(1),
             );
@@ -72,7 +72,7 @@ describe('Api testing', () => {
                 duration: 300,
                 heart_rate_avg: 80,
                 heart_rate_max: 180,
-                notes: 'xzxs',
+                message: 'xzxs',
                 show_map: 0,
                 show_workout: 1,
                 sport: 0,
