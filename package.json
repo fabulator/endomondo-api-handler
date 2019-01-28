@@ -31,7 +31,7 @@
     "@socifi/babel-config": "^0.6.0",
     "@socifi/eslint-config": "^2.6.1",
     "@socifi/jest-config": "^2.2.0",
-    "@socifi/rollup-config": "^2.0.1",
+    "@socifi/rollup-config": "^2.1.0",
     "@types/luxon": "^1.4.2",
     "@types/mathjs": "^4.4.5",
     "@types/query-string": "^6.2.0",
