@@ -35,7 +35,7 @@
     "@types/luxon": "^1.10.2",
     "@types/mathjs": "^4.4.5",
     "@types/query-string": "^6.2.0",
-    "cross-fetch": "^3.0.0"
+    "cross-fetch": "^3.0.1"
   },
   "dependencies": {
     "cookie-api-handler": "^2.1.0",
