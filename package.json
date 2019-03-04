@@ -33,7 +33,7 @@
     "@socifi/jest-config": "^2.2.0",
     "@socifi/rollup-config": "^2.1.0",
     "@types/luxon": "^1.11.1",
-    "@types/mathjs": "^5.0.0",
+    "@types/mathjs": "^5.0.1",
     "@types/query-string": "^6.2.0",
     "cross-fetch": "^3.0.1"
   },
@@ -42,7 +42,7 @@
     "fitness-models": "^0.2.1",
     "gpx-builder": "^2.0.1",
     "luxon": "^1.11.4",
-    "mathjs": "^5.5.0",
+    "mathjs": "^5.6.0",
     "query-string": "^6.2.0",
     "rest-api-handler": "^2.1.0"
   }
