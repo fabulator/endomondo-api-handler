@@ -1,6 +1,92 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] 2019-03-21
+### Merge remote-tracking branch 'origin/beta'
+
+# Conflicts
+- #	package-lock.json
+#	package.json
+
+### Added
+- Changelog for version 2.1.0-beta.6
+
+## [2.1.0-beta.6] 2019-03-21
+### Changed
+- Update libraries BREAKING
+- Changelog for version 2.1.0-beta.4
+
+## [2.1.0-beta.4] 2019-01-15
+### Changed
+- Notes to message
+- Changelog for version 2.1.0-beta.1
+
+## [2.1.0-beta.1] 2018-12-22
+### Changed
+- Update version of fitness models
+- Try Github Actions :)
+- Something
+
+### Added
+- Linters
+
+### Other
+- Make getUserApiUrl async method.
+- Prepare for beta
+- Linters
+
+### Changed
+- Update libraries BREAKING
+- Notes to message
+- Hashtag for commute.
+- Update version of fitness models
+- Try Github Actions :)
+- Something
+
+### Other
+- Update dependency @socifi/jest-config to ^2.3.1
+- Update dependency query-string to ^6.4.0
+- Update dependency mathjs to ^5.7.0
+- Update dependency query-string to ^6.3.0
+- Update dependency mathjs to ^5.6.0
+- Update dependency luxon to ^1.11.4
+- Update dependency mathjs to ^5.5.0
+- Update dependency @types/luxon to ^1.11.1
+- Update dependency luxon to ^1.11.3
+- Update dependency @types/mathjs to v5 (#44)
+- Update dependency luxon to ^1.11.2
+- Update dependency luxon to ^1.11.0
+- Update dependency cross-fetch to ^3.0.1
+- Update dependency mathjs to ^5.4.2
+- Update dependency @types/luxon to ^1.10.2
+- Update dependency @socifi/rollup-config to ^2.1.0
+- Update dependency @socifi/eslint-config to ^2.6.1
+- Update dependency fitness-models to ^0.2.1
+- Update dependency @types/mathjs to ^4.4.5
+- Update dependency @types/luxon to ^1.4.2
+- Update dependency mathjs to ^5.4.1
+- Update dependency luxon to ^1.10.0
+- Update dependency @types/query-string to ^6.2.0
+- Update dependency luxon to ^1.9.0
+- Update dependency luxon to ^1.8.3
+- Update dependency fitness-models to ^0.2.0
+- Update dependency @types/mathjs to ^4.4.4
+- Update dependency @socifi/jest-config to ^2.2.0
+- Make getUserApiUrl async method.
+- Update dependency cross-fetch to v3 (#26)
+- Update dependency mathjs to ^5.4.0
+- Update dependency luxon to ^1.8.2
+- Prepare for beta
+
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+- fabulator/endomondo-api-handler into beta
+- fabulator/endomondo-api-handler into beta
+
+### Fixed
+- unit tests
+- Unauthorized exception
+
 ## [2.1.0-beta.6] 2019-03-21
 ### Changed
 - Update libraries BREAKING
