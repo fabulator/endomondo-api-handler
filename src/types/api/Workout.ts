@@ -2,7 +2,7 @@ import { Sport } from '../Sport';
 import { Point } from './Point';
 import { Privacy } from '../Privacy';
 
-export type Workout = {
+export interface Workout {
     expand: string,
     id: number,
     sport: Sport,
@@ -38,24 +38,24 @@ export type Workout = {
     },
     is_peptalk_allowed: boolean,
     can_copy: boolean,
-    weather: Object,
+    weather: Record<string, any>,
     heart_rate_avg: number,
     heart_rate_max: number,
-    heart_rate_zones: Object,
+    heart_rate_zones: Record<string, any>,
     feed_id: number,
-    laps: Object,
+    laps: Record<string, any>,
     small_encoded_polyline: string,
-    records: Array<Object>,
-    hashtags: Array<string>,
-    tagged_users: Array<any>,
-    pictures: Array<any>,
+    records: Record<string, any>[],
+    hashtags: string[],
+    tagged_users: any[],
+    pictures: any[],
     points: {
         expand: string,
         id: number,
-        points: Array<Point>,
+        points: Point[],
     },
     show_map: Privacy,
     show_workout: Privacy,
     admin_rejected: boolean,
-    personal_bests: Array<any>,
-};
+    personal_bests: any[],
+}

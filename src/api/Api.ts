@@ -190,7 +190,7 @@ export default class Api extends CookieApi<ApiResponseType<any>> {
         filter: TYPES.WorkoutFilters = {},
         processor: (workout: Workout<number, TYPES.API.Workout>) => Promise<Workout>,
         userId: number | null = this.userId,
-    ): Promise<Array<Workout>> {
+    ): Promise<Workout[]> {
         const { workouts, paging } = await this.getWorkouts(filter, userId);
 
         const processorPromises = workouts.map((workout) => {

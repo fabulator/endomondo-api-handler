@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
     id: number,
     email: string,
     first_name: string,
@@ -18,6 +18,6 @@ export type User = {
         timezone_offset: number,
         datetime_format: string,
     },
-    roles: Array<any>,
+    roles: any[],
     premium: boolean,
-};
+}

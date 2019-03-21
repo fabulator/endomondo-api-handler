@@ -12,7 +12,7 @@ const {
 } = GarminBuilder.MODELS;
 
 // @ts-ignore
-function convertPoints(points: Array<EndomondoPoint>): Array<Point> {
+function convertPoints(points: EndomondoPoint[]): Point[] {
     return points.map((point: EndomondoPoint) => {
         return point.toObject();
     }).map((point) => {

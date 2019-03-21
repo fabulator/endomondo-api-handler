@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Point } from '../models';
 
-export default (point: Point, data: Array<{ value: number, time: number }>) => {
+export default (point: Point, data: { value: number, time: number }[]) => {
     const time = point.getTime();
     if (!time) {
         return undefined;

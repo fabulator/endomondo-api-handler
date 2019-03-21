@@ -1,4 +1,4 @@
-export type Point = {
+export interface Point {
     time?: string,
     instruction?: number,
     latitude?: number,
@@ -11,4 +11,4 @@ export type Point = {
         heart_rate?: number,
         cadence?: number,
     },
-};
+}

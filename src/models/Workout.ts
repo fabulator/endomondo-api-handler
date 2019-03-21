@@ -8,10 +8,10 @@ import { workoutGPXExporter } from '../helpers';
 
 interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
     typeId: Sport,
-    points?: Array<Point>,
+    points?: Point[],
     mapPrivacy?: Privacy,
     workoutPrivacy?: Privacy,
-    hashtags?: Array<string>,
+    hashtags?: string[],
     id: Id,
     source: ApiSource,
     message?: string,
@@ -22,9 +22,9 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
     protected typeId: Sport;
 
-    protected points: Array<Point>;
+    protected points: Point[];
 
-    protected hashtags: Array<string>;
+    protected hashtags: string[];
 
     protected source: ApiSource;
 
@@ -92,7 +92,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         start: DateTime,
         duration: Duration,
         distance?: Unit,
-        points: Array<Point> = [],
+        points: Point[] = [],
         options: Partial<Constructor<undefined, undefined>> = {},
     ): Workout<undefined, undefined> {
         return new Workout({
@@ -134,7 +134,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return Workout.SPORT_NAMES[this.getTypeId()];
     }
 
-    public getPoints(): Array<Point> {
+    public getPoints(): Point[] {
         return this.points;
     }
 
@@ -162,11 +162,11 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ message });
     }
 
-    public setHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+    public setHashtags(hashtags: string[]): Workout<Id, ApiSource> {
         return this.clone({ hashtags });
     }
 
-    public addHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+    public addHashtags(hashtags: string[]): Workout<Id, ApiSource> {
         return this.clone({
             hashtags: [
                 ...this.getHashtags(),
@@ -183,7 +183,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.removeHashtags([hashtag]);
     }
 
-    public removeHashtags(hashtags: Array<string>) {
+    public removeHashtags(hashtags: string[]) {
         return this.clone({
             hashtags: hashtags.filter(hashtag => hashtags.includes(hashtag)),
         });
@@ -213,7 +213,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ distance });
     }
 
-    public setPoints(points: Array<Point>): Workout<Id, ApiSource> {
+    public setPoints(points: Point[]): Workout<Id, ApiSource> {
         return this.clone({ points });
     }
 
