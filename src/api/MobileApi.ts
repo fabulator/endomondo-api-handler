@@ -143,6 +143,10 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
                 },
             );
 
+        if (response.data.trim() === 'AUTH_FAILED') {
+            throw new EndomondoAuthException(response);
+        }
+
         const workoutId = processStringResponse(response.data)['workout.id'];
 
         if (!workoutId) {
@@ -168,7 +172,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             gzip: true,
             ...(distance != null ? { distance: distance.toNumber('km') } : {}),
             ...(workout.getCalories() != null ? { calories: workout.getCalories() } : {}),
-            ...(workout.getNotes() != null ? { notes: workout.getNotes() } : {}),
+            ...(workout.getMessage() != null ? { message: workout.getMessage() } : {}),
             ...(workout.getMapPrivacy() != null ? { privacy_map: workout.getMapPrivacy() } : {}),
             ...(workout.getWorkoutPrivacy() != null ? { privacy_workout: workout.getWorkoutPrivacy() } : {}),
         };

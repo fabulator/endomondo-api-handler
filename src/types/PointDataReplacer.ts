@@ -1,19 +1,19 @@
 import { DateTime } from 'luxon';
 
-export type AltitudeData = Array<{
+export type AltitudeData = {
     location: {
         lat: number,
         lng: number,
     },
     elevation: number,
-}>;
+}[];
 
-export type CadenceData = Array<{
+export type CadenceData = {
     time: DateTime,
     cadence: number,
-}>;
+}[];
 
-export type HrData = Array<{
+export type HrData = {
     time: DateTime,
     hr: number,
-}>;
+}[];

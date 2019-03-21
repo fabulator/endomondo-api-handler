@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "./dist",
+    "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
       "*": [
@@ -18,7 +18,8 @@
     "module": "commonjs",
     "target": "esnext",
     "strict": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"

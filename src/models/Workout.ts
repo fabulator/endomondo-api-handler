@@ -8,12 +8,13 @@ import { workoutGPXExporter } from '../helpers';
 
 interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
     typeId: Sport,
-    points?: Array<Point>,
+    points?: Point[],
     mapPrivacy?: Privacy,
     workoutPrivacy?: Privacy,
-    hashtags?: Array<string>,
+    hashtags?: string[],
     id: Id,
     source: ApiSource,
+    message?: string,
 }
 
 export default class Workout<Id extends (number | undefined) = any, ApiSource extends (API.Workout | undefined) = any> extends BaseWorkout {
@@ -21,15 +22,17 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
     protected typeId: Sport;
 
-    protected points: Array<Point>;
+    protected points: Point[];
 
-    protected hashtags: Array<string>;
+    protected hashtags: string[];
 
     protected source: ApiSource;
 
     protected mapPrivacy?: Privacy;
 
     protected workoutPrivacy?: Privacy;
+
+    protected message?: string;
 
     public constructor(options: Constructor<Id, ApiSource>) {
         super(options);
@@ -41,9 +44,10 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         this.hashtags = options.hashtags || [];
         this.id = options.id;
         this.source = options.source;
+        this.message = options.message;
 
         this.isRace = this.hasHashtag('race');
-        this.isCommute = this.hasHashtag('commute');
+        this.isCommute = this.hasHashtag('work');
     }
 
     public static SPORT_NAMES: {[key: string]: string} = LIST_OF_SPORT_NAMES;
@@ -88,7 +92,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         start: DateTime,
         duration: Duration,
         distance?: Unit,
-        points: Array<Point> = [],
+        points: Point[] = [],
         options: Partial<Constructor<undefined, undefined>> = {},
     ): Workout<undefined, undefined> {
         return new Workout({
@@ -130,7 +134,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return Workout.SPORT_NAMES[this.getTypeId()];
     }
 
-    public getPoints(): Array<Point> {
+    public getPoints(): Point[] {
         return this.points;
     }
 
@@ -150,15 +154,19 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ workoutPrivacy });
     }
 
-    public getHashtags(): Array<string> {
-        return this.hashtags;
+    public getMessage() {
+        return this.message;
     }
 
-    public setHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+    public setMessage(message?: string): Workout<Id, ApiSource> {
+        return this.clone({ message });
+    }
+
+    public setHashtags(hashtags: string[]): Workout<Id, ApiSource> {
         return this.clone({ hashtags });
     }
 
-    public addHashtags(hashtags: Array<string>): Workout<Id, ApiSource> {
+    public addHashtags(hashtags: string[]): Workout<Id, ApiSource> {
         return this.clone({
             hashtags: [
                 ...this.getHashtags(),
@@ -171,8 +179,14 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.addHashtags([hashtag]);
     }
 
-    public hasHashtag(hashtag: string): boolean {
-        return this.hashtags.indexOf(hashtag) !== -1;
+    public removeHashtag(hashtag: string) {
+        return this.removeHashtags([hashtag]);
+    }
+
+    public removeHashtags(hashtags: string[]) {
+        return this.clone({
+            hashtags: hashtags.filter(hashtag => hashtags.includes(hashtag)),
+        });
     }
 
     public getSource(): ApiSource {
@@ -199,7 +213,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.clone({ distance });
     }
 
-    public setPoints(points: Array<Point>): Workout<Id, ApiSource> {
+    public setPoints(points: Point[]): Workout<Id, ApiSource> {
         return this.clone({ points });
     }
 
@@ -241,6 +255,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
             hashtags: this.hashtags,
             id: this.id,
             source: this.source,
+            message: this.message,
         };
     }
 }

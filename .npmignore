@@ -1,7 +1,7 @@
 .eslintrc.js
 .gitignore
 .npmignore
-.travis.yml
+.github
 jest.config.js
 renovate.json
 rollup.config.js
@@ -13,4 +13,6 @@ jest.config.build.js
 .babelrc.js
 .browserslistrc
 tsconfig.json
-.eslintignore
+.huskyrc.js
+commitlint.config.js
+release.config.js

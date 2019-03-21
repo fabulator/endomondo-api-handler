@@ -1,6 +1,6 @@
 import { Sport } from '../Sport';
 
-export type Profile = {
+export interface Profile {
     expand: string,
     id: number,
     first_name: string,
@@ -30,28 +30,28 @@ export type Profile = {
         total_duration: number,
         total_calories: number,
     },
-    summary_by_sport: Array<{
+    summary_by_sport: {
         sport: Sport,
         count: number,
         total_distance: number,
         total_duration: number,
         total_calories: number,
-    }>,
+    }[],
     created_date: string,
     has_dismissed_download_box: boolean,
     time_zone: string,
     unit_system: string,
     country: string,
     email: string,
-    personal_bests: Array<{
+    personal_bests: {
         workout_id: number,
         sport: Sport,
         date: string,
         type: number,
         value: number,
-    }>,
+    }[],
     name: string,
     viewer_friendship: number,
     is_facebook_connected: boolean,
     is_twitter_connected: boolean,
-};
+}

@@ -1,6 +1,48 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0-beta.6] 2019-03-21
+### Changed
+- Update libraries BREAKING
+
+## [2.1.0-beta.5] 2019-01-15
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+
+### Fixed
+- unit tests
+
+## [2.1.0-beta.4] 2019-01-15
+### Changed
+- Notes to message
+
+## [2.1.0-beta.3] 2018-12-27
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+
+### Fixed
+- Unauthorized exception
+
+## [2.1.0-beta.2] 2018-12-25
+### Merge branch 'beta' of github.com
+- fabulator/endomondo-api-handler into beta
+
+### Changed
+- Hashtag for commute.
+
+## [2.1.0-beta.1] 2018-12-22
+### Changed
+- Update version of fitness models
+- Try Github Actions :)
+- Something
+
+### Added
+- Linters
+
+### Other
+- Make getUserApiUrl async method.
+- Prepare for beta
+
 ## [2.0.1] - 2018-11-18
 ### Fixed
 - Fix default user id
