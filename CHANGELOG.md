@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] 2019-03-29
+### Fixed
+- package lock
+
+### Changed
+- Update fitness models package
+
 ## [3.0.0] 2019-03-21
 ### Merge remote-tracking branch 'origin/beta'
 
