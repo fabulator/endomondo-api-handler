@@ -48,7 +48,7 @@
         "gpx-builder": "^2.0.1",
         "luxon": "^1.12.1",
         "mathjs": "^5.8.0",
-        "query-string": "^6.4.2",
+        "query-string": "^6.5.0",
         "rest-api-handler": "^2.1.0"
     }
 }
