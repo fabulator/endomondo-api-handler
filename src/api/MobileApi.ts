@@ -44,7 +44,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
                 const contentType = response.headers.get('content-type');
 
                 const toResponse = {
-                    data: contentType && contentType.indexOf('json') >= 0 ? await response.json() : await response.text(),
+                    data: contentType && contentType.includes('json') ? await response.json() : await response.text(),
                     status: response.status,
                     source: response,
                     request,
