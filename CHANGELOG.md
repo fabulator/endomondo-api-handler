@@ -1,6 +1,31 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.1.1] 2019-08-27
+### Fixed
+- New eslint package
+
+### Other
+- Update dependency husky to v3 (#75)
+- Update dependency mathjs to v6 (#74)
+- Update dependency mathjs to ^5.10.3
+- Update dependency luxon to ^1.17.2
+- Update dependency husky to ^2.7.0
+- Update dependency cross-fetch to ^3.0.4
+- Update dependency query-string to ^6.8.2
+- Update dependency cross-fetch to ^3.0.3
+- Update dependency husky to ^2.3.0
+- Update dependency @types/luxon to ^1.13.0
+- Update dependency luxon to ^1.13.2
+- Update dependency luxon to ^1.13.0
+- Update dependency husky to ^2.2.0
+- Update dependency husky to v2 (#61)
+- Update dependency query-string to ^6.5.0
+- Update dependency fitness-models to ^0.4.0
+- Update dependency @types/luxon to ^1.12.0
+- Update dependency query-string to ^6.4.2
+- Update dependency cross-fetch to ^3.0.2
+
 ## [3.1.0] 2019-03-29
 ### Fixed
 - package lock
