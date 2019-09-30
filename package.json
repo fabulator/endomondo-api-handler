@@ -37,7 +37,7 @@
         "@socifi/jest-config": "^2.3.1",
         "@socifi/rollup-config": "^2.1.0",
         "cross-fetch": "^3.0.4",
-        "husky": "^3.0.5",
+        "husky": "^3.0.7",
         "semantic-release-config-fabulator": "^1.0.3"
     },
     "dependencies": {
