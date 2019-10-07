@@ -30,7 +30,7 @@
         "endomondo-api"
     ],
     "devDependencies": {
-        "@socifi/babel-config": "^0.6.2",
+        "@socifi/babel-config": "^0.7.0",
         "@socifi/browserslist-config": "^0.1.0",
         "@socifi/commitlint-config": "^1.0.0",
         "@socifi/eslint-config": "^2.8.0",
