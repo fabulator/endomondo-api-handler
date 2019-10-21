@@ -1,6 +1,26 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.2.0] 2019-10-21
+### Changed
+- [d4b9742](https://github.com/fabulator/endomondo-api-handler/commit/d4b974279ec078bb415e2b5f6ac9f07bd0c29333) Update dependencies.
+
+### Other
+- [3800cca](https://github.com/fabulator/endomondo-api-handler/commit/3800cca81ac47b684c28cd6aadc6d02a1efe62b4) Update dependency husky to ^3.0.9
+- [58b9a4a](https://github.com/fabulator/endomondo-api-handler/commit/58b9a4ad26ec6edc459a3d2cbb5c7d2ea02dc4da) Update dependency fitness-models to ^0.4.1
+- [3567077](https://github.com/fabulator/endomondo-api-handler/commit/3567077e71e2275ee5b5c8141dfb7c68eb56ae46) Update dependency rest-api-handler to ^2.2.0
+- [31c6a05](https://github.com/fabulator/endomondo-api-handler/commit/31c6a054f3e3def24758212793bf96059c67fc13) Update dependency @socifi/babel-config to ^0.7.0
+- [f7198d9](https://github.com/fabulator/endomondo-api-handler/commit/f7198d94ee8f2cf406a72246ea722a329116595a) Update dependency mathjs to ^6.2.3
+- [ef78800](https://github.com/fabulator/endomondo-api-handler/commit/ef78800c28dfa5a4fd9e897bba8d2e1e82be5ee1) Update dependency husky to ^3.0.8
+- [3e8f611](https://github.com/fabulator/endomondo-api-handler/commit/3e8f6111581d15b96b159e93a1d15abc3da19858) Update dependency luxon to ^1.19.3
+- [8afcbe1](https://github.com/fabulator/endomondo-api-handler/commit/8afcbe11140574aca93d94dd2e1efbf9e2e2a5e1) Update dependency husky to ^3.0.7
+- [665809b](https://github.com/fabulator/endomondo-api-handler/commit/665809baa5f5dce4bef50ea89598c8a2d08dda4b) Update dependency mathjs to ^6.2.2
+- [1f6480a](https://github.com/fabulator/endomondo-api-handler/commit/1f6480a258fbcbc2dbf00ef04330ae42f010602f) Update dependency luxon to ^1.19.2
+- [35654ce](https://github.com/fabulator/endomondo-api-handler/commit/35654cec10e9598a62924f16b8d615dc690ee844) Update dependency luxon to ^1.17.3
+- [6a5f730](https://github.com/fabulator/endomondo-api-handler/commit/6a5f7302ee59fec1df14c4a65e77e0ca82dad146) Update dependency query-string to ^6.8.3
+- [ceb1f30](https://github.com/fabulator/endomondo-api-handler/commit/ceb1f3070c865740a471f57c31dc2e79d5d20f3e) Update dependency mathjs to ^6.2.1
+- [a94ad90](https://github.com/fabulator/endomondo-api-handler/commit/a94ad90e7b2127bde342920f01620ec25a0b722e) Update dependency husky to ^3.0.5
+
 ## [3.1.1] 2019-08-27
 ### Fixed
 - New eslint package
