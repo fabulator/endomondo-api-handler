@@ -8,8 +8,8 @@ function processStringResponse(response: string): {[property: string]: string} {
     const data: {[property: string]: string} = {};
 
     response.split('\n')
-        .map(item => item.split('='))
-        .filter(item => item.length === 2)
+        .map((item) => item.split('='))
+        .filter((item) => item.length === 2)
         .forEach((item) => {
             const [key, value] = item;
             data[key] = value;
@@ -133,7 +133,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             authToken: this.getUserToken(),
         };
 
-        const gzippedBody = await gzipRequestBody(workout.getPoints().map(point => point.toString()).join('\n'));
+        const gzippedBody = await gzipRequestBody(workout.getPoints().map((point) => point.toString()).join('\n'));
         const response = await this
             .request(
                 `track${Api.convertParametersToUrl(options)}`,

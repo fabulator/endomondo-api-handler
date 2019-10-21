@@ -185,7 +185,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
     public removeHashtags(hashtags: string[]) {
         return this.clone({
-            hashtags: hashtags.filter(hashtag => hashtags.includes(hashtag)),
+            hashtags: hashtags.filter((hashtag) => hashtags.includes(hashtag)),
         });
     }
 

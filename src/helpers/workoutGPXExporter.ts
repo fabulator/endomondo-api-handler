@@ -37,7 +37,7 @@ function convertPoints(points: EndomondoPoint[]): Point[] {
             ele: altitude ? altitude.toNumber('m') : undefined,
             speed: speed ? speed.toNumber('m/s') : undefined,
         });
-    }).filter(item => item !== null);
+    }).filter((item) => item !== null);
 }
 
 export default (workout: Workout): string => {

@@ -1,3 +1,1 @@
-module.exports = {
-    ...require('@socifi/jest-config')(),
-};
+module.exports = require('@socifi/jest-config')();

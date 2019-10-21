@@ -30,15 +30,13 @@
         "endomondo-api"
     ],
     "devDependencies": {
-        "@socifi/babel-config": "^0.7.0",
+        "@socifi/babel-config": "^1.0.0",
         "@socifi/browserslist-config": "^0.1.0",
-        "@socifi/commitlint-config": "^1.0.0",
-        "@socifi/eslint-config": "^2.8.0",
-        "@socifi/jest-config": "^2.3.1",
-        "@socifi/rollup-config": "^2.1.0",
-        "cross-fetch": "^3.0.4",
-        "husky": "^3.0.9",
-        "semantic-release-config-fabulator": "^1.0.3"
+        "@socifi/commitlint-config": "^1.1.0",
+        "@socifi/eslint-config": "^2.10.0",
+        "@socifi/jest-config": "^2.4.1",
+        "@socifi/rollup-config": "^2.2.1",
+        "cross-fetch": "^3.0.4"
     },
     "dependencies": {
         "@types/luxon": "^1.15.2",
@@ -49,6 +47,6 @@
         "luxon": "^1.19.3",
         "mathjs": "^6.2.3",
         "query-string": "^6.8.3",
-        "rest-api-handler": "^2.2.0"
+        "rest-api-handler": "^2.3.0"
     }
 }
