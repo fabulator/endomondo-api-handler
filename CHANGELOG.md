@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.3.0] 2019-10-24
+### Changed
+- [3353166](https://github.com/fabulator/endomondo-api-handler/commit/3353166f42e646d9da5fbe5de4f4869c88c1a6f5) Update dev dependency @socifi/rollup-config to ^2.2.2
+
 ## [3.2.0] 2019-10-21
 ### Changed
 - [d4b9742](https://github.com/fabulator/endomondo-api-handler/commit/d4b974279ec078bb415e2b5f6ac9f07bd0c29333) Update dependencies.

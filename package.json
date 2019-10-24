@@ -1,6 +1,6 @@
 {
     "name": "endomondo-api-handler",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "description": "Unofficial handler for Endomondo API",
     "main": "dist/index.js",
     "jsnext:main": "dist/index.esm.js",
