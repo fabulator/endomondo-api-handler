@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.12.0] 2019-11-10
+### Changed
+- [0513f27](https://github.com/fabulator/endomondo-api-handler/commit/0513f2713b631fb22eb76fabb5198f41f3ee78eb) Update dependency rest-api-handler to v2.5.0
+
 ## [3.11.0] 2019-11-06
 ### Changed
 - [34562ed](https://github.com/fabulator/endomondo-api-handler/commit/34562ed50f2107f6ea375285f1fada1f1aed0909) Update dependency luxon to ^1.21.1
