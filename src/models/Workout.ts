@@ -9,7 +9,6 @@ import { workoutGPXExporter } from '../helpers';
 interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
     typeId: Sport,
     points?: Point[],
-    mapPrivacy?: Privacy,
     workoutPrivacy?: Privacy,
     hashtags?: string[],
     id: Id,
@@ -28,10 +27,6 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
     protected source: ApiSource;
 
-    protected mapPrivacy?: Privacy;
-
-    protected workoutPrivacy?: Privacy;
-
     protected message?: string;
 
     public constructor(options: Constructor<Id, ApiSource>) {
@@ -39,8 +34,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
         this.typeId = options.typeId;
         this.points = options.points || [];
-        this.mapPrivacy = options.mapPrivacy;
-        this.workoutPrivacy = options.workoutPrivacy;
+        this.privacy = options.workoutPrivacy;
         this.hashtags = options.hashtags || [];
         this.id = options.id;
         this.source = options.source;
@@ -53,8 +47,6 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
     public static SPORT_NAMES: {[key: string]: string} = LIST_OF_SPORT_NAMES;
 
     public static SPORT: {[key: string]: Sport} = SPORT;
-
-    public static PRIVACY: {[key: string]: Privacy} = PRIVACY;
 
     public static fromApi(workout: API.Workout): Workout<number, API.Workout> {
         const { points, distance } = workout;
@@ -138,16 +130,8 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.points;
     }
 
-    public getMapPrivacy(): Privacy | undefined {
-        return this.mapPrivacy;
-    }
-
-    public setMapPrivacy(mapPrivacy?: Privacy): Workout<Id, ApiSource> {
-        return this.clone({ mapPrivacy });
-    }
-
     public getWorkoutPrivacy(): Privacy | undefined {
-        return this.workoutPrivacy;
+        return this.privacy;
     }
 
     public setWorkoutPrivacy(workoutPrivacy?: Privacy): Workout<Id, ApiSource> {
@@ -251,7 +235,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
             typeId: this.typeId,
             points: this.points,
             mapPrivacy: this.mapPrivacy,
-            workoutPrivacy: this.workoutPrivacy,
+            workoutPrivacy: this.privacy,
             hashtags: this.hashtags,
             id: this.id,
             source: this.source,
