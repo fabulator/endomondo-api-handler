@@ -20,6 +20,11 @@ describe('Test Workout class', () => {
         expect(typeof workout.toGpx()).toEqual('string');
     });
 
+    it('allows to set privacy', () => {
+        const privateWorkout = workout.setWorkoutPrivacy(Workout.PRIVACY.FRIENDS);
+        expect(privateWorkout.getWorkoutPrivacy()).toEqual(Workout.PRIVACY.FRIENDS);
+    });
+
     describe('Test hashtag methods', () => {
         it('set and get hashtags', () => {
             expect(workout.getHashtags()).toEqual([]);
