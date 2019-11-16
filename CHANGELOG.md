@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.16.0] 2019-11-16
+### Changed
+- [e54c639](https://github.com/fabulator/endomondo-api-handler/commit/e54c639d552fc603e6c572a4725e1fc212e295f4) Update dependency @types/luxon to v1.21.0
+
 ## [3.15.0] 2019-11-14
 ### Changed
 - [4e8362c](https://github.com/fabulator/endomondo-api-handler/commit/4e8362cc8d55d645a6361c60c7b7e7cf49720dd3) Update dependency query-string to v6.9.0
