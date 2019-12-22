@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.31.0] 2019-12-22
+### Changed
+- [ed52a93](https://github.com/fabulator/endomondo-api-handler/commit/ed52a93767ab40106dbc2f3512bf12466f2c2ef4) Update dependency cookie-api-handler to v2.9.0
+
 ## [3.30.0] 2019-12-21
 ### Changed
 - [0217795](https://github.com/fabulator/endomondo-api-handler/commit/0217795681ffc6bc77f51a61305b37c41d8eec89) Update dependency rest-api-handler to v2.9.0
