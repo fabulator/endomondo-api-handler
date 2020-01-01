@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.32.0] 2020-01-01
+### Changed
+- [80bfe86](https://github.com/fabulator/endomondo-api-handler/commit/80bfe86228fb9635921d5b08814391f3244ef084) Update dependency mathjs to v6.3.0
+
 ## [3.31.0] 2019-12-22
 ### Changed
 - [ed52a93](https://github.com/fabulator/endomondo-api-handler/commit/ed52a93767ab40106dbc2f3512bf12466f2c2ef4) Update dependency cookie-api-handler to v2.9.0
