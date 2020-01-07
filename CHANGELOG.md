@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.34.0] 2020-01-07
+### Changed
+- [89c1ebe](https://github.com/fabulator/endomondo-api-handler/commit/89c1ebe0a51bf45d0a6c1b94764ecf6a41d1ce87) Update dependency mathjs to v6.4.0
+
 ## [3.33.0] 2020-01-02
 ### Changed
 - [c3be83c](https://github.com/fabulator/endomondo-api-handler/commit/c3be83c111ea64430441660a0fb8ce2d90c06dc6) Update dependency fitness-models to ^0.15.0
