@@ -67,7 +67,7 @@ Search for workouts:
 const { DateTime } = require('luxon');
 
 const { workouts } = await api.getWorkouts({
-    afterDate: DateTime.fromObject({
+    after: DateTime.fromObject({
         year: 2018,
         month: 3,
         day: 1,
