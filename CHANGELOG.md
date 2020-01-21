@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.42.1] 2020-01-21
+### Fixed
+- [0adf4d9](https://github.com/fabulator/endomondo-api-handler/commit/0adf4d99f6f5c7b3d298b97881eae21ddbf48b40) Missing hasGPSData method from Workout
+- [0adf4d9](https://github.com/fabulator/endomondo-api-handler/commit/0adf4d99f6f5c7b3d298b97881eae21ddbf48b40) README description about exporting gpx of workouts
+- [6176135](https://github.com/fabulator/endomondo-api-handler/commit/6176135284a7fd2b6aefdcfbed78cc255a23cce3) Parameter name in readme 
+
+Change afterDate to after in example for "Search for workouts".
+
 ## [3.42.0] 2020-01-18
 ### Changed
 - [3678946](https://github.com/fabulator/endomondo-api-handler/commit/36789464e3ecb13a9c35ec01c320de217e23eb13) Update dependency query-string to v6.10.1
