@@ -181,6 +181,10 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return workoutGPXExporter(this);
     }
 
+    public hasGPSData(): boolean {
+        return this.points.length > 0;
+    }
+
     public setTypeId(typeId: Sport): Workout<Id, ApiSource> {
         return this.clone({ typeId });
     }
