@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.43.0] 2020-01-23
+### Changed
+- [b070095](https://github.com/fabulator/endomondo-api-handler/commit/b0700956d0cc22f881c527e2041d9cc0234b9ddb) Update dependency @types/mathjs to v6.0.4
+
+### Docs
+- [461cbe0](https://github.com/fabulator/endomondo-api-handler/commit/461cbe0d00e59804a37eb6eac86e6c12ac4734f3) Add info about duplicit tcx IDs 
+
 ## [3.42.1] 2020-01-21
 ### Fixed
 - [0adf4d9](https://github.com/fabulator/endomondo-api-handler/commit/0adf4d99f6f5c7b3d298b97881eae21ddbf48b40) Missing hasGPSData method from Workout
