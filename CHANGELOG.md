@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.53.0] 2020-02-27
+### Changed
+- [be2d9ea](https://github.com/fabulator/endomondo-api-handler/commit/be2d9ea606e4737564e44cfecf2abf0570c8df45) Update dependency mathjs to v6.6.1
+- [284610f](https://github.com/fabulator/endomondo-api-handler/commit/284610feeef757c005fdc664a56991adb947c31f) Update dev dependency @socifi/eslint-config to v2.10.2 
+
 ## [3.52.0] 2020-02-14
 ### Changed
 - [b202784](https://github.com/fabulator/endomondo-api-handler/commit/b2027847c8752325745117b7d23b8aa0f0fddc7a) Update dependency query-string to v6.11.0
