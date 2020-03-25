@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.63.0] 2020-03-25
+### Changed
+- [8e78d85](https://github.com/fabulator/endomondo-api-handler/commit/8e78d85d2b427fd93afe682fe6a43009b64fbc74) Update dependency cookie-api-handler to v2.14.0
+
 ## [3.62.0] 2020-03-24
 ### Changed
 - [032e22a](https://github.com/fabulator/endomondo-api-handler/commit/032e22a5d9781ed9547b0bb17963bc9090d3ec93) Update dependency @types/luxon to v1.22.0
