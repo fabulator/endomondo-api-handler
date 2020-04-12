@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.73.0] 2020-04-12
+### Changed
+- [49c7dc5](https://github.com/fabulator/endomondo-api-handler/commit/49c7dc536036f3a81905cc33d78023a03fd92e38) Update dependency mathjs to v6.6.3
+
 ## [3.72.0] 2020-04-07
 ### Changed
 - [aefa187](https://github.com/fabulator/endomondo-api-handler/commit/aefa18728c59dd6ae6150485ce84576c893b1eba) Update dependency query-string to v6.12.0
