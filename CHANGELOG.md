@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.75.0] 2020-04-13
+### Changed
+- [330a3e7](https://github.com/fabulator/endomondo-api-handler/commit/330a3e74ab7b77aa998875f659f310c5f2a5a2da) Update dependency query-string to v6.12.1
+
 ## [3.74.0] 2020-04-13
 ### Changed
 - [2c0346a](https://github.com/fabulator/endomondo-api-handler/commit/2c0346ab203adeab061bbdd9b441f2afbbb7ad67) Update dependency fitness-models to ^0.30.0
