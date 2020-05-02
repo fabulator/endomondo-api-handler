@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.79.0] 2020-05-02
+### Changed
+- [28807be](https://github.com/fabulator/endomondo-api-handler/commit/28807be73a115cb0ec931519fa78877b699a0eb8) Update dependency gpx-builder to v2.5.0
+- [0b1bd09](https://github.com/fabulator/endomondo-api-handler/commit/0b1bd09d3dc1b60353a7f887456a7a5a41319d45) Update dependency rest-api-handler to v2.15.0
+
 ## [3.78.0] 2020-04-24
 ### Changed
 - [e753910](https://github.com/fabulator/endomondo-api-handler/commit/e753910f27825a2a1aef7c1148b2e0439d39be2a) Update dependency cookie-api-handler to v2.15.0
