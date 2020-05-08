@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.85.0] 2020-05-08
+### Changed
+- [0373e69](https://github.com/fabulator/endomondo-api-handler/commit/0373e69600690760ee30e00934638de1e56fb617) Update dependency @types/luxon to v1.24.0
+
 ## [3.84.0] 2020-05-07
 ### Changed
 - [cdb09a6](https://github.com/fabulator/endomondo-api-handler/commit/cdb09a62590980c24c23e041bcf593c9b1aecc5a) Update dependency fitness-models to ^0.34.0
