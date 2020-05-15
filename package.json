@@ -46,7 +46,7 @@
         "fitness-models": "^0.35.0",
         "gpx-builder": "^2.2.0",
         "luxon": "^1.21.1",
-        "mathjs": "^6.2.3",
+        "mathjs": "^7.0.0",
         "query-string": "^6.8.3",
         "rest-api-handler": "^2.4.1"
     }
