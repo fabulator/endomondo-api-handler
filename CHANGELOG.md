@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [5.0.0] 2020-05-19
+### Changed
+- [14e2720](https://github.com/fabulator/endomondo-api-handler/commit/14e27208915b86b8cad5cf27af3232211420dcb7) Update dependency gpx-builder to v3 BREAKING (#185)
+
+Co-authored-by: Renovate Bot <bot@renovateapp.com>
+
 ## [4.0.0] 2020-05-16
 ### Changed
 - [2074734](https://github.com/fabulator/endomondo-api-handler/commit/207473449d8d6cf65da61f90563147d29317a0e0) Update dependency mathjs to v7 BREAKING (#182)
