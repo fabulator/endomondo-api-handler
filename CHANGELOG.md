@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [6.0.0] 2020-05-23
+### Changed
+- [c102876](https://github.com/fabulator/endomondo-api-handler/commit/c102876df6294c1e3aa38289506a825846379202) Update dependency fitness-models to v2 BREAKING (#186)
+
+Co-authored-by: Renovate Bot <bot@renovateapp.com>
+
 ## [5.0.0] 2020-05-19
 ### Changed
 - [14e2720](https://github.com/fabulator/endomondo-api-handler/commit/14e27208915b86b8cad5cf27af3232211420dcb7) Update dependency gpx-builder to v3 BREAKING (#185)
