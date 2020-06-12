@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [6.12.0] 2020-06-12
+### Changed
+- [5c9d7d0](https://github.com/fabulator/endomondo-api-handler/commit/5c9d7d0f507768fbc09d8f88d0b061a9f005e51c) Update dependency query-string to v6.13.1
+
 ## [6.11.0] 2020-06-07
 ### Changed
 - [4afa39b](https://github.com/fabulator/endomondo-api-handler/commit/4afa39ba7cfe16639867c6bb9b4cd1cc326f1048) Update dependency query-string to v6.13.0
