@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [6.13.0] 2020-06-22
+### Changed
+- [aae4a10](https://github.com/fabulator/endomondo-api-handler/commit/aae4a1051730f82aabd7ff7fa0c4a18ca6b2c9ba) Update dependency gpx-builder to v3.3.0
+- [13c159b](https://github.com/fabulator/endomondo-api-handler/commit/13c159bdebd4b0a9eceb62a507a0c7370c9d1820) Update dev dependency cross-fetch to v3.0.5 
+
 ## [6.12.0] 2020-06-12
 ### Changed
 - [5c9d7d0](https://github.com/fabulator/endomondo-api-handler/commit/5c9d7d0f507768fbc09d8f88d0b061a9f005e51c) Update dependency query-string to v6.13.1
