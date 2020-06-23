@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [6.16.0] 2020-06-23
+### Changed
+- [9046517](https://github.com/fabulator/endomondo-api-handler/commit/9046517d364f6864d655d7b5b9cc87c85e1d95d9) Update dependency fitness-models to v2.4.0
+
 ## [6.15.0] 2020-06-23
 ### Changed
 - [befbcd1](https://github.com/fabulator/endomondo-api-handler/commit/befbcd1f38101a8893d4fc0edf69d232c8461ea8) Update dependency cookie-api-handler to v2.20.0
