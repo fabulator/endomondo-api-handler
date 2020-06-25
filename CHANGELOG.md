@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [6.18.0] 2020-06-25
+### Changed
+- [02d48a2](https://github.com/fabulator/endomondo-api-handler/commit/02d48a2bf135c14522e4ccf01884443c65575467) Update dependency mathjs to v7.0.2
+
 ## [6.17.0] 2020-06-25
 ### Changed
 - [ad7da05](https://github.com/fabulator/endomondo-api-handler/commit/ad7da05b8035bcd3f121ae819920e56faa822f54) Update dependency @types/luxon to v1.24.1
