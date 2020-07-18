@@ -2,16 +2,16 @@ import CookieApi from 'cookie-api-handler';
 import { DateTime } from 'luxon';
 import { parseUrl } from 'query-string';
 import { ApiResponseType, DefaultResponseProcessor } from 'rest-api-handler';
-import { ApiProfile } from 'types/api/ApiProfile';
-import { ApiUser } from 'types/api/ApiUser';
-import { ApiWorkout } from 'types/api/ApiWorkout';
-import { ApiWorkoutFilters } from 'types/api/ApiWorkoutFilters';
-import { ApiWorkouts } from 'types/api/ApiWorkouts';
-import { ListOfWorkouts } from 'types/Responses';
-import { WorkoutFilters } from 'types/WorkoutFilters';
 import { ENDOMONDO_URL } from '../constants';
 import { EndomondoApiException, EndomondoException } from '../exceptions';
 import { Workout } from '../models';
+import { ApiProfile } from '../types/api/ApiProfile';
+import { ApiUser } from '../types/api/ApiUser';
+import { ApiWorkout } from '../types/api/ApiWorkout';
+import { ApiWorkoutFilters } from '../types/api/ApiWorkoutFilters';
+import { ApiWorkouts } from '../types/api/ApiWorkouts';
+import { ListOfWorkouts } from '../types/Responses';
+import { WorkoutFilters } from '../types/WorkoutFilters';
 
 export default class Api extends CookieApi<ApiResponseType<any>> {
     protected userId: number | null = null;
