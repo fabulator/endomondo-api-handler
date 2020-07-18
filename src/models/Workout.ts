@@ -1,22 +1,22 @@
+import { Workout as BaseWorkout, WorkoutConstructor } from 'fitness-models';
 import { DateTime, Duration } from 'luxon';
-import { Unit, unit } from 'mathjs';
-import { Workout as BaseWorkout, TYPES } from 'fitness-models';
-import { SPORT_NAMES as LIST_OF_SPORT_NAMES, SPORT, PRIVACY } from '../constants';
-import Point from './Point';
-import { Sport, Privacy, API } from '../types';
+import { Unit } from 'mathjs';
+import { Sport, SPORT_NAMES } from '../constants';
 import { workoutGPXExporter } from '../helpers';
+import { unit } from '../helpers/math';
+import { ApiWorkout } from '../types/api/ApiWorkout';
+import Point from './Point';
 
-interface Constructor<Id, ApiSource> extends TYPES.WorkoutConstructor {
-    typeId: Sport,
-    points?: Point[],
-    workoutPrivacy?: Privacy,
-    hashtags?: string[],
-    id: Id,
-    source: ApiSource,
-    message?: string,
+interface Constructor<Id, ApiSource> extends WorkoutConstructor<Point> {
+    hashtags?: string[];
+    id: Id;
+    message?: string;
+    points?: Point[];
+    source: ApiSource;
+    typeId: Sport;
 }
 
-export default class Workout<Id extends (number | undefined) = any, ApiSource extends (API.Workout | undefined) = any> extends BaseWorkout {
+export default class Workout<Id extends number | undefined = any, ApiSource extends ApiWorkout | undefined = any> extends BaseWorkout {
     protected id: Id;
 
     protected typeId: Sport;
@@ -34,7 +34,6 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
 
         this.typeId = options.typeId;
         this.points = options.points || [];
-        this.privacy = options.workoutPrivacy;
         this.hashtags = options.hashtags || [];
         this.id = options.id;
         this.source = options.source;
@@ -44,11 +43,7 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         this.isCommute = this.hasHashtag('work');
     }
 
-    public static SPORT_NAMES: {[key: string]: string} = LIST_OF_SPORT_NAMES;
-
-    public static SPORT: {[key: string]: Sport} = SPORT;
-
-    public static fromApi(workout: API.Workout): Workout<number, API.Workout> {
+    public static fromApi(workout: ApiWorkout): Workout<number, ApiWorkout> {
         const { points, distance } = workout;
 
         const start = DateTime.fromISO(workout.local_start_time, { setZone: true });
@@ -60,15 +55,13 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
                 seconds: workout.duration,
             }),
             source: workout,
-            points: points && points.points ? points.points.map((point) => {
-                return Point.fromApi(point, start.toFormat('z'));
-            }) : [],
+            points: points && points.points ? points.points.map((point) => Point.fromApi(point, start.toFormat('z'))) : [],
             ascent: workout.ascent ? unit(workout.ascent, 'm') : undefined,
             descent: workout.descent ? unit(workout.descent, 'm') : undefined,
             calories: workout.calories,
             notes: workout.message,
             mapPrivacy: workout.show_map,
-            workoutPrivacy: workout.show_workout,
+            privacy: workout.show_workout,
             id: workout.id,
             hashtags: workout.hashtags,
             avgHeartRate: workout.heart_rate_avg,
@@ -99,22 +92,22 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         });
     }
 
-    protected clone(extension: Partial<Constructor<number | undefined, ApiSource>>): any {
+    protected clone(extension: Partial<Constructor<number | undefined, ApiSource>>): this {
         return new Workout({
             ...this.toObject(),
             ...extension,
-        });
+        }) as this;
     }
 
     public getId() {
         return this.id;
     }
 
-    public setId(id: number): Workout<number, ApiSource>
+    public setId(id: number): Workout<number, ApiSource>;
 
-    public setId(id: undefined): Workout<undefined, ApiSource>
+    public setId(id: undefined): Workout<undefined, ApiSource>;
 
-    public setId(id: number | undefined) {
+    public setId(id: number | undefined): Workout<number | undefined, ApiSource> {
         return this.clone({ id });
     }
 
@@ -123,54 +116,19 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
     }
 
     public getSportName(): string {
-        return Workout.SPORT_NAMES[this.getTypeId()];
+        return SPORT_NAMES[this.getTypeId()];
     }
 
     public getPoints(): Point[] {
         return this.points;
     }
 
-    public getWorkoutPrivacy(): Privacy | undefined {
-        return this.privacy;
-    }
-
-    public setWorkoutPrivacy(workoutPrivacy?: Privacy): Workout<Id, ApiSource> {
-        return this.clone({ workoutPrivacy });
-    }
-
     public getMessage() {
         return this.message;
     }
 
-    public setMessage(message?: string): Workout<Id, ApiSource> {
+    public setMessage(message?: string) {
         return this.clone({ message });
-    }
-
-    public setHashtags(hashtags: string[]): Workout<Id, ApiSource> {
-        return this.clone({ hashtags });
-    }
-
-    public addHashtags(hashtags: string[]): Workout<Id, ApiSource> {
-        return this.clone({
-            hashtags: [
-                ...this.getHashtags(),
-                ...hashtags,
-            ],
-        });
-    }
-
-    public addHashtag(hashtag: string): Workout<Id, ApiSource> {
-        return this.addHashtags([hashtag]);
-    }
-
-    public removeHashtag(hashtag: string) {
-        return this.removeHashtags([hashtag]);
-    }
-
-    public removeHashtags(hashtags: string[]) {
-        return this.clone({
-            hashtags: hashtags.filter((hashtag) => hashtags.includes(hashtag)),
-        });
     }
 
     public getSource(): ApiSource {
@@ -185,52 +143,8 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
         return this.points.length > 0;
     }
 
-    public setTypeId(typeId: Sport): Workout<Id, ApiSource> {
+    public setTypeId(typeId: Sport) {
         return this.clone({ typeId });
-    }
-
-    public setStart(start: DateTime): Workout<Id, ApiSource> {
-        return this.clone({ start });
-    }
-
-    public setDuration(duration: Duration): Workout<Id, ApiSource> {
-        return this.clone({ duration });
-    }
-
-    public setDistance(distance?: Unit): Workout<Id, ApiSource> {
-        return this.clone({ distance });
-    }
-
-    public setPoints(points: Point[]): Workout<Id, ApiSource> {
-        return this.clone({ points });
-    }
-
-    public setCalories(calories?: number): Workout<Id, ApiSource> {
-        return this.clone({ calories });
-    }
-
-    public setNotes(notes?: string): Workout<Id, ApiSource> {
-        return this.clone({ notes });
-    }
-
-    public setAvgHeartRate(avgHeartRate?: number): Workout<Id, ApiSource> {
-        return this.clone({ avgHeartRate });
-    }
-
-    public setMaxHeartRate(maxHeartRate?: number): Workout<Id, ApiSource> {
-        return this.clone({ maxHeartRate });
-    }
-
-    public setTitle(title?: string): Workout<Id, ApiSource> {
-        return this.clone({ title });
-    }
-
-    public setAscent(ascent?: Unit): Workout<Id, ApiSource> {
-        return this.clone({ ascent });
-    }
-
-    public setDescent(descent?: Unit): Workout<Id, ApiSource> {
-        return this.clone({ descent });
     }
 
     public toObject(): Constructor<Id, ApiSource> {
@@ -238,8 +152,6 @@ export default class Workout<Id extends (number | undefined) = any, ApiSource ex
             ...super.toObject(),
             typeId: this.typeId,
             points: this.points,
-            mapPrivacy: this.mapPrivacy,
-            workoutPrivacy: this.privacy,
             hashtags: this.hashtags,
             id: this.id,
             source: this.source,

@@ -1,8 +1,5 @@
-import * as SPORT from './sport';
-import * as PRIVACY from './privacy';
-
-export { SPORT, PRIVACY };
-
+export { Privacy } from './privacy';
+export { Sport } from './sport';
 export { default as SPORT_NAMES } from './sport-names';
 
 export const ENDOMONDO_URL = 'https://www.endomondo.com';

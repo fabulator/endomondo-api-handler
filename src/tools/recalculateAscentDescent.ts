@@ -1,5 +1,5 @@
-import { unit } from 'mathjs';
-import { Workout, Point } from '../models';
+import { unit } from '../helpers/math';
+import { Point, Workout } from '../models';
 
 /**
  * Recalculate total ascent and descent.
@@ -10,7 +10,7 @@ import { Workout, Point } from '../models';
 export default function recalculateAscentDescent(workout: Workout): Workout {
     let ascent = 0;
     let descent = 0;
-    let previusPoint: Point | null = null;
+    let previusPoint: Point | undefined;
 
     workout.getPoints().forEach((point) => {
         if (!previusPoint) {
@@ -21,11 +21,11 @@ export default function recalculateAscentDescent(workout: Workout): Workout {
         const altitude = point.getAltitude();
         const previusAltitude = previusPoint.getAltitude();
 
-        if (altitude == null) {
+        if (altitude === undefined) {
             return;
         }
 
-        if (previusAltitude == null) {
+        if (previusAltitude === undefined) {
             previusPoint = point;
             return;
         }
@@ -40,7 +40,5 @@ export default function recalculateAscentDescent(workout: Workout): Workout {
         previusPoint = point;
     });
 
-    return workout
-        .setAscent(unit(ascent, 'm'))
-        .setDescent(unit(descent, 'm'));
+    return workout.setAscent(unit(ascent, 'm')).setDescent(unit(descent, 'm'));
 }

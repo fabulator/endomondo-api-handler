@@ -1,11 +1,6 @@
 import replaceWorkout from './replaceWorkout';
 import rewriteAltitudeData from './rewriteAltitudeData';
-import rewriteHeartRateData from './rewriteHeartRateData';
 import rewriteCadenceData from './rewriteCadenceData';
+import rewriteHeartRateData from './rewriteHeartRateData';
 
-export {
-    replaceWorkout,
-    rewriteAltitudeData,
-    rewriteHeartRateData,
-    rewriteCadenceData,
-};
+export { replaceWorkout, rewriteAltitudeData, rewriteHeartRateData, rewriteCadenceData };

@@ -5,17 +5,17 @@ import EndomondoException from './EndomondoException';
  * Endomondo API Exception
  */
 export default class EndomondoApiException extends EndomondoException {
-    protected response: ApiResponseType<any>;
+    protected response: ApiResponseType<unknown>;
 
     /**
      * Constructor.
      */
-    public constructor(response: ApiResponseType<any>) {
+    public constructor(response: ApiResponseType<unknown>) {
         super(JSON.stringify(response.data));
         this.response = response;
     }
 
-    public getResponse(): ApiResponseType<any> {
+    public getResponse(): ApiResponseType<unknown> {
         return this.response;
     }
 

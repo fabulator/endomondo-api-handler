@@ -1,1 +1,5 @@
-extends @socifi/browserslist-config
+defaults
+not IE 11
+not IE_Mob 11
+maintained node versions
+not op_mini all

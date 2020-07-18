@@ -1,11 +1,11 @@
 import { DateTime, Duration } from 'luxon';
-import { WorkoutFilters as ApiWorkoutFilters } from './api';
+import { ApiWorkoutFilters } from './api/ApiWorkoutFilters';
 
 type CleanApiWorkoutFilters = Pick<ApiWorkoutFilters, Exclude<keyof ApiWorkoutFilters, 'after' | 'before' | 'fromDuration' | 'toDuration'>>;
 
 export interface WorkoutFilters extends CleanApiWorkoutFilters {
-    after?: string | DateTime,
-    before?: string | DateTime,
-    fromDuration?: number | Duration,
-    toDuration?: number | Duration,
+    after?: string | DateTime;
+    before?: string | DateTime;
+    fromDuration?: number | Duration;
+    toDuration?: number | Duration;
 }

@@ -1,5 +1,5 @@
-import { Workout } from '../models';
 import { Api, MobileApi } from '../api';
+import { Workout } from '../models';
 
 /**
  * Create new workout and delete old one. It is only way how to update points.

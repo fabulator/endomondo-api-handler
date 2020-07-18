@@ -7,7 +7,7 @@ const api = new Api();
 api.setUserId(1);
 
 const putSpy = jest.spyOn(api, 'put').mockImplementation(() => {
-    return Promise.resolve({ data: { } });
+    return Promise.resolve({ data: {}, status: 200, source: new Response(''), request: new Request('') });
 });
 
 describe('Api testing', () => {
@@ -63,7 +63,7 @@ describe('Api testing', () => {
                     .setDescent(unit(999, 'm'))
                     .setMessage('xzxs')
                     .setMapPrivacy(0)
-                    .setWorkoutPrivacy(1),
+                    .setPrivacy(1),
             );
 
             expect(putSpy).toHaveBeenCalledWith('rest/v1/users/1/workouts/', {

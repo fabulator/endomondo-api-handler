@@ -1,15 +1,18 @@
-import rewriteWorkoutData from './rewriteWorkoutData';
+import { Point, Workout } from '../models';
+import { HrData } from '../types/PointDataReplacer';
 import rewriteTimeData from './rewriteTimeData';
-import { Workout, Point } from '../models';
-import { POINT_DATA_REPLACER } from '../types';
+import rewriteWorkoutData from './rewriteWorkoutData';
 
-export default function rewriteHeartRateData(workout: Workout, HrData: POINT_DATA_REPLACER.HrData): Workout {
+export default function rewriteHeartRateData(workout: Workout, hrData: HrData): Workout {
     return rewriteWorkoutData(workout, 'hr', (point: Point) => {
-        return rewriteTimeData(point, HrData.map((item) => {
-            return {
-                value: item.hr,
-                time: item.time.valueOf(),
-            };
-        }));
+        return rewriteTimeData(
+            point,
+            hrData.map((item) => {
+                return {
+                    value: item.hr,
+                    time: item.time.valueOf(),
+                };
+            }),
+        );
     });
 }

@@ -1,6 +1,7 @@
 import { Workout } from '../models';
-import * as API from './api';
+import { ApiPaging } from './api/ApiPaging';
+import { ApiWorkout } from './api/ApiWorkout';
 
 export type ListOfWorkouts = {
-    workouts: Workout<number, API.Workout>[],
-} & API.Paging;
+    workouts: Workout<number, ApiWorkout>[];
+} & ApiPaging;

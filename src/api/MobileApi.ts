@@ -1,13 +1,14 @@
-import { gzip } from 'zlib';
 import { Api, ApiResponseType } from 'rest-api-handler';
-import { EndomondoApiException, EndomondoAuthException, EndomondoException } from '../exceptions';
+import { gzip } from 'zlib';
 import { ENDOMONDO_MOBILE_URL } from '../constants';
+import { EndomondoApiException, EndomondoAuthException, EndomondoException } from '../exceptions';
 import { Workout } from '../models';
 
-function processStringResponse(response: string): {[property: string]: string} {
-    const data: {[property: string]: string} = {};
+function processStringResponse(response: string): { [property: string]: string } {
+    const data: { [property: string]: string } = {};
 
-    response.split('\n')
+    response
+        .split('\n')
         .map((item) => item.split('='))
         .filter((item) => item.length === 2)
         .forEach((item) => {
@@ -36,34 +37,38 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
 
     protected userId: number | null;
 
-    protected static dataFormat = 'yyyy-MM-dd HH:mm:ss \'UTC\'';
+    protected static dataFormat = "yyyy-MM-dd HH:mm:ss 'UTC'";
 
     public constructor() {
-        super(ENDOMONDO_MOBILE_URL, [
-            async (response: Response, request: Request) => {
-                const contentType = response.headers.get('content-type');
+        super(
+            ENDOMONDO_MOBILE_URL,
+            [
+                async (response: Response, request: Request) => {
+                    const contentType = response.headers.get('content-type');
 
-                const toResponse = {
-                    data: contentType && contentType.includes('json') ? await response.json() : await response.text(),
-                    status: response.status,
-                    source: response,
-                    request,
-                };
+                    const toResponse = {
+                        data: contentType && contentType.includes('json') ? await response.json() : await response.text(),
+                        status: response.status,
+                        source: response,
+                        request,
+                    };
 
-                if ((typeof toResponse.data === 'object' && toResponse.data.error) || !response.ok) {
-                    if (toResponse.data.error && toResponse.data.error.type === 'AUTH_FAILED') {
-                        throw new EndomondoAuthException(toResponse);
+                    if ((typeof toResponse.data === 'object' && toResponse.data.error) || !response.ok) {
+                        if (toResponse.data.error && toResponse.data.error.type === 'AUTH_FAILED') {
+                            throw new EndomondoAuthException(toResponse);
+                        }
+
+                        throw new EndomondoApiException(toResponse);
                     }
 
-                    throw new EndomondoApiException(toResponse);
-                }
-
-                return toResponse;
+                    return toResponse;
+                },
+            ],
+            {
+                'Content-Type': 'application/octet-stream',
+                'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)',
             },
-        ], {
-            'Content-Type': 'application/octet-stream',
-            'User-Agent': 'Dalvik/1.4.0 (Linux; U; Android 4.1; GT-B5512 Build/GINGERBREAD)',
-        });
+        );
         this.authToken = null;
         this.userId = null;
     }
@@ -123,9 +128,12 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
      */
     public async createWorkout(workout: Workout): Promise<number> {
         const options = {
-            workoutId: `-${'XXXXXXXXXXXXXXXX'.split('X').map(() => {
-                return Math.floor(Math.random() * 9);
-            }).join('')}`,
+            workoutId: `-${'XXXXXXXXXXXXXXXX'
+                .split('X')
+                .map(() => {
+                    return Math.floor(Math.random() * 9);
+                })
+                .join('')}`,
             duration: workout.getDuration().as('seconds'),
             sport: workout.getTypeId(),
             extendedResponse: true,
@@ -133,15 +141,15 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             authToken: this.getUserToken(),
         };
 
-        const gzippedBody = await gzipRequestBody(workout.getPoints().map((point) => point.toString()).join('\n'));
-        const response = await this
-            .request(
-                `track${Api.convertParametersToUrl(options)}`,
-                'POST',
-                {
-                    body: gzippedBody,
-                },
-            );
+        const gzippedBody = await gzipRequestBody(
+            workout
+                .getPoints()
+                .map((point) => point.toString())
+                .join('\n'),
+        );
+        const response = await this.request(`track${Api.convertParametersToUrl(options)}`, 'POST', {
+            body: gzippedBody,
+        });
 
         if (response.data.trim() === 'AUTH_FAILED') {
             throw new EndomondoAuthException(response);
@@ -174,7 +182,7 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             ...(workout.getCalories() != null ? { calories: workout.getCalories() } : {}),
             ...(workout.getMessage() != null ? { message: workout.getMessage() } : {}),
             ...(workout.getMapPrivacy() != null ? { privacy_map: workout.getMapPrivacy() } : {}),
-            ...(workout.getWorkoutPrivacy() != null ? { privacy_workout: workout.getWorkoutPrivacy() } : {}),
+            ...(workout.getPrivacy() != null ? { privacy_workout: workout.getPrivacy() } : {}),
         };
 
         const options = {
@@ -184,13 +192,8 @@ export default class MobileApi extends Api<ApiResponseType<any>> {
             authToken: this.getUserToken(),
         };
 
-        return this
-            .request(
-                `api/workout/post${Api.convertParametersToUrl(options)}`,
-                'POST',
-                {
-                    body: await gzipRequestBody(JSON.stringify(data)),
-                },
-            );
+        return this.request(`api/workout/post${Api.convertParametersToUrl(options)}`, 'POST', {
+            body: await gzipRequestBody(JSON.stringify(data)),
+        });
     }
 }

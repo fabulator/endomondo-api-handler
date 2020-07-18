@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 import { Point } from '../models';
 
-export default (point: Point, data: { value: number, time: number }[]) => {
+export default (point: Point, data: { time: number; value: number }[]) => {
     const time = point.getTime();
     if (!time) {
-        return undefined;
+        return;
     }
 
     const valueOfTime = time.valueOf();
@@ -14,7 +14,7 @@ export default (point: Point, data: { value: number, time: number }[]) => {
     })[0];
 
     if (time.diff(DateTime.fromMillis(nearest.time), ['milliseconds']).as('seconds') > 15) {
-        return undefined;
+        return;
     }
 
     return nearest.value;

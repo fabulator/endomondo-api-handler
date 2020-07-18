@@ -1,0 +1,8 @@
+!.*
+**/node_modules
+**/dist
+**/es
+**/tests_results
+**/package-lock.json
+**/dev
+tsconfig.json

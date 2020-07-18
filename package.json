@@ -1,53 +1,53 @@
 {
-    "name": "endomondo-api-handler",
-    "version": "6.25.0",
-    "description": "Unofficial handler for Endomondo API",
-    "main": "dist/index.js",
-    "jsnext:main": "dist/index.esm.js",
-    "module": "dist/index.esm.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "lint": "eslint --ext .ts ./src ./tests",
-        "lint:export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
-        "tsc": "tsc",
-        "build": "rollup --config ./rollup.config.js",
-        "develop": "tsc --emitDeclarationOnly false --watch",
-        "test": "jest",
-        "test:build": "npm run test -- --config jest.config.build.js",
-        "test:all": "npm run lint && npm run tsc && npm run test",
-        "prepublishOnly": "npm run build && npm run tsc && npm run test:build",
-        "release": "semantic-release"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@github.com/fabulator/endomondo-api-handler.git"
-    },
-    "author": "Michal Ozogán <michal@ozogan.eu>",
-    "license": "Apache-2.0",
-    "homepage": "https://github.com/fabulator/endomondo-api-handler#readme",
-    "keywords": [
-        "endomondo",
-        "endomondo-api"
-    ],
-    "devDependencies": {
-        "@socifi/babel-config": "^1.0.0",
-        "@socifi/browserslist-config": "^0.1.0",
-        "@socifi/commitlint-config": "^1.1.0",
-        "@socifi/eslint-config": "^2.10.0",
-        "@socifi/jest-config": "^2.4.1",
-        "@socifi/rollup-config": "^2.2.2",
-        "cross-fetch": "^3.0.4",
-        "semantic-release-config-fabulator": "^1.3.2"
-    },
-    "dependencies": {
-        "@types/luxon": "^1.15.2",
-        "@types/mathjs": "^6.0.2",
-        "cookie-api-handler": "^2.4.0",
-        "fitness-models": "^2.0.0",
-        "gpx-builder": "^3.0.0",
-        "luxon": "^1.21.1",
-        "mathjs": "^7.0.0",
-        "query-string": "^6.8.3",
-        "rest-api-handler": "^2.4.1"
-    }
+  "name": "endomondo-api-handler",
+  "version": "6.25.0",
+  "description": "Unofficial handler for Endomondo API",
+  "keywords": [
+    "endomondo",
+    "endomondo-api"
+  ],
+  "homepage": "https://github.com/fabulator/endomondo-api-handler#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fabulator/endomondo-api-handler.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Michal Ozogán <michal@ozogan.eu>",
+  "main": "dist/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config ./rollup.config.js",
+    "develop": "tsc --emitDeclarationOnly false --watch",
+    "lint": "eslint ./ --ext .js --ext .json --ext .ts",
+    "lint:export": "npm run lint -- -o ./tests_results/checkstyle/js-checkstyle.xml -f checkstyle",
+    "lint:fix": "npm run lint -- --fix",
+    "prepublishOnly": "npm run build && npm run tsc && npm run test:build",
+    "release": "semantic-release",
+    "test": "jest",
+    "test:all": "npm run lint && npm run tsc && npm run test",
+    "test:build": "npm run test -- --config jest.config.build.js",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@types/luxon": "^1.24.1",
+    "@types/mathjs": "^6.0.5",
+    "cookie-api-handler": "^2.22.0",
+    "fitness-models": "^3.0.1",
+    "gpx-builder": "^3.5.0",
+    "luxon": "^1.24.1",
+    "mathjs": "^7.1.0",
+    "query-string": "^6.13.1",
+    "rest-api-handler": "^2.20.0"
+  },
+  "devDependencies": {
+    "babel-config-fabulator": "^1.0.0",
+    "commitlint-config-fabulator": "^1.0.0",
+    "cross-fetch": "^3.0.5",
+    "eslint-config-fabulator": "^1.0.1",
+    "jest-config-fabulator": "^1.0.0",
+    "rollup-config-fabulator": "^1.0.0",
+    "semantic-release-config-fabulator": "^2.5.0"
+  }
 }

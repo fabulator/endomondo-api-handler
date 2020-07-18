@@ -1,13 +1,13 @@
 import { DateTime, Duration } from 'luxon';
-import { Workout } from '../../src';
+import { Privacy, Sport, Workout } from '../../src';
 
-describe('Test Workout class', () => {
+describe('Test ApiWorkout class', () => {
     let workout: Workout;
 
     beforeEach(() => {
         workout = new Workout({
             hashtags: [],
-            typeId: Workout.SPORT.CYCLING_SPORT,
+            typeId: Sport.CYCLING_SPORT,
             start: DateTime.local(),
             duration: Duration.fromMillis(1),
             points: [],
@@ -21,8 +21,13 @@ describe('Test Workout class', () => {
     });
 
     it('allows to set privacy', () => {
-        const privateWorkout = workout.setWorkoutPrivacy(Workout.PRIVACY.FRIENDS);
-        expect(privateWorkout.getWorkoutPrivacy()).toEqual(Workout.PRIVACY.FRIENDS);
+        const privateWorkout = workout.setPrivacy(Privacy.FRIENDS);
+        expect(privateWorkout.getPrivacy()).toEqual(Privacy.FRIENDS);
+    });
+
+    it('allows user model setter and extended workout property', () => {
+        const workout2 = workout.setPrivacy(Privacy.FRIENDS).setMessage('haha');
+        expect(workout2.getMessage()).toEqual('haha');
     });
 
     describe('Test hashtag methods', () => {

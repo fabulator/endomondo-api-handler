@@ -1,5 +1,5 @@
-import { unit } from 'mathjs';
-import { Workout, Point } from '../models';
+import { unit } from '../helpers/math';
+import { Point, Workout } from '../models';
 
 type Type = 'altitude' | 'hr' | 'cadence';
 
