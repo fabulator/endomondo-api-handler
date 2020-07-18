@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## v7.0.0 (2020-07-18)
+### Refactored
+- [c45de48](https://github.com/fabulator/endomondo-api-handler/commit/c45de485c5beca64742d5dc61db9afd870f67c2b) Use new building engine, changed types structure BREAKING
+
 ## [6.28.0] 2020-07-18
 ### Changed
 - [9eae447](https://github.com/fabulator/endomondo-api-handler/commit/9eae4476bc39a05f99711d441c2c22971dcf709a) Update dependency cookie-api-handler to v2.22.0
