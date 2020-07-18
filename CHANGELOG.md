@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## v7.0.1 (2020-07-18)
+### Fixed
+- [79b01c8](https://github.com/fabulator/endomondo-api-handler/commit/79b01c86ac3e2561c04b869ecf68ddbbcaacbb76) Path to types
+
 ## v7.0.0 (2020-07-18)
 ### Refactored
 - [c45de48](https://github.com/fabulator/endomondo-api-handler/commit/c45de485c5beca64742d5dc61db9afd870f67c2b) Use new building engine, changed types structure BREAKING
