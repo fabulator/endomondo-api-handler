@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## v7.1.0 (2020-07-22)
+### Changed
+- [5973752](https://github.com/fabulator/endomondo-api-handler/commit/5973752e93feb1c8df50d7fd1228e277c72af672) Update dependency @types/luxon to v1.24.2
+- [0babd43](https://github.com/fabulator/endomondo-api-handler/commit/0babd438b9a2749fae21da3a1a0f71baef5a7033) Update dev dependency eslint-config-fabulator to v1.0.2 
+
 ## v7.0.1 (2020-07-18)
 ### Fixed
 - [79b01c8](https://github.com/fabulator/endomondo-api-handler/commit/79b01c86ac3e2561c04b869ecf68ddbbcaacbb76) Path to types
