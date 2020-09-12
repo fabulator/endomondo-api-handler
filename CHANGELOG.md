@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## v7.3.1 (2020-09-12)
+### Fixed
+- [9dd08c5](https://github.com/fabulator/endomondo-api-handler/commit/9dd08c53af1480ea4a80364448ad76860bcf41e5) Security lock update (#221)
+
+Co-authored-by: Renovate Bot <bot@renovateapp.com>
+
 ## v7.3.0 (2020-07-24)
 ### Changed
 - [eeac3ec](https://github.com/fabulator/endomondo-api-handler/commit/eeac3ec285277406124d56de7d0d37db27534fa6) Update dependency @types/luxon to v1.24.3
