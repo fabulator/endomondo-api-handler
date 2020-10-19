@@ -1,6 +1,6 @@
 {
   "name": "endomondo-api-handler",
-  "version": "7.3.18",
+  "version": "7.3.19",
   "description": "Unofficial handler for Endomondo API",
   "keywords": [
     "endomondo",
