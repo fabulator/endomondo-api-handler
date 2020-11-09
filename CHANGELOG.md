@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## v7.3.32 (2020-11-09)
+### Fixed
+- [792f4cd](https://github.com/fabulator/endomondo-api-handler/commit/792f4cd7d7bcf4ee20baba9aeff938abb6f31180) Update lock for security updated
+
 ## v7.3.31 (2020-11-09)
 ### Fixed
 - [f2397ec](https://github.com/fabulator/endomondo-api-handler/commit/f2397ec6e91c6ff05d40cd422c1f32dc8701dc08) Update lock for security updated
